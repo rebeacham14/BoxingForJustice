@@ -1,0 +1,48 @@
+:root {
+  /* brand surfaces */
+  --color-bg-page: #0f0f0f;
+  --color-bg-panel: #1a1a1a;
+  --color-panel-glass: rgba(28, 28, 28, 0.92);
+  --color-auth-panel: #1b1b1b;
+  --color-input-bg: #2c2c2c;
+  --color-input-border: #555;
+
+  /* brand accent */
+  --color-gold: #d4af37;
+  --color-gold-hover: #b58a1d;
+  --color-gold-wash: rgba(212, 175, 55, 0.18);
+  --color-gold-wash-soft: rgba(212, 175, 55, 0.05);
+
+  /* text */
+  --color-white: #ffffff;
+  --color-body-text: #25202e;
+  --color-text-muted: #d5d5d5;
+  --color-danger: #ff6b6b;
+
+  /* chart surface (dark-only site, matches --color-bg-panel) */
+  --chart-surface: #1a1a1a;
+  --chart-text-secondary: #c3c2b7;
+  --chart-gridline: #2c2c2a;
+
+  /* chart categorical series — fixed order, validated against dark surface #1a1a1a
+     via the dataviz skill's validate_palette.js (all checks pass, worst adjacent
+     normal-vision ΔE 16.4). Never cycle, never reassign per-filter. */
+  --chart-series-1: #a9812f;
+  --chart-series-2: #2fa88f;
+  --chart-series-3: #8a6fd1;
+  --chart-series-4: #d9633f;
+
+  /* chart sequential ramp (gold family), light -> dark, for single-series
+     lines and stat-tile sparklines */
+  --chart-seq-100: #f2e2b8;
+  --chart-seq-400: #c99a2e;
+  --chart-seq-700: #7a5c15;
+
+  /* chart status palette — fixed, never themed, never used as a chart series.
+     Values match the dataviz skill's own validated status defaults for a dark
+     surface; always paired with an icon + label, never color alone. */
+  --chart-status-good: #0ca30c;
+  --chart-status-warning: #fab219;
+  --chart-status-serious: #ec835a;
+  --chart-status-critical: #d03b3b;
+}

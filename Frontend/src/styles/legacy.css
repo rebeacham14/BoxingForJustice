@@ -1,8 +1,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  color: #25202e;
-  background-color: #0f0f0f;
+  color: var(--color-body-text);
+  background-color: var(--color-bg-page);
 }
 
 button {
@@ -17,16 +17,18 @@ button {
 
 .home-page {
   background:
-    radial-gradient(circle at 80% 20%, rgba(212,175,55,.05), transparent 35%),
-    linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    radial-gradient(circle at 80% 20%, var(--color-gold-wash-soft), transparent 35%),
+    linear-gradient(135deg, var(--color-bg-page), var(--color-bg-panel));
 }
 
 .shop-page,
 .about-page,
-.orders-page {
+.orders-page,
+.resources-page,
+.veteran-page {
   background:
-    radial-gradient(circle at 80% 20%, rgba(212,175,55,.18), transparent 35%),
-    linear-gradient(135deg,#0f0f0f,#1a1a1a);
+    radial-gradient(circle at 80% 20%, var(--color-gold-wash), transparent 35%),
+    linear-gradient(135deg, var(--color-bg-page), var(--color-bg-panel));
 }
 
 /* NAVBAR */
@@ -43,11 +45,11 @@ button {
 }
 
 .logo {
-  color: white;
+  color: var(--color-white);
 }
 
 .logo span {
-  color: white;
+  color: var(--color-white);
 }
 
 .nav-links {
@@ -56,12 +58,68 @@ button {
   align-items: center;
 }
 
-.nav-links button {
-  color: white;
+.nav-links button,
+.nav-links a {
+  color: var(--color-white);
 }
 
-.nav-links button:hover {
-  color: #d4af37;
+.nav-links button:hover,
+.nav-links a:hover {
+  color: var(--color-gold);
+}
+
+/* SPONSOR BAR */
+
+.sponsor-bar {
+  width: 100%;
+  overflow: hidden;
+  padding: 22px 0;
+  margin-bottom: 20px;
+  background-color: var(--color-panel-glass);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.sponsor-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 70px;
+  animation: sponsor-scroll 28s linear infinite;
+}
+
+.sponsor-track img {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: grayscale(100%);
+  opacity: 0.8;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.sponsor-track img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.sponsor-bar:hover .sponsor-track {
+  animation-play-state: paused;
+}
+
+@keyframes sponsor-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-track {
+    animation: none;
+  }
 }
 
 /* HOME HERO */
@@ -89,14 +147,14 @@ button {
   line-height: 1.05;
   margin: 0 0 24px;
   font-weight: 900;
-  color: white;
+  color: var(--color-white);
 }
 
 .hero-text h1 span,
 .page-hero-text h1 span {
   font-size: 34px;
   display: block;
-  color: #d4af37;
+  color: var(--color-gold);
 }
 
 .hero-text p,
@@ -105,12 +163,12 @@ button {
   font-size: 18px;
   line-height: 1.6;
   margin-bottom: 32px;
-  color: #d5d5d5;
+  color: var(--color-text-muted);
 }
 
 .main-button,
 .secondary-button {
-  background-color: #d4af37;
+  background-color: var(--color-gold);
   border: none;
   padding: 16px 34px;
   margin-bottom: 40px;
@@ -123,7 +181,7 @@ button {
 
 .main-button:hover,
 .secondary-button:hover {
-  background-color: #b58a1d;
+  background-color: var(--color-gold-hover);
 }
 
 .hero-image {
@@ -202,7 +260,7 @@ button {
 }
 
 .ticket-card {
-  background-color: rgba(28,28,28,.92);
+  background-color: var(--color-panel-glass);
   width: 300px;
   padding: 32px;
   border-radius: 26px;
@@ -213,14 +271,14 @@ button {
 
 .ticket-card h2 {
   margin-top: 0;
-  color:#d4af37;
+  color: var(--color-gold);
   font-size: 26px;
 }
 
 .price {
   font-size: 40px;
   font-weight: 900;
-   color:#d4af37;
+  color: var(--color-gold);
   margin: 18px 0;
 }
 
@@ -229,7 +287,7 @@ button {
 }
 
 .ticket-card p {
-    color:white;
+  color: var(--color-white);
 }
 
 .quantity-input {
@@ -254,7 +312,7 @@ button {
   width: 72%;
   margin: 0 auto 70px;
   padding: 28px 32px;
-  background-color: rgba(28,28,28,.92);
+  background-color: var(--color-panel-glass);
   border-radius: 26px;
   box-shadow: 0 24px 45px rgba(45, 28, 20, 0.14);
   position: relative;
@@ -263,7 +321,7 @@ button {
 
 .cart-section h2 {
   margin-top: 0;
-  color: #d4af37;
+  color: var(--color-gold);
 }
 
 .cart-item {
@@ -272,7 +330,7 @@ button {
   justify-content: space-between;
   gap: 16px;
   padding: 12px 0;
-  color: white;
+  color: var(--color-white);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -281,7 +339,7 @@ button {
 }
 
 .cart-section .total {
-  color: #d4af37;
+  color: var(--color-gold);
   margin-top: 18px;
 }
 
@@ -305,25 +363,25 @@ button {
 .checkout-summary,
 .checkout-payment {
   flex: 1 1 320px;
-  background-color: rgba(28,28,28,.92);
+  background-color: var(--color-panel-glass);
   padding: 28px 32px;
   border-radius: 26px;
   box-shadow: 0 24px 45px rgba(45, 28, 20, 0.14);
-  color: white;
+  color: var(--color-white);
 }
 
 .checkout-summary h2,
 .checkout-payment h2 {
   margin-top: 0;
-  color: #d4af37;
+  color: var(--color-gold);
 }
 
 .checkout-summary .cart-item {
-  color: white;
+  color: var(--color-white);
 }
 
 .checkout-summary .total {
-  color: #d4af37;
+  color: var(--color-gold);
   margin-top: 18px;
 }
 
@@ -336,7 +394,7 @@ button {
 }
 
 .checkout-error {
-  color: #ff6b6b;
+  color: var(--color-danger);
   font-weight: 700;
   margin: 10px 0;
 }
@@ -353,21 +411,22 @@ button {
 .checkout-success {
   width: 100%;
   text-align: center;
-  background-color: rgba(28,28,28,.92);
+  background-color: var(--color-panel-glass);
   padding: 40px 32px;
   border-radius: 26px;
   box-shadow: 0 24px 45px rgba(45, 28, 20, 0.14);
-  color: white;
+  color: var(--color-white);
 }
 
 .checkout-success h2 {
-  color: #d4af37;
+  color: var(--color-gold);
   margin-top: 0;
 }
 
-/* ABOUT */
+/* ABOUT / CARD GRIDS (reused by Programs, Resources, Veteran sections) */
 
-.about-cards {
+.about-cards,
+.card-grid {
   width: 72%;
   margin: 0 auto;
   padding: 20px 0 70px;
@@ -379,8 +438,9 @@ button {
   z-index: 4;
 }
 
-.about-card {
-  background-color: rgba(28,28,28,.92);
+.about-card,
+.info-card {
+  background-color: var(--color-panel-glass);
   width: 260px;
   padding: 30px;
   border-radius: 24px;
@@ -389,13 +449,15 @@ button {
   backdrop-filter: blur(8px);
 }
 
-.about-card h2 {
-  color:#d4af37;
+.about-card h2,
+.info-card h2 {
+  color: var(--color-gold);
   margin-top: 0;
 }
 
-.about-card p {
-    color:white;
+.about-card p,
+.info-card p {
+  color: var(--color-white);
 }
 
 .about-card img {
@@ -422,7 +484,7 @@ button {
 }
 
 .order-card {
-  background-color: rgba(28,28,28,.92);
+  background-color: var(--color-panel-glass);
   width: 430px;
   max-width: 90%;
   padding: 28px;
@@ -433,7 +495,7 @@ button {
 }
 
 .order-card h2 {
-  color:#d4af37;
+  color: var(--color-gold);
   margin-top: 0;
 }
 
@@ -445,7 +507,7 @@ button {
 }
 
 .order-card p {
-    color:white;
+  color: var(--color-white);
 }
 
 /* RESPONSIVE */
@@ -458,6 +520,7 @@ button {
   .cart-section,
   .checkout-section,
   .about-cards,
+  .card-grid,
   .orders-section {
     width: 88%;
   }
@@ -485,11 +548,19 @@ button {
     font-size: 46px;
   }
 
-  .nav-links {
-    gap: 14px;
+  .navbar {
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .nav-links button {
+  .nav-links {
+    gap: 12px 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-links button,
+  .nav-links a {
     font-size: 14px;
   }
 }
@@ -499,19 +570,16 @@ button {
   max-width: 420px;
   margin: 80px auto;
   padding: 35px;
-  background:#1b1b1b;
+  background: var(--color-auth-panel);
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   text-align: center;
+  color: var(--color-white);
 }
 
 .auth-box h1 {
   font-size: 2rem;
   margin-bottom: 25px;
-}
-
-.auth-box h1 span {
-  color: #ff7a00;
 }
 
 .auth-box form {
@@ -522,77 +590,81 @@ button {
 
 .auth-box input {
   padding: 14px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-input-border);
   border-radius: 12px;
   font-size: 1rem;
+  background: var(--color-input-bg);
+  color: var(--color-white);
 }
 
 .text-button {
   background: none;
   border: none;
-  color: #ff7a00;
   font-weight: bold;
   cursor: pointer;
 }
 
 .user-name {
   font-weight: bold;
-  color: #ff7a00;
   margin: 0 10px;
-}
-
-.auth-box {
-    color:white;
-}
-
-.auth-box input {
-    background:#2c2c2c;
-    color:white;
-    border:1px solid #555;
 }
 
 .auth-box h1 span,
 .user-name,
 .text-button {
-    color:#d4af37;
+  color: var(--color-gold);
 }
 
-/* Fix navbar buttons */
+/* Nav buttons */
 .nav-links button {
   background: transparent;
   border: none;
-  color: white;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   padding: 0;
   box-shadow: none;
+  text-decoration: none;
 }
 
-.nav-links button:hover {
-  color: #d4af37;
+.nav-links a {
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
 }
 
-/* Remove red glow from buttons */
+/* CTA buttons */
 .main-button,
 .secondary-button {
-  background-color: #d4af37;
+  background-color: var(--color-gold);
   color: #111;
   box-shadow: 0 10px 24px rgba(212, 175, 55, 0.22);
+  text-decoration: none;
+  display: inline-block;
 }
 
 .main-button:hover,
 .secondary-button:hover {
-  background-color: #b58a1d;
+  background-color: var(--color-gold-hover);
 }
 
-/* Remove red glow from images */
+.secondary-button {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 1px solid var(--color-gold);
+  box-shadow: none;
+}
+
+.secondary-button:hover {
+  background-color: var(--color-gold-wash);
+}
+
+/* Image shadows/overlays */
 .hero-image,
 .page-hero-image {
   box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
 }
 
-/* Remove red overlay */
 .hero-image::after,
 .page-hero-image::after {
   background: rgba(0, 0, 0, 0.12);

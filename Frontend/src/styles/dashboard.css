@@ -1,0 +1,157 @@
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* STAT TILE */
+
+.stat-tile {
+  background-color: var(--color-panel-glass);
+  border-radius: 20px;
+  padding: 24px 26px;
+  backdrop-filter: blur(8px);
+}
+
+.stat-tile-label {
+  color: var(--chart-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 10px;
+}
+
+.stat-tile-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.stat-tile-value {
+  color: var(--color-white);
+  font-size: 42px;
+  font-weight: 900;
+}
+
+.stat-tile-delta {
+  color: var(--chart-status-good);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.stat-tile-delta.is-negative {
+  color: var(--chart-status-critical);
+}
+
+/* CHART CARD */
+
+.chart-card {
+  background-color: var(--color-panel-glass);
+  border-radius: 20px;
+  padding: 24px 26px 20px;
+  backdrop-filter: blur(8px);
+}
+
+.chart-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.chart-card-title {
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.chart-card-toggle {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--chart-text-secondary);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chart-card-toggle:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.chart-card-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.chart-card-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--chart-text-secondary);
+}
+
+.chart-card-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.chart-card-source {
+  color: var(--chart-text-secondary);
+  font-size: 11px;
+  margin: 12px 0 0;
+}
+
+.chart-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.chart-table th,
+.chart-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--chart-gridline);
+  color: var(--color-white);
+}
+
+.chart-table th {
+  color: var(--chart-text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
