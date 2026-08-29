@@ -8,7 +8,7 @@ import SiteImpactPage from './pages/site/ImpactPage';
 import SiteGetInvolvedPage from './pages/site/GetInvolvedPage';
 import SiteEnrollLandingPage from './pages/site/EnrollLandingPage';
 
-import Layout from './components/layout/Layout';
+import MmaEventsRoot from './components/layout/MmaEventsRoot';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import ResourcesPage from './pages/ResourcesPage';
@@ -36,7 +36,7 @@ function App() {
         <Route path="/enroll" element={<SiteEnrollLandingPage />} />
       </Route>
 
-      <Route path="/mma-events" element={<Layout />}>
+      <Route path="/mma-events" element={<MmaEventsRoot />}>
         <Route index element={<HomePage />} />
         <Route path="resources" element={<ResourcesPage />} />
         <Route path="about" element={<AboutPage />} />
