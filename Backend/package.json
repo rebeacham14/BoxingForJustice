@@ -12,13 +12,13 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@getbrevo/brevo": "^6.0.2",
-    "bcryptjs": "^3.0.3",
+    "@clerk/backend": "^3.16.13",
+    "@mailchimp/mailchimp_transactional": "^1.4.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.1",
+    "multer": "^2.3.0",
     "square": "^45.0.1"
   },
   "devDependencies": {

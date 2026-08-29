@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema(
   {
+    // Clerk user id (e.g. "user_...") - Clerk is the sole identity system
+    // now, there is no local User model to reference.
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
       required: true,
     },
 

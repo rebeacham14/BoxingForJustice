@@ -1,2 +1,5 @@
 node_modules
 .env
+# Holds personal data (name/age/email) submitted via /api/enroll - flat-file
+# storage for now, will move to a secure cloud endpoint later.
+BoxingEnrollments.txt

@@ -1,26 +1,39 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs/promises');
 const { randomUUID } = require('crypto');
 const {
   SquareClient,
   SquareEnvironment,
   SquareError,
 } = require('square');
+const { createClerkClient } = require('@clerk/backend');
 
 require('dotenv').config();
 
 const Order = require('./models/Order');
 const Ticket = require('./models/Ticket');
-const User = require('./models/User');
 const Cart = require('./models/Cart');
+const Donation = require('./models/Donation');
+const Subscription = require('./models/Subscription');
 
 const { authMiddleware } = require('./middleware/authMiddleware');
-const { sendPurchaseConfirmation } = require('./utils/email');
+const {
+  sendPurchaseConfirmation,
+  sendContactNotification,
+  sendKickback,
+  sendInternshipApplicationNotification,
+  sendDonationThankYou,
+} = require('./utils/email');
 
 const app = express();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +47,15 @@ const squareClient = new SquareClient({
   token: process.env.SQUARE_ACCESS_TOKEN,
   environment: squareEnvironment,
 });
+
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
+
+async function getUserEmail(userId) {
+  const user = await clerkClient.users.getUser(userId);
+  return user.primaryEmailAddress?.emailAddress || user.emailAddresses[0]?.emailAddress;
+}
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -52,135 +74,9 @@ app.get('/api/test', (req, res) => {
 
 app.get('/api/auth-test', authMiddleware, (req, res) => {
   return res.json({
-    message: 'JWT authentication is working',
-    user: req.user,
+    message: 'Clerk authentication is working',
+    userId: req.auth.userId,
   });
-});
-
-/* =========================
-   AUTH ROUTES
-========================= */
-
-app.post('/api/register', async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        message: 'Please fill in all fields',
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: 'Password must be at least 6 characters',
-      });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-
-    const existingUser = await User.findOne({
-      email: normalizedEmail,
-    });
-
-    if (existingUser) {
-      return res.status(400).json({
-        message: 'Email already registered',
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      username: username.trim(),
-      email: normalizedEmail,
-      password: hashedPassword,
-      role: 'user',
-    });
-
-    return res.status(201).json({
-      message: 'User registered successfully',
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role,
-      },
-    });
-  } catch (error) {
-    console.error('Registration error:', error);
-
-    return res.status(500).json({
-      message: 'Error registering user',
-      error: error.message,
-    });
-  }
-});
-
-app.post('/api/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        message: 'Please enter email and password',
-      });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-
-    const user = await User.findOne({
-      email: normalizedEmail,
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        message: 'Invalid email or password',
-      });
-    }
-
-    const passwordMatches = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    if (!passwordMatches) {
-      return res.status(400).json({
-        message: 'Invalid email or password',
-      });
-    }
-
-    const token = jwt.sign(
-      {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '1h',
-      }
-    );
-
-    return res.json({
-      message: 'Login successful',
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-
-    return res.status(500).json({
-      message: 'Error logging in',
-      error: error.message,
-    });
-  }
 });
 
 /* =========================
@@ -249,13 +145,13 @@ app.post('/api/seed-tickets', async (req, res) => {
 
 app.get('/api/cart', authMiddleware, async (req, res) => {
   try {
-    let cart = await Cart.findOne({ user: req.user.id }).populate(
+    let cart = await Cart.findOne({ user: req.auth.userId }).populate(
       'items.ticket'
     );
 
     if (!cart) {
       cart = await Cart.create({
-        user: req.user.id,
+        user: req.auth.userId,
         items: [],
       });
     }
@@ -300,11 +196,11 @@ app.post('/api/cart/items', authMiddleware, async (req, res) => {
       });
     }
 
-    let cart = await Cart.findOne({ user: req.user.id });
+    let cart = await Cart.findOne({ user: req.auth.userId });
 
     if (!cart) {
       cart = new Cart({
-        user: req.user.id,
+        user: req.auth.userId,
         items: [],
       });
     }
@@ -343,7 +239,7 @@ app.delete(
   async (req, res) => {
     try {
       const cart = await Cart.findOneAndUpdate(
-        { user: req.user.id },
+        { user: req.auth.userId },
         { $pull: { items: { ticket: req.params.ticketId } } },
         { new: true }
       ).populate('items.ticket');
@@ -369,7 +265,7 @@ app.delete(
 app.delete('/api/cart', authMiddleware, async (req, res) => {
   try {
     const cart = await Cart.findOneAndUpdate(
-      { user: req.user.id },
+      { user: req.auth.userId },
       { $set: { items: [] } },
       { new: true, upsert: true }
     );
@@ -402,7 +298,7 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
   let session;
 
   try {
-    const cart = await Cart.findOne({ user: req.user.id }).populate(
+    const cart = await Cart.findOne({ user: req.auth.userId }).populate(
       'items.ticket'
     );
 
@@ -493,7 +389,7 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
       const [order] = await Order.create(
         [
           {
-            user: req.user.id,
+            user: req.auth.userId,
             ticket: item.ticket._id,
             ticketName: item.ticket.name,
             ticketPrice: item.ticket.price,
@@ -517,7 +413,8 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
     await session.commitTransaction();
 
     try {
-      await sendPurchaseConfirmation(req.user.email, {
+      const email = await getUserEmail(req.auth.userId);
+      await sendPurchaseConfirmation(email, {
         items: newOrders.map((order) => ({
           name: order.ticketName,
           quantity: order.quantity,
@@ -575,7 +472,7 @@ app.post('/api/checkout', authMiddleware, async (req, res) => {
 app.get('/api/orders', authMiddleware, async (req, res) => {
   try {
     const orders = await Order.find({
-      user: req.user.id,
+      user: req.auth.userId,
     })
       .populate('ticket')
       .sort({
@@ -594,6 +491,305 @@ app.get('/api/orders', authMiddleware, async (req, res) => {
 });
 
 /* =========================
+   CONTACT ROUTES
+   (Request a training, Discuss partnership, bottom-of-page contact form -
+   see Frontend/src/components/site/ContactForm.jsx)
+========================= */
+
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { type, name, email, org, phone, comment } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Name and email are required' });
+    }
+
+    await sendContactNotification({ type, name, email, org, phone, comment });
+
+    try {
+      await sendKickback(email, '- an associate from bfj will get back to you');
+    } catch (emailError) {
+      console.error('Contact kickback email failed to send:', emailError.message);
+    }
+
+    return res.status(201).json({ message: 'Message sent' });
+  } catch (error) {
+    console.error('Contact submission error:', error);
+
+    return res.status(500).json({
+      message: 'Error sending message',
+      error: error.message,
+    });
+  }
+});
+
+/* =========================
+   INTERNSHIP APPLICATION
+========================= */
+
+app.post(
+  '/api/internship-apply',
+  upload.fields([
+    { name: 'resume', maxCount: 1 },
+    { name: 'coverLetter', maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { position, name, email, phone } = req.body;
+
+      if (!position || !name || !email) {
+        return res.status(400).json({
+          message: 'position, name, and email are required',
+        });
+      }
+
+      const files = [
+        ...(req.files?.resume || []),
+        ...(req.files?.coverLetter || []),
+      ];
+
+      await sendInternshipApplicationNotification(
+        { position, name, email, phone },
+        files
+      );
+
+      try {
+        await sendKickback(
+          email,
+          `Thank you for your interest in ${position}. BFJ will get back to you as soon as we can.`
+        );
+      } catch (emailError) {
+        console.error('Internship kickback email failed to send:', emailError.message);
+      }
+
+      return res.status(201).json({ message: 'Application submitted' });
+    } catch (error) {
+      console.error('Internship application error:', error);
+
+      return res.status(500).json({
+        message: 'Error submitting application',
+        error: error.message,
+      });
+    }
+  }
+);
+
+/* =========================
+   DONATE (unauthenticated - anyone can donate)
+========================= */
+
+app.post('/api/donate', async (req, res) => {
+  const { provider, token, amount, name, email } = req.body;
+
+  if (provider === 'paypal') {
+    return res.status(501).json({ message: 'PayPal donations are not configured yet.' });
+  }
+
+  const parsedAmount = Number(amount);
+
+  if (!token || !Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+    return res.status(400).json({ message: 'Missing or invalid token/amount' });
+  }
+
+  try {
+    const squareResponse = await squareClient.payments.create({
+      sourceId: token,
+      idempotencyKey: randomUUID(),
+      locationId: process.env.SQUARE_LOCATION_ID,
+      autocomplete: true,
+      amountMoney: {
+        amount: BigInt(Math.round(parsedAmount * 100)),
+        currency: 'USD',
+      },
+    });
+
+    const payment = squareResponse.payment;
+
+    if (!payment || payment.status !== 'COMPLETED') {
+      throw new Error(`Square payment was not completed. Status: ${payment?.status || 'unknown'}`);
+    }
+
+    const donation = await Donation.create({
+      name,
+      email,
+      amount: parsedAmount,
+      provider: 'square',
+      providerPaymentId: payment.id,
+    });
+
+    if (email) {
+      try {
+        await sendDonationThankYou(email, parsedAmount);
+      } catch (emailError) {
+        console.error('Donation thank-you email failed to send:', emailError.message);
+      }
+    }
+
+    return res.status(201).json({ success: true, donation });
+  } catch (error) {
+    console.error('Donation error:', error);
+
+    let errorMessage = error.message;
+
+    if (error instanceof SquareError && Array.isArray(error.errors) && error.errors.length > 0) {
+      errorMessage = error.errors[0].detail || error.errors[0].code || error.message;
+    }
+
+    return res.status(500).json({ success: false, message: 'Donation processing failed', error: errorMessage });
+  }
+});
+
+/* =========================
+   ENROLL (mma-events side site, Clerk-authenticated)
+========================= */
+
+app.post('/api/enroll', authMiddleware, async (req, res) => {
+  try {
+    const { name, age, email } = req.body;
+
+    if (!name || !age || !email) {
+      return res.status(400).json({ message: 'name, age, and email are required' });
+    }
+
+    const record = {
+      userId: req.auth.userId,
+      name,
+      age,
+      email,
+      submittedAt: new Date().toISOString(),
+    };
+
+    // Flat-file storage for now, per the current phase of the project -
+    // will move to a cloud-backed, secure endpoint later.
+    await fs.appendFile(
+      path.join(__dirname, 'BoxingEnrollments.txt'),
+      `${JSON.stringify(record)}\n`
+    );
+
+    return res.status(201).json({ message: 'Enrolled' });
+  } catch (error) {
+    console.error('Enrollment error:', error);
+
+    return res.status(500).json({
+      message: 'Error submitting enrollment',
+      error: error.message,
+    });
+  }
+});
+
+/* =========================
+   SUBSCRIPTIONS (Account page monthly giving)
+========================= */
+
+app.get('/api/subscriptions', authMiddleware, async (req, res) => {
+  try {
+    const subscriptions = await Subscription.find({ user: req.auth.userId }).sort({ createdAt: -1 });
+    return res.json(subscriptions);
+  } catch (error) {
+    console.error('Subscription fetch error:', error);
+
+    return res.status(500).json({
+      message: 'Error getting subscriptions',
+      error: error.message,
+    });
+  }
+});
+
+app.post('/api/subscriptions', authMiddleware, async (req, res) => {
+  const { provider, token } = req.body;
+
+  if (provider === 'paypal') {
+    return res.status(501).json({ message: 'PayPal subscriptions are not configured yet.' });
+  }
+
+  if (!token) {
+    return res.status(400).json({ message: 'Missing payment token' });
+  }
+
+  if (!process.env.SQUARE_SUBSCRIPTION_PLAN_VARIATION_ID) {
+    return res.status(503).json({ message: 'Monthly giving is not configured yet.' });
+  }
+
+  try {
+    const email = await getUserEmail(req.auth.userId);
+
+    const customerResponse = await squareClient.customers.create({
+      idempotencyKey: randomUUID(),
+      emailAddress: email,
+      referenceId: req.auth.userId,
+    });
+    const customerId = customerResponse.customer.id;
+
+    const cardResponse = await squareClient.cards.create({
+      idempotencyKey: randomUUID(),
+      sourceId: token,
+      card: { customerId },
+    });
+    const cardId = cardResponse.card.id;
+
+    const subscriptionResponse = await squareClient.subscriptions.create({
+      idempotencyKey: randomUUID(),
+      locationId: process.env.SQUARE_LOCATION_ID,
+      planVariationId: process.env.SQUARE_SUBSCRIPTION_PLAN_VARIATION_ID,
+      customerId,
+      cardId,
+    });
+
+    const subscription = await Subscription.create({
+      user: req.auth.userId,
+      provider: 'square',
+      providerSubscriptionId: subscriptionResponse.subscription.id,
+      providerCustomerId: customerId,
+      planId: process.env.SQUARE_SUBSCRIPTION_PLAN_VARIATION_ID,
+      status: 'active',
+    });
+
+    return res.status(201).json(subscription);
+  } catch (error) {
+    console.error('Subscription creation error:', error);
+
+    let errorMessage = error.message;
+
+    if (error instanceof SquareError && Array.isArray(error.errors) && error.errors.length > 0) {
+      errorMessage = error.errors[0].detail || error.errors[0].code || error.message;
+    }
+
+    return res.status(500).json({ message: 'Could not start monthly giving', error: errorMessage });
+  }
+});
+
+app.post('/api/subscriptions/:id/cancel', authMiddleware, async (req, res) => {
+  try {
+    const subscription = await Subscription.findOne({
+      _id: req.params.id,
+      user: req.auth.userId,
+    });
+
+    if (!subscription) {
+      return res.status(404).json({ message: 'Subscription not found' });
+    }
+
+    if (subscription.provider === 'square') {
+      await squareClient.subscriptions.cancel({
+        subscriptionId: subscription.providerSubscriptionId,
+      });
+    }
+
+    subscription.status = 'canceled';
+    await subscription.save();
+
+    return res.json(subscription);
+  } catch (error) {
+    console.error('Subscription cancellation error:', error);
+
+    return res.status(500).json({
+      message: 'Error cancelling subscription',
+      error: error.message,
+    });
+  }
+});
+
+/* =========================
    SERVER START
 ========================= */
 
@@ -602,4 +798,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
