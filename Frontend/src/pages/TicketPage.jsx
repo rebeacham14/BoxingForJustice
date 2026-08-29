@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import SEO from '../components/common/SEO';
 import { API_URL, getAuthHeaders } from '../utils/api';
 
@@ -8,6 +9,7 @@ export default function TicketPage() {
   const [quantities, setQuantities] = useState({});
   const [cart, setCart] = useState({ items: [] });
   const navigate = useNavigate();
+  const { getToken } = useAuth();
 
   useEffect(() => {
     fetch(`${API_URL}/api/tickets`)
@@ -35,23 +37,25 @@ export default function TicketPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/cart`, {
-      headers: getAuthHeaders(),
-    })
-      .then(async (res) => {
+    async function loadCart() {
+      try {
+        const res = await fetch(`${API_URL}/api/cart`, {
+          headers: await getAuthHeaders(getToken),
+        });
         const data = await res.json();
 
         if (!res.ok) {
           throw new Error(data.message || 'Unable to load cart.');
         }
 
-        return data;
-      })
-      .then((data) => setCart(data))
-      .catch((error) => {
+        setCart(data);
+      } catch (error) {
         console.error('Error fetching cart:', error);
-      });
-  }, []);
+      }
+    }
+
+    loadCart();
+  }, [getToken]);
 
   function getQuantity(ticketId) {
     return quantities[ticketId] ?? 1;
@@ -66,7 +70,7 @@ export default function TicketPage() {
     }));
   }
 
-  function handleAddToCart(ticket) {
+  async function handleAddToCart(ticket) {
     const quantity = getQuantity(ticket._id);
 
     if (!Number.isInteger(quantity) || quantity < 1) {
@@ -74,52 +78,46 @@ export default function TicketPage() {
       return;
     }
 
-    fetch(`${API_URL}/api/cart/items`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({
-        ticketId: ticket._id,
-        quantity,
-      }),
-    })
-      .then(async (res) => {
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || 'Unable to update cart.');
-        }
-
-        return data;
-      })
-      .then((data) => {
-        setCart(data);
-        alert(`Added ${quantity} ${ticket.name} to your cart.`);
-      })
-      .catch((error) => {
-        console.error('Error updating cart:', error);
-        alert(error.message);
+    try {
+      const res = await fetch(`${API_URL}/api/cart/items`, {
+        method: 'POST',
+        headers: await getAuthHeaders(getToken),
+        body: JSON.stringify({
+          ticketId: ticket._id,
+          quantity,
+        }),
       });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Unable to update cart.');
+      }
+
+      setCart(data);
+      alert(`Added ${quantity} ${ticket.name} to your cart.`);
+    } catch (error) {
+      console.error('Error updating cart:', error);
+      alert(error.message);
+    }
   }
 
-  function handleRemoveFromCart(ticketId) {
-    fetch(`${API_URL}/api/cart/items/${ticketId}`, {
-      method: 'DELETE',
-      headers: getAuthHeaders(),
-    })
-      .then(async (res) => {
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || 'Unable to update cart.');
-        }
-
-        return data;
-      })
-      .then((data) => setCart(data))
-      .catch((error) => {
-        console.error('Error removing cart item:', error);
-        alert(error.message);
+  async function handleRemoveFromCart(ticketId) {
+    try {
+      const res = await fetch(`${API_URL}/api/cart/items/${ticketId}`, {
+        method: 'DELETE',
+        headers: await getAuthHeaders(getToken),
       });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Unable to update cart.');
+      }
+
+      setCart(data);
+    } catch (error) {
+      console.error('Error removing cart item:', error);
+      alert(error.message);
+    }
   }
 
   const cartTotal = cart.items.reduce(
@@ -148,7 +146,7 @@ export default function TicketPage() {
         </div>
 
         <div className="page-hero-image">
-          <img src="/shop-boxing.jpg" alt="Boxing stadium" />
+          <img src="/misc/shop-boxing.jpg" alt="Boxing stadium" />
         </div>
       </section>
 

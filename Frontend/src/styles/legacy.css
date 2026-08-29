@@ -24,8 +24,7 @@ button {
 .shop-page,
 .about-page,
 .orders-page,
-.resources-page,
-.veteran-page {
+.resources-page {
   background:
     radial-gradient(circle at 80% 20%, var(--color-gold-wash), transparent 35%),
     linear-gradient(135deg, var(--color-bg-page), var(--color-bg-panel));
@@ -423,7 +422,7 @@ button {
   margin-top: 0;
 }
 
-/* ABOUT / CARD GRIDS (reused by Programs, Resources, Veteran sections) */
+/* ABOUT / CARD GRIDS (reused by Programs, Resources sections) */
 
 .about-cards,
 .card-grid {

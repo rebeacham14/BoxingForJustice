@@ -9,13 +9,4 @@ export const crisisLinks = {
       href: 'https://988lifeline.org/chat',
     },
   },
-  veteran: {
-    heading: 'Veterans Crisis Line — free, confidential, 24/7.',
-    body: 'Dial 988 then press 1, or text 838255, to connect with the Veterans Crisis Line.',
-    primary: { label: 'Call 988, Press 1', href: 'tel:988' },
-    secondary: {
-      label: 'Text 838255',
-      href: 'sms:838255',
-    },
-  },
 };

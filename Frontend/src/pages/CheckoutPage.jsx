@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import SEO from '../components/common/SEO';
 import { API_URL, getAuthHeaders } from '../utils/api';
 import { SQUARE_APPLICATION_ID, SQUARE_LOCATION_ID, loadSquareSdk } from '../utils/square';
@@ -15,39 +16,40 @@ export default function CheckoutPage() {
   const [isComplete, setIsComplete] = useState(false);
   const cardContainerRef = useRef(null);
   const navigate = useNavigate();
+  const { getToken } = useAuth();
 
   useEffect(() => {
     let cancelled = false;
 
-    fetch(`${API_URL}/api/cart`, {
-      headers: getAuthHeaders(),
-    })
-      .then(async (res) => {
+    async function loadCart() {
+      try {
+        const res = await fetch(`${API_URL}/api/cart`, {
+          headers: await getAuthHeaders(getToken),
+        });
         const data = await res.json();
 
         if (!res.ok) {
           throw new Error(data.message || 'Unable to load your cart.');
         }
 
-        return data;
-      })
-      .then((data) => {
         if (!cancelled) {
           setCart(data);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching cart:', error);
 
         if (!cancelled) {
           setCartError(error.message);
         }
-      });
+      }
+    }
+
+    loadCart();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [getToken]);
 
   useEffect(() => {
     if (!SQUARE_APPLICATION_ID || !SQUARE_LOCATION_ID) {
@@ -125,7 +127,7 @@ export default function CheckoutPage() {
 
       const res = await fetch(`${API_URL}/api/checkout`, {
         method: 'POST',
-        headers: getAuthHeaders(),
+        headers: await getAuthHeaders(getToken),
         body: JSON.stringify({
           token: tokenizeResult.token,
         }),

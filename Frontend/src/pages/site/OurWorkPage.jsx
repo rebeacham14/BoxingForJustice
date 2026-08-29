@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom';
 import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
+import AccordionItem from '../../components/common/AccordionItem';
+import FlipCard from '../../components/common/FlipCard';
 
 const educationTopics = [
   'Human trafficking, sexual exploitation, grooming, and coercion',
   'Sexual misconduct by people in leadership or positions of trust',
   'Bullying, peer pressure, substance misuse, and unsafe relationships',
   'Physical, emotional, and sexual abuse; healthy boundaries; and help-seeking',
+];
+
+const equipping = [
+  { front: 'Recognize', back: 'emotions and warning signs' },
+  { front: 'Respond', back: 'with skills instead of impulse' },
+  { front: 'Rise', back: 'through leadership and purpose' },
 ];
 
 export default function OurWorkPage() {
@@ -17,13 +25,74 @@ export default function OurWorkPage() {
         title="One mission."
         accent="Multiple pathways."
         lede="Harm is connected. Healing must be, too. Our programs meet people at different points in their lives while advancing the same goal: safety, agency, resilience, and a future shaped by possibility."
-        number="02"
+        number="03"
       />
 
-      <section className="program-section program-red" id="prevention">
+      <div className="feature-card">
+        <div>
+          <p className="feature-card-tag">Boxing &amp; life skills</p>
+          <h3>One program.<br />Two youth pathways.</h3>
+          <p>
+            Beginning and Elite Boxing pathways build fitness, discipline, and
+            confidence — with a route to USA Boxing competition for athletes who
+            are ready. Full details now live on the enrollment portal.
+          </p>
+          <Link className="button button-dark" to="/mma-events/about#boxing-life-skills">
+            See the full breakdown ↗
+          </Link>
+        </div>
+      </div>
+
+      <section className="program-section program-red" id="campaigns">
         <div className="program-index">01</div>
         <div className="program-title">
-          <p className="eyebrow eyebrow-light"><span /> Prevention & education</p>
+          <p className="eyebrow eyebrow-light"><span /> Campaigns</p>
+          <h2>2028<br /><strong>Olympics.</strong></h2>
+        </div>
+        <div className="program-detail">
+          <p className="program-lede">
+            No past campaigns yet — this is the one we&apos;re building toward.
+          </p>
+          <p>
+            As the 2028 Olympics come to the region, BFJ is planning to partner
+            with hotels, local businesses, and organizations to confront issues
+            like prostitution and trafficking around USC and the surrounding
+            areas during the Games.
+          </p>
+        </div>
+      </section>
+
+      <section className="program-section" id="fundraiser-events">
+        <div className="program-index">02</div>
+        <div className="program-title">
+          <p className="eyebrow"><span /> Fundraiser events</p>
+          <h2>Coming<br /><strong>soon.</strong></h2>
+        </div>
+        <div className="program-detail">
+          <div className="content-placeholder">Owner to add upcoming fundraiser events.</div>
+        </div>
+      </section>
+
+      <section className="program-section" id="articles">
+        <div className="program-index">03</div>
+        <div className="program-title">
+          <p className="eyebrow"><span /> Articles</p>
+          <h2>Coming<br /><strong>soon.</strong></h2>
+        </div>
+        <div className="program-detail">
+          <div className="content-placeholder">Owner to add articles and press.</div>
+        </div>
+      </section>
+
+      <div className="callout-bar">
+        <h3>Know the signs. Name the harm. Build safety.</h3>
+        <p>Owner to add subline.</p>
+      </div>
+
+      <section className="program-section program-red">
+        <div className="program-index">04</div>
+        <div className="program-title">
+          <p className="eyebrow eyebrow-light"><span /> Educating</p>
           <h2>Know the signs.<br />Name the harm.<br /><strong>Build safety.</strong></h2>
         </div>
         <div className="program-detail">
@@ -36,17 +105,21 @@ export default function OurWorkPage() {
             community groups through clear, age-appropriate conversations about
             vulnerability, exploitation, abuse, and everyday pressures.
           </p>
-          <ul>
-            {educationTopics.map((topic) => <li key={topic}>{topic}</li>)}
-          </ul>
+          <div className="accordion">
+            {educationTopics.map((topic) => (
+              <AccordionItem title={topic} key={topic}>
+                Owner to add detail.
+              </AccordionItem>
+            ))}
+          </div>
           <Link className="button button-dark" to="/get-involved#training">Request a training</Link>
         </div>
       </section>
 
-      <section className="program-section" id="youth">
-        <div className="program-index">02</div>
+      <section className="program-section">
+        <div className="program-index">05</div>
         <div className="program-title">
-          <p className="eyebrow"><span /> Youth resilience & leadership</p>
+          <p className="eyebrow"><span /> Equipping</p>
           <h2>Today&apos;s strength.<br /><strong>Tomorrow&apos;s leaders.</strong></h2>
         </div>
         <div className="program-detail">
@@ -61,105 +134,28 @@ export default function OurWorkPage() {
             different future can be built.
           </p>
           <div className="mini-grid">
-            <div><span>01</span><strong>Recognize</strong><small>emotions and warning signs</small></div>
-            <div><span>02</span><strong>Respond</strong><small>with skills instead of impulse</small></div>
-            <div><span>03</span><strong>Rise</strong><small>through leadership and purpose</small></div>
+            {equipping.map(({ front, back }, index) => (
+              <FlipCard
+                key={front}
+                front={<><span>0{index + 1}</span><strong>{front}</strong></>}
+                back={<span>{back}</span>}
+              />
+            ))}
           </div>
-          <Link className="button button-dark" to="/get-involved#refer">Refer a young person</Link>
+          <Link className="button button-dark" to="/get-involved#mma-program">Refer a young person</Link>
         </div>
       </section>
 
-      <section className="boxing-deep-dive" id="boxing">
-        <div className="boxing-heading">
-          <p className="eyebrow eyebrow-light"><span /> Boxing &amp; life skills</p>
-          <h2>One program.<br /><strong>Two youth pathways.</strong></h2>
-          <p>
-            BFJ welcomes youth who are stepping into a boxing gym for the first time
-            and youth who want to earn the opportunity to compete. Every participant
-            receives structured coaching, physical conditioning, mentorship, and
-            practical life-skills development in a supportive environment.
-          </p>
-        </div>
-        <div className="cs-deep-grid">
-          <article><span>01</span><h3>Choice</h3><strong>My voice matters.</strong><p>Safe options help participants practice saying yes, saying no, and recognizing that their preferences can be respected.</p></article>
-          <article><span>02</span><h3>Control</h3><strong>I can choose my response.</strong><p>Breathing, pausing, resetting, and returning help participants manage activation without shutting down or exploding.</p></article>
-          <article><span>03</span><h3>Confidence</h3><strong>I am more than what happened.</strong><p>Every earned skill and completed round creates credible evidence of strength, progress, and possibility.</p></article>
-        </div>
-        <div className="boxing-levels">
-          <article>
-            <span>Pathway 01</span>
-            <h3>Beginning Boxing</h3>
-            <p className="level-audience">For all youth—no boxing experience required.</p>
-            <p>
-              Beginning Boxing introduces interested and novice youth to the sport in
-              a safe, structured, and encouraging environment. Group instruction and
-              individual coaching help participants develop fitness, confidence, and
-              a strong technical foundation at their own pace.
-            </p>
-            <ul>
-              <li>Stance, guard, footwork, balance, and basic combinations</li>
-              <li>Conditioning, coordination, and healthy training habits</li>
-              <li>Gym safety, teamwork, respect, and personal responsibility</li>
-              <li>Choice, control, confidence, and positive goal-setting</li>
-            </ul>
-            <p className="level-note">
-              Competition is not required. Youth who later demonstrate interest,
-              consistency, and readiness may be considered for the Elite pathway.
-            </p>
-            <Link className="button button-red" to="/get-involved#refer">Enroll or refer a youth</Link>
-          </article>
-          <article>
-            <span>Pathway 02</span>
-            <h3>Elite Boxing</h3>
-            <p className="level-audience">For committed youth pursuing USA Boxing competition.</p>
-            <p>
-              Elite Boxing provides advanced training for youth who want to prepare
-              for amateur competition. Athletes build technical skill, conditioning,
-              ring awareness, and competitive readiness while learning the 4 D&apos;s:
-              Desire, Dedication, Determination, and Discipline.
-            </p>
-            <ul>
-              <li>Advanced technique, defense, combinations, and ring movement</li>
-              <li>Strength, conditioning, strategy, and competition preparation</li>
-              <li>Attendance, coachability, discipline, and sportsmanship</li>
-              <li>Goal-setting, accountability, resilience, and leadership</li>
-            </ul>
-            <p className="level-note">
-              Entry into Elite Boxing and participation in competition depend on
-              coach assessment, consistent training, athlete readiness, and completion
-              of applicable USA Boxing registration, eligibility, medical, and safety requirements.
-            </p>
-            <Link className="button button-red" to="/get-involved#refer">Ask about Elite Boxing</Link>
-          </article>
-        </div>
-        <p className="boxing-scope-note">
-          BFJ provides boxing instruction, coaching, mentorship, prevention education,
-          and experiential life-skills development. Our program is not therapy or mental
-          health treatment. When a youth has an established therapist, clinician, case
-          manager, or STRTP treatment team, BFJ may coordinate with that team—with
-          appropriate authorization—while remaining within our role as coaches, mentors,
-          and educators.
-        </p>
-      </section>
-
-      <section className="program-section" id="veterans">
-        <div className="program-index">04</div>
+      <section className="program-section program-red">
+        <div className="program-index">06</div>
         <div className="program-title">
-          <p className="eyebrow"><span /> Veteran support</p>
-          <h2>Service changed.<br /><strong>Purpose continues.</strong></h2>
+          <p className="eyebrow eyebrow-light"><span /> Encouraging</p>
+          <h2>Community that<br /><strong>shows up.</strong></h2>
         </div>
         <div className="program-detail">
-          <p className="program-lede">
-            Veterans deserve connection, structure, and a community that recognizes
-            the challenges of post-traumatic stress and civilian transition.
-          </p>
-          <p>
-            Purposeful movement, routine, peer connection, and a respectful coaching
-            environment offer a constructive outlet for stress and a way to rebuild
-            confidence beyond military service. This support complements—not
-            replaces—professional mental health care.
-          </p>
-          <Link className="button button-dark" to="/get-involved#refer">Ask about veteran support</Link>
+          <div className="content-placeholder content-placeholder-light">
+            Owner to add encouragement/mentorship stories and content.
+          </div>
         </div>
       </section>
 
@@ -172,7 +168,7 @@ export default function OurWorkPage() {
           referrals, shared resources, and coordinated efforts, we help people reach
           the right support while helping partner organizations advance their own missions.
         </p>
-        <Link className="button button-red" to="/get-involved#partner">Build something together</Link>
+        <Link className="button button-red" to="/get-involved#partnership">Build something together</Link>
       </section>
       <BottomCta />
     </>

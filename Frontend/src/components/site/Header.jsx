@@ -1,6 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import DesktopNav from './DesktopNav';
+import MobileNav from './MobileNav';
+import DonateOverlay from './DonateOverlay';
 
 export default function Header() {
+  const [showDonate, setShowDonate] = useState(false);
+
   return (
     <>
       <div className="announcement">
@@ -14,31 +20,17 @@ export default function Header() {
           <span className="brand-mark" aria-hidden="true">BFJ</span>
           <span className="brand-name">Boxing <em>For</em> Justice</span>
         </Link>
-        <nav className="desktop-nav" aria-label="Primary navigation">
-          <Link to="/about">About</Link>
-          <Link to="/our-work">Our work</Link>
-          <Link to="/impact">Impact</Link>
-          <Link to="/get-involved">Get involved</Link>
-          <Link to="/mma-events">MMA Events</Link>
-        </nav>
-        <a
+        <DesktopNav />
+        <button
+          type="button"
           className="button button-small button-dark"
-          href="https://www.boxingforjustice.org/donationatetoday"
+          onClick={() => setShowDonate(true)}
         >
           Donate
-        </a>
-        <details className="mobile-menu">
-          <summary aria-label="Open navigation">Menu</summary>
-          <nav aria-label="Mobile navigation">
-            <Link to="/about">About</Link>
-            <Link to="/our-work">Our work</Link>
-            <Link to="/impact">Impact</Link>
-            <Link to="/get-involved">Get involved</Link>
-            <Link to="/mma-events">MMA Events</Link>
-            <a href="https://www.boxingforjustice.org/donationatetoday">Donate</a>
-          </nav>
-        </details>
+        </button>
+        <MobileNav onDonateClick={() => setShowDonate(true)} />
       </header>
+      {showDonate && <DonateOverlay onClose={() => setShowDonate(false)} />}
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import ContactFormBand from './ContactFormBand';
 
 export default function SiteLayout() {
   const location = useLocation();
@@ -25,6 +26,7 @@ export default function SiteLayout() {
       <main>
         <Outlet />
       </main>
+      <ContactFormBand />
       <Footer />
     </div>
   );

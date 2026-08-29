@@ -1,7 +1,10 @@
 export const API_URL = 'https://boxforjuice.onrender.com';
 
-export function getAuthHeaders() {
-  const token = localStorage.getItem('token');
+// Clerk tokens are short-lived and fetched async via `getToken()` from
+// Clerk's useAuth() hook - callers must pass that function in (it can't be
+// imported statically the way the old localStorage-based token could).
+export async function getAuthHeaders(getToken) {
+  const token = await getToken();
 
   return {
     'Content-Type': 'application/json',

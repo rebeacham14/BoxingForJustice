@@ -1,51 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import SEO from '../components/common/SEO';
-import { API_URL } from '../utils/api';
+import { API_URL, getAuthHeaders } from '../utils/api';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { getToken } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      alert('Please log in to view orders.');
-      navigate('/mma-events/login', { state: { from: { pathname: '/mma-events/orders' } } });
-      return;
-    }
-
-    fetch(`${API_URL}/api/orders`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (res) => {
+    async function loadOrders() {
+      try {
+        const res = await fetch(`${API_URL}/api/orders`, {
+          headers: await getAuthHeaders(getToken),
+        });
         const data = await res.json();
-
-        if (res.status === 401 || res.status === 403) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-
-          throw new Error(data.message || 'Your login has expired. Please log in again.');
-        }
 
         if (!res.ok) {
           throw new Error(data.message || 'Error loading orders.');
         }
 
-        return data;
-      })
-      .then((data) => {
         setOrders(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching orders:', error);
-        alert(error.message);
-        navigate('/mma-events/login', { state: { from: { pathname: '/mma-events/orders' } } });
-      });
-  }, [navigate]);
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+        setError(err.message);
+      }
+    }
+
+    loadOrders();
+  }, [getToken]);
 
   return (
     <div className="page orders-page">
@@ -69,25 +54,18 @@ export default function OrdersPage() {
         </div>
 
         <div className="page-hero-image">
-          <img src="/orders-boxing.jpg" alt="Boxing event ticket orders" />
+          <img src="/misc/orders-boxing.jpg" alt="Boxing event ticket orders" />
         </div>
       </section>
 
       <section className="orders-section">
-        {orders.length === 0 ? (
+        {error && <p className="empty-orders">{error}</p>}
+        {!error && orders.length === 0 ? (
           <p className="empty-orders">No orders yet.</p>
         ) : (
           orders.map((order) => (
             <div className="order-card" key={order._id}>
               <h2>{order.ticketName}</h2>
-
-              <p>
-                <strong>Name:</strong> {order.buyerName}
-              </p>
-
-              <p>
-                <strong>Email:</strong> {order.buyerEmail}
-              </p>
 
               <p>
                 <strong>Quantity:</strong> {order.quantity}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { NAV_ITEMS } from '../../data/navigation';
 
 export default function Footer() {
   return (
@@ -16,14 +17,14 @@ export default function Footer() {
       </div>
       <div className="footer-contact">
         <strong>Start a conversation</strong>
-        <p><a href="mailto:boxingforjustice@gmail.com">boxingforjustice@gmail.com</a></p>
+        <p><a href="mailto:info@boxingforjustice.org">info@boxingforjustice.org</a></p>
       </div>
       <nav className="footer-nav" aria-label="Footer navigation">
-        <Link to="/about">About</Link>
-        <Link to="/our-work">Our work</Link>
-        <Link to="/impact">Impact</Link>
-        <Link to="/get-involved">Get involved</Link>
-        <Link to="/mma-events">MMA Events</Link>
+        {NAV_ITEMS.map((item) => (
+          <Link key={item.label} to={item.to}>
+            {item.label}
+          </Link>
+        ))}
       </nav>
       <p className="footer-legal">
         © {new Date().getFullYear()} Boxing For Justice. IRS-recognized 501(c)(3). EIN 99-3175496.

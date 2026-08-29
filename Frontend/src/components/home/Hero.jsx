@@ -23,7 +23,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-image">
-        <img src="/home-boxing.jpg" alt="Boxing for Justice community program" />
+        <img src="/misc/home-boxing.jpg" alt="Boxing for Justice community program" />
       </div>
     </section>
   );

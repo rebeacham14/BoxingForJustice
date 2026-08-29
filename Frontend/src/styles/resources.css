@@ -71,21 +71,6 @@
   background: #0e8f0e;
 }
 
-.crisis-banner.crisis-banner-veteran {
-  background: linear-gradient(90deg, #123047, #163f52);
-  border-color: rgba(41, 121, 176, 0.4);
-}
-
-.crisis-banner-veteran .crisis-banner-icon,
-.crisis-banner-veteran .crisis-banner-links a {
-  background: #2f8fd9;
-  color: #05233a;
-}
-
-.crisis-banner-veteran .crisis-banner-links a:hover {
-  background: #237ac0;
-}
-
 @media (max-width: 900px) {
   .crisis-banner-inner {
     width: 88%;

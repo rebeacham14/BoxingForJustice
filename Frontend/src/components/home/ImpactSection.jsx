@@ -2,14 +2,14 @@ import SectionHeading from '../common/SectionHeading';
 
 const impactCards = [
   {
-    image: '/shop-boxing.jpg',
+    image: '/misc/shop-boxing.jpg',
     title: 'Our Mission',
     body: 'We use advocacy, education, and mentorship to help youth affected by trauma build confidence and a path forward.',
   },
   {
-    image: '/orders-boxing.jpg',
+    image: '/misc/orders-boxing.jpg',
     title: 'Who We Serve',
-    body: 'At-risk youth, community members, and veterans — anyone who needs support, safety education, or a stronger foundation.',
+    body: 'At-risk youth and community members — anyone who needs support, safety education, or a stronger foundation.',
   },
   {
     image: '/headshots/about-boxing.png',

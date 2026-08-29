@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
+import UsPolicyMap from '../../components/impact/UsPolicyMap';
 
 const outcomes = [
   ['Participation', 'Consistent engagement, attendance, retention, and completion'],
@@ -18,8 +19,36 @@ export default function ImpactPage() {
         title="Measure what"
         accent="matters."
         lede="Trust is earned through clear goals, responsible stewardship, honest learning, and evidence that programs are creating the changes they were designed to make."
-        number="03"
+        number="04"
       />
+
+      <section className="work-section" id="policies">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> Policies</p>
+            <h2>What&apos;s on<br />the books.</h2>
+          </div>
+          <p className="section-intro">
+            A state-by-state look at the policies that shape how kids are
+            protected. Content below is a placeholder — the owner will add real
+            policy summaries.
+          </p>
+        </div>
+        <div className="content-placeholder">Owner to add policy tracking content.</div>
+      </section>
+
+      <section className="work-section" id="geo-data">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> GEO Data</p>
+            <h2>Click a state.<br />See the picture.</h2>
+          </div>
+          <p className="section-intro">
+            Click or tap any state to see its policies and helpful data.
+          </p>
+        </div>
+        <UsPolicyMap />
+      </section>
 
       <section className="fact-band">
         <article><strong>2024</strong><span>Year founded</span></article>
@@ -95,7 +124,7 @@ export default function ImpactPage() {
           </p>
           <div className="funder-links">
             <a href="https://www.guidestar.org/Profile/99-3175496">View GuideStar profile <span>↗</span></a>
-            <Link to="/get-involved#partner">Discuss a partnership <span>→</span></Link>
+            <Link to="/get-involved#partnership">Discuss a partnership <span>→</span></Link>
           </div>
         </div>
       </section>

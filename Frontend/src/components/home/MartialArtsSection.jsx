@@ -17,7 +17,7 @@ export default function MartialArtsSection() {
       </div>
 
       <div className="martial-arts-image">
-        <img src="/shop-boxing.jpg" alt="Boxing training session" />
+        <img src="/misc/shop-boxing.jpg" alt="Boxing training session" />
       </div>
     </section>
   );

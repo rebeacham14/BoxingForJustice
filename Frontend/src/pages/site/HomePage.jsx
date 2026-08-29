@@ -13,11 +13,6 @@ const focusAreas = [
   },
   {
     number: '03',
-    title: 'Veteran Support',
-    text: 'Purposeful activity and community connection for veterans navigating post-traumatic stress and the transition to civilian life.',
-  },
-  {
-    number: '04',
     title: 'Community Partnership',
     text: 'Collaboration with nonprofits, educators, advocates, and service providers to close gaps and multiply impact across Riverside County.',
   },
@@ -39,11 +34,11 @@ export default function HomePage() {
           <h1>Power is not taken.<br /><strong>It is restored.</strong></h1>
           <p className="hero-lede">
             We protect vulnerable people, prevent harm, and help youth, families,
-            veterans, and survivors reclaim their power. Boxing is one tool. The
+            and survivors reclaim their power. Boxing is one tool. The
             mission is healing, justice, and lasting change.
           </p>
           <div className="button-row">
-            <Link className="button button-red" to="/get-involved#refer">Refer a young person</Link>
+            <Link className="button button-red" to="/get-involved#mma-program">Refer a young person</Link>
             <Link className="text-link" to="/our-work">Explore our work <span aria-hidden="true">→</span></Link>
           </div>
         </div>
@@ -141,7 +136,7 @@ export default function HomePage() {
             <li><span>02</span> Elite Boxing prepares committed youth for the demands of USA Boxing competition and develops the 4 D&apos;s.</li>
             <li><span>03</span> Every level values personal growth as much as athletic progress.</li>
           </ul>
-          <Link className="text-link text-link-dark" to="/our-work#boxing">Find the right program <span aria-hidden="true">→</span></Link>
+          <Link className="text-link text-link-dark" to="/mma-events/about#boxing-life-skills">Find the right program <span aria-hidden="true">→</span></Link>
         </div>
       </section>
 
@@ -177,10 +172,10 @@ export default function HomePage() {
         <p className="eyebrow"><span /> Take the next step</p>
         <h2>Justice is a team effort.<br /><strong>There is a place for you.</strong></h2>
         <div className="action-grid">
-          <Link to="/get-involved#refer"><span>For families</span><strong>Enroll or refer a participant</strong><em>→</em></Link>
+          <Link to="/get-involved#mma-program"><span>For families</span><strong>Enroll or refer a participant</strong><em>→</em></Link>
           <Link to="/get-involved#training"><span>For organizations</span><strong>Request education or training</strong><em>→</em></Link>
-          <Link to="/get-involved#partner"><span>For community leaders</span><strong>Become a partner</strong><em>→</em></Link>
-          <Link to="/get-involved#support"><span>For supporters</span><strong>Donate, sponsor, or volunteer</strong><em>→</em></Link>
+          <Link to="/get-involved#partnership"><span>For community leaders</span><strong>Become a partner</strong><em>→</em></Link>
+          <Link to="/get-involved#internship"><span>For supporters</span><strong>Volunteer or intern</strong><em>→</em></Link>
         </div>
       </section>
     </>

@@ -79,12 +79,70 @@ html { scroll-behavior: smooth; }
 .bfj-site .desktop-nav a { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .bfj-site .desktop-nav a:hover { color: var(--red); }
 
+.bfj-site .nav-item { position: relative; }
+.bfj-site .nav-dropdown {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 16px 32px rgba(17, 17, 15, .14);
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  min-width: 220px;
+  opacity: 0;
+  padding: 8px;
+  pointer-events: none;
+  position: absolute;
+  top: calc(100% + 16px);
+  transform: translate(-50%, -6px);
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 30;
+}
+.bfj-site .nav-dropdown-open { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+.bfj-site .nav-dropdown a {
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 10px 12px;
+  text-transform: none;
+  white-space: nowrap;
+}
+.bfj-site .nav-dropdown a:hover { background: var(--paper); color: var(--red); }
+
 .bfj-site .mobile-menu { display: none; position: relative; }
-.bfj-site .mobile-menu summary { cursor: pointer; font-size: 11px; font-weight: 800; letter-spacing: .1em; list-style: none; text-transform: uppercase; }
-.bfj-site .mobile-menu summary::-webkit-details-marker { display: none; }
-.bfj-site .mobile-menu nav { background: var(--ink); color: white; display: grid; min-width: 220px; padding: 18px; position: absolute; right: 0; top: 36px; z-index: 20; }
-.bfj-site .mobile-menu nav a { border-bottom: 1px solid rgba(255,255,255,.15); font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; padding: 10px; text-transform: uppercase; }
-.bfj-site .mobile-menu nav a:last-child { border: 0; color: var(--red); }
+.bfj-site .mobile-menu > button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.bfj-site .mobile-menu nav { background: var(--ink); color: white; display: grid; min-width: 260px; padding: 18px; position: absolute; right: 0; top: 36px; z-index: 20; }
+.bfj-site .mobile-nav-item { border-bottom: 1px solid rgba(255,255,255,.15); }
+.bfj-site .mobile-nav-item:last-of-type { border-bottom: 0; }
+.bfj-site .mobile-nav-row { align-items: center; display: flex; justify-content: space-between; }
+.bfj-site .mobile-nav-row a { flex: 1; font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; padding: 10px 0; text-transform: uppercase; }
+.bfj-site .mobile-nav-toggle {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 16px;
+  height: 28px;
+  line-height: 1;
+  width: 28px;
+}
+.bfj-site .mobile-nav-submenu { display: grid; padding: 0 0 12px 4px; }
+.bfj-site .mobile-nav-submenu a { color: rgba(255, 255, 255, .72); font-size: 13px; font-weight: 700; padding: 8px 4px; text-transform: none; }
+.bfj-site .mobile-nav-submenu a:hover { color: var(--red); }
+.bfj-site .mobile-nav-donate { background: none; border: 0; color: var(--red); cursor: pointer; display: block; font-family: var(--font-display); font-size: 24px; letter-spacing: .03em; padding: 14px 0 4px; text-align: left; text-transform: uppercase; width: 100%; }
 
 .bfj-site .button {
   align-items: center;
@@ -99,6 +157,7 @@ html { scroll-behavior: smooth; }
   transition: transform .2s ease, background .2s ease;
 }
 .bfj-site .button:hover { transform: translateY(-2px); }
+.bfj-site button.button { border: 0; cursor: pointer; font-family: inherit; }
 .bfj-site .button-small { min-height: 44px; padding: 0 20px; }
 .bfj-site .button-dark { background: var(--ink); color: white; }
 .bfj-site .button-red { background: var(--red); color: white; }
@@ -151,6 +210,7 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .button-row { align-items: center; display: flex; gap: 28px; }
 .bfj-site .text-link { border-bottom: 1px solid var(--ink); font-size: 12px; font-weight: 800; letter-spacing: .06em; padding-bottom: 5px; text-transform: uppercase; }
+.bfj-site button.text-link { background: none; border-left: 0; border-right: 0; border-top: 0; cursor: pointer; font-family: inherit; padding-left: 0; padding-right: 0; }
 .bfj-site .text-link span { color: var(--red); margin-left: 8px; }
 
 .bfj-site .hero-visual {
@@ -195,7 +255,8 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .work-section { padding: 120px clamp(20px, 8vw, 124px); }
 .bfj-site .section-heading { align-items: end; display: grid; gap: 40px; grid-template-columns: 1.2fr .8fr; margin-bottom: 70px; }
-.bfj-site .section-heading h2 { font-size: clamp(66px, 7vw, 110px); }
+.bfj-site .section-heading h2 { font-size: clamp(66px, 7vw, 110px); color: inherit; }
+.bfj-site .section-heading .eyebrow { color: inherit; }
 .bfj-site .section-intro { color: var(--muted); font-size: 15px; line-height: 1.8; margin: 0 0 8px; max-width: 480px; }
 .bfj-site .focus-grid { border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; }
 .bfj-site .focus-card { border-bottom: 1px solid var(--line); display: grid; gap: 24px; grid-template-columns: 42px 1fr 28px; min-height: 230px; padding: 38px 28px 38px 0; position: relative; }
@@ -265,7 +326,9 @@ html { scroll-behavior: smooth; }
   border-bottom: 1px solid var(--line);
   display: grid;
   grid-template-columns: 1fr 230px;
+  margin: 0;
   min-height: 570px;
+  width: 100%;
 }
 .bfj-site .page-hero-copy { display: flex; flex-direction: column; justify-content: center; padding: 80px clamp(30px, 8vw, 124px); }
 .bfj-site .page-hero h1 { font-family: var(--font-display); font-size: clamp(74px, 8vw, 128px); font-weight: 400; letter-spacing: .005em; line-height: .88; margin: 0; text-transform: uppercase; }
@@ -333,11 +396,13 @@ html { scroll-behavior: smooth; }
 .bfj-site .program-detail li::before { color: var(--red); content: "+"; font-size: 18px; left: 0; position: absolute; top: 11px; }
 .bfj-site .program-red .program-detail li::before { color: var(--ink); }
 .bfj-site .mini-grid { border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); margin: 32px 0; }
-.bfj-site .mini-grid > div { border-right: 1px solid var(--line); padding: 20px; }
-.bfj-site .mini-grid > div:last-child { border: 0; }
+.bfj-site .mini-grid > div, .bfj-site .mini-grid > .flip-card { border-right: 1px solid var(--line); min-height: 150px; padding: 20px; }
+.bfj-site .mini-grid > div:last-child, .bfj-site .mini-grid > .flip-card:last-child { border: 0; }
 .bfj-site .mini-grid span { color: var(--red); font-family: var(--font-display); font-size: 17px; }
 .bfj-site .mini-grid strong { display: block; font-family: var(--font-display); font-size: 25px; font-weight: 400; margin: 24px 0 4px; text-transform: uppercase; }
 .bfj-site .mini-grid small { color: var(--muted); font-size: 10px; line-height: 1.5; }
+.bfj-site .mini-grid .flip-card-front, .bfj-site .mini-grid .flip-card-back { justify-content: center; padding: 0; }
+.bfj-site .mini-grid .flip-card-back { font-family: var(--font-display); font-size: 18px; letter-spacing: .02em; text-transform: uppercase; }
 
 .bfj-site .boxing-deep-dive { background: var(--ink); color: white; padding: 120px clamp(20px, 8vw, 124px); }
 .bfj-site .boxing-heading { max-width: 940px; }
@@ -434,7 +499,7 @@ html { scroll-behavior: smooth; }
   .bfj-site .measure-grid { grid-template-columns: 1fr 1fr; }
   .bfj-site .measure:nth-child(2) { border-right: 0; }
   .bfj-site .measure:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.18); }
-  .bfj-site .story-section, .bfj-site .values-section, .bfj-site .program-section, .bfj-site .change-model, .bfj-site .integrity-section, .bfj-site .contact-panel, .bfj-site .urgent-help { grid-template-columns: 1fr; }
+  .bfj-site .story-section, .bfj-site .values-section, .bfj-site .program-section, .bfj-site .change-model, .bfj-site .integrity-section, .bfj-site .contact-panel, .bfj-site .urgent-help, .bfj-site .feature-card, .bfj-site .us-map, .bfj-site .contact-band { grid-template-columns: 1fr; }
   .bfj-site .story-rail { border-bottom: 1px solid var(--line); border-right: 0; flex-direction: row; flex-wrap: wrap; padding: 0 0 30px; }
   .bfj-site .story-content { padding: 50px 0 0; }
   .bfj-site .values-heading { position: static; }
@@ -512,7 +577,272 @@ html { scroll-behavior: smooth; }
   .bfj-site .help-links a { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
 
+/* Shared: flip cards (Our Work's Recognize/Respond/Rise, Advocacy's
+   #AwarenessProtects blocks) */
+.bfj-site .flip-card { cursor: pointer; min-height: 210px; outline-offset: 4px; perspective: 1200px; }
+.bfj-site .flip-card-inner {
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .5s ease;
+  width: 100%;
+}
+.bfj-site .flip-card:hover .flip-card-inner,
+.bfj-site .flip-card:focus-visible .flip-card-inner,
+.bfj-site .flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.bfj-site .flip-card-front, .bfj-site .flip-card-back {
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+}
+.bfj-site .flip-card-back { transform: rotateY(180deg); }
+
+/* Shared: accordion (+) items (Our Work's Educating bullets) */
+.bfj-site .accordion-item { border-bottom: 1px solid var(--line); }
+.bfj-site .program-red .accordion-item { border-color: rgba(255, 255, 255, .35); }
+.bfj-site .accordion-toggle {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  justify-content: space-between;
+  padding: 16px 4px;
+  text-align: left;
+  width: 100%;
+}
+.bfj-site .accordion-icon { color: var(--red); flex-shrink: 0; font-size: 20px; margin-left: 16px; }
+.bfj-site .program-red .accordion-icon { color: var(--ink); }
+.bfj-site .accordion-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+.bfj-site .accordion-item-open .accordion-panel { grid-template-rows: 1fr; }
+.bfj-site .accordion-panel-inner { color: var(--muted); font-size: 14px; line-height: 1.7; overflow: hidden; padding: 0 4px; }
+.bfj-site .accordion-item-open .accordion-panel-inner { padding: 0 4px 18px; }
+
+/* Funds-allocation chart ("where the money goes", About > Purpose) */
+.bfj-site .funds-chart {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-top: 40px;
+  padding: 28px clamp(20px, 4vw, 40px) 32px;
+}
+.bfj-site .funds-chart-bar {
+  border-radius: 4px;
+  display: flex;
+  height: 40px;
+  overflow: hidden;
+  width: 100%;
+}
+.bfj-site .funds-chart-segment {
+  align-items: center;
+  border-right: 2px solid var(--white);
+  display: flex;
+  justify-content: center;
+}
+.bfj-site .funds-chart-segment:last-child { border-right: 0; }
+.bfj-site .funds-chart-segment span { color: white; font-size: 12px; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+.bfj-site .funds-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+}
+.bfj-site .funds-chart-legend li { align-items: center; color: var(--ink); display: flex; font-size: 13px; gap: 8px; }
+.bfj-site .funds-chart-legend strong { color: var(--muted); font-weight: 700; }
+.bfj-site .funds-chart-swatch { border-radius: 3px; display: inline-block; height: 12px; width: 12px; }
+.bfj-site .funds-chart-caption { color: var(--muted); font-size: 11px; font-style: italic; margin: 18px 0 0; }
+
+/* Callout bar (Our Work: "Know the signs" banner above Educating) */
+.bfj-site .callout-bar { background: var(--ink); color: white; padding: 50px clamp(20px, 8vw, 124px); text-align: center; }
+.bfj-site .callout-bar h3 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 400;
+  letter-spacing: .01em;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+.bfj-site .callout-bar p { color: rgba(255, 255, 255, .6); font-size: 13px; font-style: italic; margin: 0; }
+
+/* Generic feature card (Our Work: Boxing & life skills teaser, 2028 Olympics campaign) */
+.bfj-site .feature-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 1fr 1fr;
+  margin: clamp(40px, 6vw, 70px) clamp(20px, 8vw, 124px);
+  padding: clamp(28px, 4vw, 48px);
+}
+.bfj-site .feature-card h3 { font-size: clamp(30px, 4vw, 46px); margin: 6px 0 14px; }
+.bfj-site .feature-card p { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 0 0 20px; }
+.bfj-site .feature-card-tag { color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+
+/* Interactive US policy map (Impact > GEO Data) */
+.bfj-site .us-map {
+  align-items: center;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1.4fr 1fr;
+  margin: 0 clamp(20px, 8vw, 124px) clamp(60px, 8vw, 110px);
+}
+.bfj-site .us-map-canvas { width: 100%; }
+.bfj-site .us-map-state {
+  cursor: pointer;
+  fill: var(--paper);
+  outline: none;
+  stroke: var(--ink);
+  stroke-width: 0.75;
+  transition: fill .15s ease;
+}
+.bfj-site .us-map-state:hover, .bfj-site .us-map-state:focus-visible { fill: rgba(226, 45, 35, .35); }
+.bfj-site .us-map-state-selected { fill: var(--red); }
+.bfj-site .us-map-panel {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-height: 220px;
+  padding: 28px;
+}
+.bfj-site .us-map-panel h3 { font-family: var(--font-display); font-size: 32px; margin: 0 0 12px; text-transform: uppercase; }
+.bfj-site .us-map-panel-label { color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: .08em; margin: 16px 0 4px; text-transform: uppercase; }
+.bfj-site .us-map-panel-label:first-of-type { margin-top: 0; }
+.bfj-site .us-map-panel p:not(.us-map-panel-label):not(.content-placeholder) { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+
+/* Site-wide bottom contact form band (above the footer) */
+.bfj-site .contact-band {
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 50px;
+  grid-template-columns: 1fr 1fr;
+  padding: 90px clamp(20px, 8vw, 124px);
+}
+.bfj-site .contact-band h2 { font-size: clamp(48px, 5vw, 76px); }
+.bfj-site .contact-band-form { max-width: 480px; }
+
+/* Shared: overlay/modal (Request a training, Discuss partnership, Internship, Donate) */
+.bfj-site .overlay-backdrop {
+  align-items: center;
+  background: rgba(17, 17, 15, .72);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 24px;
+  position: fixed;
+  z-index: 100;
+}
+.bfj-site .overlay-panel {
+  background: var(--white);
+  border-radius: 12px;
+  max-height: 88vh;
+  max-width: 520px;
+  overflow-y: auto;
+  width: 100%;
+}
+.bfj-site .overlay-header {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 24px;
+  position: sticky;
+  top: 0;
+  background: var(--white);
+}
+.bfj-site .overlay-header h3 { font-family: var(--font-display); font-size: 26px; margin: 0; text-transform: uppercase; }
+.bfj-site .overlay-close { background: none; border: 0; color: var(--ink); cursor: pointer; font-size: 26px; line-height: 1; padding: 0; }
+.bfj-site .overlay-body { padding: 24px; }
+
+/* Shared: form fields used inside overlays and the bottom contact band */
+.bfj-site .form-field { display: block; margin-bottom: 16px; }
+.bfj-site .form-field span { color: var(--muted); display: block; font-size: 11px; font-weight: 800; letter-spacing: .06em; margin-bottom: 6px; text-transform: uppercase; }
+.bfj-site .form-field input, .bfj-site .form-field textarea, .bfj-site .form-field select {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 12px 14px;
+  width: 100%;
+}
+.bfj-site .form-field textarea { resize: vertical; }
+.bfj-site .form-submit {
+  background: var(--red);
+  border: 0;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: 14px 24px;
+  text-transform: uppercase;
+}
+.bfj-site .form-submit:disabled { cursor: not-allowed; opacity: .6; }
+.bfj-site .form-status { font-size: 13px; margin-top: 12px; }
+.bfj-site .form-status-error { color: var(--red); }
+.bfj-site .form-status-success { color: #1a7a1a; }
+.bfj-site .opportunity-list { list-style: none; margin: 0; padding: 0; }
+.bfj-site .opportunity-list button {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding: 16px;
+  text-align: left;
+  width: 100%;
+}
+.bfj-site .opportunity-list button:hover { border-color: var(--red); color: var(--red); }
+.bfj-site .opportunity-description { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0 0 20px; }
+.bfj-site .donate-provider-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
+.bfj-site .donate-provider-toggle button {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  flex: 1;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  padding: 12px;
+  text-transform: uppercase;
+}
+.bfj-site .donate-provider-toggle button.active { background: var(--ink); border-color: var(--ink); color: white; }
+
+/* Shared: "owner will fill this in" placeholder blocks */
+.bfj-site .content-placeholder {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+  padding: 28px;
+  text-align: center;
+}
+.bfj-site .content-placeholder-light { border-color: rgba(255, 255, 255, .35); color: rgba(255, 255, 255, .72); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .bfj-site .button, .bfj-site .action-grid a { transition: none; }
+  .bfj-site .flip-card-inner, .bfj-site .accordion-panel { transition: none; }
 }

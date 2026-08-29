@@ -1,5 +1,13 @@
 import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
+import SponsorBar from '../../components/common/SponsorBar';
+import FundsAllocationChart from '../../components/common/FundsAllocationChart';
+
+const pillars = [
+  ['Healing-Centered Boxing', 'Boxing as a structured tool for regulation, discipline, and confidence — not the end goal, the vehicle.'],
+  ['Mentorship', 'Consistent, trusted adults who walk alongside youth through decisions, setbacks, and growth.'],
+  ['— pillar 3 —', 'Owner to name and describe the third pillar.'],
+];
 
 const values = [
   ['Agency', 'People deserve meaningful choices, respected boundaries, and a voice in what happens next.'],
@@ -7,6 +15,10 @@ const values = [
   ['Safety', 'Trust is built through consistency, appropriate boundaries, and environments designed for belonging.'],
   ['Accountability', 'We set clear expectations, communicate honestly, and measure what our programs are meant to change.'],
   ['Collaboration', 'We share the work, connect people to appropriate support, and value impact over recognition.'],
+];
+
+const partners = [
+  'Owner to add confirmed partner organizations here.',
 ];
 
 const leaders = [
@@ -24,11 +36,31 @@ export default function AboutPage() {
         eyebrow="About Boxing For Justice"
         title="Rooted in survival."
         accent="Built for restoration."
-        lede="Boxing For Justice began with lived experience and a refusal to let silence have the final word. Today, that conviction powers a broader movement for safer youth, stronger families, supported veterans, and resilient communities."
+        lede="Boxing For Justice began with lived experience and a refusal to let silence have the final word. Today, that conviction powers a broader movement for safer youth, stronger families, and resilient communities."
         number="01"
       />
 
-      <section className="story-section">
+      <section className="work-section pillars-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> Our 3 pillars</p>
+            <h2>What we<br />stand on.</h2>
+          </div>
+        </div>
+        <div className="focus-grid">
+          {pillars.map(([name, description], index) => (
+            <article className="focus-card" key={name}>
+              <span className="focus-number">0{index + 1}</span>
+              <div>
+                <h3>{name}</h3>
+                <p>{description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="story-section" id="purpose">
         <div className="story-rail">
           <span>Founded 2024</span>
           <span>Riverside County, CA</span>
@@ -65,7 +97,7 @@ export default function AboutPage() {
           <h2>Protect. Educate. Restore.</h2>
           <p>
             We protect vulnerable people, prevent harm, and help youth, families,
-            veterans, and survivors reclaim their power through education,
+            and survivors reclaim their power through education,
             advocacy, mentorship, community partnership, and healing-centered
             physical activity.
           </p>
@@ -75,7 +107,7 @@ export default function AboutPage() {
           <h2>Communities where power is shared.</h2>
           <p>
             We envision safer communities where youth are supported, survivors are
-            treated with dignity, veterans remain connected, families can reach
+            treated with dignity, families can reach
             trusted resources, and every person knows their voice matters.
           </p>
         </article>
@@ -97,10 +129,46 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="leadership-section">
+      <section className="work-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> Where the money goes</p>
+            <h2>Funds,<br />accounted for.</h2>
+          </div>
+          <p className="section-intro">
+            A transparent look at how donations and program funding are put to
+            work. Figures below are illustrative placeholders.
+          </p>
+        </div>
+        <FundsAllocationChart />
+      </section>
+
+      <section className="work-section" id="sponsors">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> Sponsors</p>
+            <h2>Backed by<br />our community.</h2>
+          </div>
+        </div>
+        <SponsorBar />
+      </section>
+
+      <section className="work-section" id="partners">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow"><span /> Partners</p>
+            <h2>We don&apos;t do<br />this alone.</h2>
+          </div>
+        </div>
+        <div className="content-placeholder">
+          {partners[0]}
+        </div>
+      </section>
+
+      <section className="leadership-section" id="staff">
         <div className="section-heading compact-heading">
           <div>
-            <p className="eyebrow"><span /> Leadership & stewardship</p>
+            <p className="eyebrow"><span /> Leadership & staff</p>
             <h2>People in<br />your corner.</h2>
           </div>
           <p className="section-intro">

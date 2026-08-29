@@ -1,0 +1,108 @@
+- - move the section under 'our work' about the 'one program, two youth pathways' to the 'mma events' site website under the about section
+
+- - move "Boxing & life skills" section toward the top of page, under 'what we do'
+
+awareness protects, one page, blocks and tabs, clickable tabs and overays (flipable interactives)
+
+
+in get involved
+- erase fund the work
+- if they wanna donate, they can, but to create partnership, that's totally different
+- - partnerships are for other nonprofits
+- 'discuss partnership' --> contact info form too
+
+
+you can make a bar that says (pull from know the signs page titile)
+- sub line (owner inputs infio)
+-----------------
+
+
+
+
+Website changes - from 8/24/26 sponsor meeting + BFJ pro-am/proposal work notes
+(analyzed via Sched notes-analyzer, cross-checked against live site 8/27/26)
+
+
+
+
+on-hover dropdown on nav bar items (the parent nav item, when click, is a page that has all the info. when the user clicks on a dropdown/submenu, it takes them to the section of the parent page that has the desired information; for example, hovering on about and  clicking on purpose will take the user to the about page and auto scroll to the purpose section)
+
+- about / (purpose, sponsors, partners, staff )
+- - move "3 Pillars" framing (Healing-Centered Boxing, Mentorship, etc.) to the top of page
+- - the purpose section tells what we are about 
+- - this is where the graph is that visualizes the break down of how we spend/put funds "where the money goes"
+
+- advocacy / (#AwarenessProtects, legislative prep)
+- - has a link that points to get-involved, "want to be on the BFJ committee/board?"
+
+- our work / (campaigns, fundraiser events,  articles)
+- - in our work tab, have different sections (campaigns, educating, equipping, encouraging)
+- - owner can fill in tabs
+
+- impact / (policies, GEO Data)
+- - this is where the interactive map lives; the user can see all US states, can click one to get info about policies and helpful data 
+
+- get involved / (make a report, endorsements, fundraiser signups, committee/board recruitment, MMA program)
+
+- mma events
+- - move the section under 'our work' about the 'one program, two youth pathways' to the 'mma events' site website under the about section
+
+
+
+
+
+
+--------------
+
+notes
+
+Advocacy, our work, and impact all kind of describe the same things. how shoud we organize them? dropdown menu? subtract?
+
+]]]]]]]]
+
+
+
+
+
+
+HIGH PRIORITY
+- New "Advocacy" nav tab, 3rd position next to About. Content: committee/board recruitment, legislative prep (capital visits, policy work), other fundraisers incl. a $1 human-trafficking-awareness donation drive.
+
+Donation-allocation graph - "where the money goes."
+- (Confirmed: doesn't exist. The dashboard charts under /mma-events/resources are placeholder illustrative data for different stats - youth training, program completion - not fund allocation.)
+
+Real sponsor: Roberto Arnold / Cali Multi-Business Alliance - $30K, logo, marketing credit.
+  (Confirmed: all 5 current sponsor slots in data/sponsors.js are labeled
+  placeholders. This is the first real one.)
+- Location conflict - needs lead input before touching the site: notes say
+  Fresno + "the desert"; live site currently says "Riverside County,
+  California" as the service area. Don't guess which is right.
+
+MEDIUM PRIORITY
+- "3 Pillars" framing (Healing-Centered Boxing, Mentorship, + a third) as the
+  top-line structure on Home/About.
+  (Confirmed: no pillar language exists anywhere yet.) Notes left the third
+  pillar as "..." - needs the lead to name it.
+- Expanded program disclaimer: OurWorkPage already has a "we're not therapy"
+  disclaimer - extend it to cover the STRP/therapist-partnership language
+  (goal-setting coordination, self-advocacy, daily-life-outside-treatment
+  framing) and an explicit "this is what we do / this is why we're here /
+  what we can do / what we don't do" structure for grant/funder readers.
+
+- Cali Multi-Cultural Business Alliance (CBO Alliance) logo on the sponsors
+  section - distinct from Roberto Arnold individually.
+- Government-funded STRP / probation-agency partnership content - ties into
+  the existing partnership sections on Our Work and Get Involved, but
+  probation/STRP specifics aren't there yet.
+- New "Identify online predators" workshop as a resource/program entry.
+
+
+LOWER PRIORITY / MESSAGING CANDIDATES
+- Possible tagline: "fighting a system never built to protect our kids"
+- Awareness stat: "predators are using kids to recruit other kids"
+- Pro-Am boxing card announcement - likely belongs under /mma-events since
+  ticketing already lives there
+
+OPEN QUESTIONS FOR THE LEAD
+- Fresno vs. Riverside County as the stated service area (see above)
+- Name of the third pillar (notes only had "...")
