@@ -115,7 +115,7 @@ export default function ImpactPage() {
       <section className="funder-section">
         <div className="funder-seal">BFJ<span>Funder<br />readiness</span></div>
         <div>
-          <p className="eyebrow eyebrow-light"><span /> For grantmakers & sponsors</p>
+          <p className="eyebrow"><span /> For grantmakers & sponsors</p>
           <h2>A mission built<br />for partnership.</h2>
           <p>
             Boxing For Justice is an IRS-recognized 501(c)(3) public charity. We

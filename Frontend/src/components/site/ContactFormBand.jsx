@@ -4,7 +4,7 @@ export default function ContactFormBand() {
   return (
     <section className="contact-band">
       <div>
-        <p className="eyebrow eyebrow-light"><span /> Still have a question?</p>
+        <p className="eyebrow"><span /> Still have a question?</p>
         <h2>Send us<br />a note.</h2>
       </div>
       <div className="contact-band-form">

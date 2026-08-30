@@ -210,7 +210,7 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .button-row { align-items: center; display: flex; gap: 28px; }
 .bfj-site .text-link { border-bottom: 1px solid var(--ink); font-size: 12px; font-weight: 800; letter-spacing: .06em; padding-bottom: 5px; text-transform: uppercase; }
-.bfj-site button.text-link { background: none; border-left: 0; border-right: 0; border-top: 0; cursor: pointer; font-family: inherit; padding-left: 0; padding-right: 0; }
+.bfj-site button.text-link { background: none; border-left: 0; border-right: 0; border-top: 0; color: inherit; cursor: pointer; font-family: inherit; padding-left: 0; padding-right: 0; }
 .bfj-site .text-link span { color: var(--red); margin-left: 8px; }
 
 .bfj-site .hero-visual {
