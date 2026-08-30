@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { NAV_ITEMS } from '../../data/navigation';
+import useNavItems from '../../hooks/useNavItems';
 
 export default function DesktopNav() {
+  const navItems = useNavItems();
   const [openIndex, setOpenIndex] = useState(null);
   const closeTimer = useRef(null);
 
@@ -20,7 +21,7 @@ export default function DesktopNav() {
 
   return (
     <nav className="desktop-nav" aria-label="Primary navigation">
-      {NAV_ITEMS.map((item, index) => (
+      {navItems.map((item, index) => (
         <div
           className="nav-item"
           key={item.label}

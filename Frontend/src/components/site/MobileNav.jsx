@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { NAV_ITEMS } from '../../data/navigation';
+import useNavItems from '../../hooks/useNavItems';
 
 export default function MobileNav({ onDonateClick }) {
+  const navItems = useNavItems();
   const [open, setOpen] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
   const rootRef = useRef(null);
@@ -37,7 +38,7 @@ export default function MobileNav({ onDonateClick }) {
       </button>
       {open && (
         <nav aria-label="Mobile navigation">
-          {NAV_ITEMS.map((item, index) => (
+          {navItems.map((item, index) => (
             <div className="mobile-nav-item" key={item.label}>
               <div className="mobile-nav-row">
                 <Link to={item.to} onClick={closeMenu}>

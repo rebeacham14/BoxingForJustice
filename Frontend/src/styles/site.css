@@ -187,7 +187,11 @@ html { scroll-behavior: smooth; }
   margin: 0 0 24px;
   text-transform: uppercase;
 }
-.bfj-site .eyebrow > span { background: var(--red); display: inline-block; height: 3px; width: 24px; }
+/* :first-child scopes this to the decorative tick only - EditableText
+   renders its content as a <span> too (see EditableText.jsx), and an
+   unscoped `.eyebrow > span` would flatten that text span into this same
+   3px-tall/24px-wide box. */
+.bfj-site .eyebrow > span:first-child { background: var(--red); display: inline-block; height: 3px; width: 24px; }
 
 .bfj-site .hero h1, .bfj-site .section-heading h2, .bfj-site .manifesto h2, .bfj-site .method-copy h2, .bfj-site .impact-content h2, .bfj-site .action-section h2 {
   font-family: var(--font-display), Impact, sans-serif;
@@ -467,7 +471,10 @@ html { scroll-behavior: smooth; }
 .bfj-site .funder-section > div:last-child > p:not(.eyebrow) { color: var(--muted); font-size: 14px; line-height: 1.85; max-width: 700px; }
 .bfj-site .funder-links { border-top: 1px solid var(--line); display: grid; margin-top: 35px; }
 .bfj-site .funder-links a { border-bottom: 1px solid var(--line); display: flex; font-size: 11px; font-weight: 800; justify-content: space-between; letter-spacing: .08em; padding: 18px 0; text-transform: uppercase; }
-.bfj-site .funder-links a span { color: var(--red); }
+/* :last-child scopes this to the trailing arrow icon - EditableText renders
+   its content as a <span> too (see EditableText.jsx), and an unscoped
+   `.funder-links a span` would also recolor that text span red. */
+.bfj-site .funder-links a > span:last-child { color: var(--red); }
 
 .bfj-site .involvement-list { padding: 100px clamp(20px, 8vw, 124px); }
 .bfj-site .involvement-card { align-items: center; border-top: 1px solid var(--line); display: grid; gap: 45px; grid-template-columns: 70px 1fr auto; min-height: 230px; padding: 38px 0; scroll-margin-top: 40px; }
@@ -845,4 +852,94 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   .bfj-site .button, .bfj-site .action-grid a { transition: none; }
   .bfj-site .flip-card-inner, .bfj-site .accordion-panel { transition: none; }
+}
+
+/* Site editor - owner-only edit-mode affordances (see EditableText.jsx,
+   EditToolbar.jsx, EditModeToggle.jsx) */
+.bfj-site .bfj-editable {
+  border-radius: 4px;
+  cursor: text;
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color .15s ease, background-color .15s ease;
+}
+.bfj-site .bfj-editable:hover,
+.bfj-site .bfj-editable:focus {
+  background-color: var(--color-gold-wash-soft);
+  outline-color: var(--color-gold);
+}
+.bfj-site .bfj-editable-empty {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+.bfj-site .bfj-editable-retry {
+  background: var(--color-danger);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 8px;
+  padding: 2px 8px;
+}
+
+.bfj-site .bfj-edit-toolbar {
+  align-items: center;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-gold);
+  border-radius: 10px;
+  bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  display: flex;
+  gap: 20px;
+  left: 50%;
+  padding: 10px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+.bfj-site .bfj-edit-toolbar-group { align-items: center; display: flex; gap: 6px; }
+.bfj-site .bfj-edit-toolbar-label {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.bfj-site .bfj-edit-toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+.bfj-site .bfj-edit-toolbar-btn-active,
+.bfj-site .bfj-edit-toolbar-btn:hover {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-bg-page);
+}
+.bfj-site .bfj-edit-toolbar-swatch {
+  border: 2px solid var(--color-input-border);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 20px;
+  padding: 0;
+  width: 20px;
+}
+.bfj-site .bfj-edit-toolbar-swatch-active { border-color: var(--color-gold); }
+
+.bfj-site .footer-owner-signin {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  margin-left: 12px;
+  padding: 0;
+  text-decoration: underline;
 }

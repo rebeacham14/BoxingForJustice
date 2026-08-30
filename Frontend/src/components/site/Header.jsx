@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import DonateOverlay from './DonateOverlay';
+import EditModeToggle from './EditModeToggle';
 
 export default function Header() {
   const [showDonate, setShowDonate] = useState(false);
@@ -21,6 +22,7 @@ export default function Header() {
           <span className="brand-name">Boxing <em>For</em> Justice</span>
         </Link>
         <DesktopNav />
+        <EditModeToggle />
         <button
           type="button"
           className="button button-small button-dark"

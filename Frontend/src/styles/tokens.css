@@ -19,6 +19,18 @@
   --color-text-muted: #d5d5d5;
   --color-danger: #ff6b6b;
 
+  /* editor font-size scale - the only sizes the site editor's toolbar can
+     apply to a text block. Existing hardcoded per-selector font sizes across
+     site.css/home.css/etc are untouched; this scale only takes effect once a
+     block has an explicit style.fontSize set via the editor. */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+  --font-size-2xl: 2.5rem;
+  --font-size-display: 4rem;
+
   /* chart surface (dark-only site, matches --color-bg-panel) */
   --chart-surface: #1a1a1a;
   --chart-text-secondary: #c3c2b7;

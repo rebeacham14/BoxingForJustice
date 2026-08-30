@@ -21,6 +21,7 @@ const Donation = require('./models/Donation');
 const Subscription = require('./models/Subscription');
 
 const { authMiddleware } = require('./middleware/authMiddleware');
+const contentRoutes = require('./routes/content');
 const {
   sendPurchaseConfirmation,
   sendContactNotification,
@@ -78,6 +79,13 @@ app.get('/api/auth-test', authMiddleware, (req, res) => {
     userId: req.auth.userId,
   });
 });
+
+/* =========================
+   SITE EDITOR (nav / pages / blocks / articles / policies)
+   see routes/content.js
+========================= */
+
+app.use('/api', contentRoutes);
 
 /* =========================
    TICKET ROUTES

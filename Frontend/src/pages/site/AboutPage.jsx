@@ -2,6 +2,8 @@ import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
 import SponsorBar from '../../components/common/SponsorBar';
 import FundsAllocationChart from '../../components/common/FundsAllocationChart';
+import EditablePage from '../../components/site/EditablePage';
+import EditableText from '../../components/site/EditableText';
 
 const pillars = [
   ['Healing-Centered Boxing', 'Boxing as a structured tool for regulation, discipline, and confidence — not the end goal, the vehicle.'],
@@ -17,10 +19,6 @@ const values = [
   ['Collaboration', 'We share the work, connect people to appropriate support, and value impact over recognition.'],
 ];
 
-const partners = [
-  'Owner to add confirmed partner organizations here.',
-];
-
 const leaders = [
   ['Martye Perkins', 'Founder, Chief Executive Officer & Board Chair'],
   ['Julian “JP” Powers', 'Director, Strength & Conditioning Coach & Board Vice Chair'],
@@ -31,20 +29,29 @@ const leaders = [
 
 export default function AboutPage() {
   return (
-    <>
+    <EditablePage slug="about">
       <PageHero
-        eyebrow="About Boxing For Justice"
-        title="Rooted in survival."
-        accent="Built for restoration."
-        lede="Boxing For Justice began with lived experience and a refusal to let silence have the final word. Today, that conviction powers a broader movement for safer youth, stronger families, and resilient communities."
+        eyebrow={<EditableText id="about.hero.eyebrow" defaultValue="About Boxing For Justice" />}
+        title={<EditableText id="about.hero.title" defaultValue="Rooted in survival." />}
+        accent={<EditableText id="about.hero.accent" defaultValue="Built for restoration." />}
+        lede={
+          <EditableText
+            as="span"
+            id="about.hero.lede"
+            defaultValue="Boxing For Justice began with lived experience and a refusal to let silence have the final word. Today, that conviction powers a broader movement for safer youth, stronger families, and resilient communities."
+          />
+        }
         number="01"
       />
 
       <section className="work-section pillars-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> Our 3 pillars</p>
-            <h2>What we<br />stand on.</h2>
+            <p className="eyebrow"><span /> <EditableText id="about.pillars.eyebrow" defaultValue="Our 3 pillars" /></p>
+            <h2>
+              <EditableText id="about.pillars.title-line1" defaultValue="What we" /><br />
+              <EditableText id="about.pillars.title-line2" defaultValue="stand on." />
+            </h2>
           </div>
         </div>
         <div className="focus-grid">
@@ -52,8 +59,8 @@ export default function AboutPage() {
             <article className="focus-card" key={name}>
               <span className="focus-number">0{index + 1}</span>
               <div>
-                <h3>{name}</h3>
-                <p>{description}</p>
+                <EditableText as="h3" id={`about.pillars.${index}.name`} defaultValue={name} />
+                <EditableText as="p" id={`about.pillars.${index}.description`} defaultValue={description} />
               </div>
             </article>
           ))}
@@ -62,68 +69,78 @@ export default function AboutPage() {
 
       <section className="story-section" id="purpose">
         <div className="story-rail">
-          <span>Founded 2024</span>
-          <span>Riverside County, CA</span>
-          <span>501(c)(3) public charity</span>
+          <span><EditableText id="about.story.fact-founded" defaultValue="Founded 2024" /></span>
+          <span><EditableText id="about.story.fact-location" defaultValue="Riverside County, CA" /></span>
+          <span><EditableText id="about.story.fact-status" defaultValue="501(c)(3) public charity" /></span>
         </div>
         <div className="story-content">
-          <p className="eyebrow"><span /> The story behind the mission</p>
-          <h2>When pain becomes purpose,<br />silence loses its power.</h2>
+          <p className="eyebrow"><span /> <EditableText id="about.story.eyebrow" defaultValue="The story behind the mission" /></p>
+          <h2>
+            <EditableText id="about.story.title-line1" defaultValue="When pain becomes purpose," /><br />
+            <EditableText id="about.story.title-line2" defaultValue="silence loses its power." />
+          </h2>
           <div className="story-columns">
             <p>
-              Founder Martye Perkins is a survivor of exploitation, physical abuse,
-              and sexual abuse. Her experience showed her how secrecy can protect
-              harmful systems while isolating the very people who need support.
+              <EditableText
+                as="span"
+                id="about.story.paragraph-1"
+                defaultValue="Founder Martye Perkins is a survivor of exploitation, physical abuse, and sexual abuse. Her experience showed her how secrecy can protect harmful systems while isolating the very people who need support."
+              />
             </p>
             <p>
-              Walking alongside a young relative through the aftermath of severe
-              abuse made the need even clearer: families require better tools,
-              young people need safe adults, and behavior must be understood in
-              the context of what a child may have survived.
+              <EditableText
+                as="span"
+                id="about.story.paragraph-2"
+                defaultValue="Walking alongside a young relative through the aftermath of severe abuse made the need even clearer: families require better tools, young people need safe adults, and behavior must be understood in the context of what a child may have survived."
+              />
             </p>
           </div>
           <blockquote>
-            &ldquo;My pain was not mine to carry in silence. It became the foundation of
-            a purpose: creating spaces where young people are empowered, not
-            overlooked, and where their voices are heard.&rdquo;
-            <cite>— Martye Perkins, Founder</cite>
+            &ldquo;<EditableText
+              as="span"
+              id="about.story.quote"
+              defaultValue="My pain was not mine to carry in silence. It became the foundation of a purpose: creating spaces where young people are empowered, not overlooked, and where their voices are heard."
+            />&rdquo;
+            <cite>— <EditableText id="about.story.quote-cite" defaultValue="Martye Perkins, Founder" /></cite>
           </blockquote>
         </div>
       </section>
 
       <section className="mission-vision">
         <article>
-          <span>Our mission</span>
-          <h2>Protect. Educate. Restore.</h2>
-          <p>
-            We protect vulnerable people, prevent harm, and help youth, families,
-            and survivors reclaim their power through education,
-            advocacy, mentorship, community partnership, and healing-centered
-            physical activity.
-          </p>
+          <span><EditableText id="about.mission.label" defaultValue="Our mission" /></span>
+          <EditableText as="h2" id="about.mission.title" defaultValue="Protect. Educate. Restore." />
+          <EditableText
+            as="p"
+            id="about.mission.text"
+            defaultValue="We protect vulnerable people, prevent harm, and help youth, families, and survivors reclaim their power through education, advocacy, mentorship, community partnership, and healing-centered physical activity."
+          />
         </article>
         <article>
-          <span>Our vision</span>
-          <h2>Communities where power is shared.</h2>
-          <p>
-            We envision safer communities where youth are supported, survivors are
-            treated with dignity, families can reach
-            trusted resources, and every person knows their voice matters.
-          </p>
+          <span><EditableText id="about.vision.label" defaultValue="Our vision" /></span>
+          <EditableText as="h2" id="about.vision.title" defaultValue="Communities where power is shared." />
+          <EditableText
+            as="p"
+            id="about.vision.text"
+            defaultValue="We envision safer communities where youth are supported, survivors are treated with dignity, families can reach trusted resources, and every person knows their voice matters."
+          />
         </article>
       </section>
 
       <section className="values-section">
         <div className="values-heading">
-          <p className="eyebrow"><span /> How we show up</p>
-          <h2>Values you can<br />feel in the room.</h2>
+          <p className="eyebrow"><span /> <EditableText id="about.values.eyebrow" defaultValue="How we show up" /></p>
+          <h2>
+            <EditableText id="about.values.title-line1" defaultValue="Values you can" /><br />
+            <EditableText id="about.values.title-line2" defaultValue="feel in the room." />
+          </h2>
         </div>
         <div className="values-list">
           {values.map(([name, description], index) => (
             <article key={name}>
               <span>0{index + 1}</span>
-              <h3>{name}</h3>
-              <p>{description}</p>
+              <EditableText as="h3" id={`about.values.${index}.name`} defaultValue={name} />
+              <EditableText as="p" id={`about.values.${index}.description`} defaultValue={description} />
             </article>
           ))}
         </div>
@@ -132,12 +149,18 @@ export default function AboutPage() {
       <section className="work-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> Where the money goes</p>
-            <h2>Funds,<br />accounted for.</h2>
+            <p className="eyebrow"><span /> <EditableText id="about.funds.eyebrow" defaultValue="Where the money goes" /></p>
+            <h2>
+              <EditableText id="about.funds.title-line1" defaultValue="Funds," /><br />
+              <EditableText id="about.funds.title-line2" defaultValue="accounted for." />
+            </h2>
           </div>
           <p className="section-intro">
-            A transparent look at how donations and program funding are put to
-            work. Figures below are illustrative placeholders.
+            <EditableText
+              as="span"
+              id="about.funds.intro"
+              defaultValue="A transparent look at how donations and program funding are put to work. Figures below are illustrative placeholders."
+            />
           </p>
         </div>
         <FundsAllocationChart />
@@ -146,8 +169,11 @@ export default function AboutPage() {
       <section className="work-section" id="sponsors">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> Sponsors</p>
-            <h2>Backed by<br />our community.</h2>
+            <p className="eyebrow"><span /> <EditableText id="about.sponsors.eyebrow" defaultValue="Sponsors" /></p>
+            <h2>
+              <EditableText id="about.sponsors.title-line1" defaultValue="Backed by" /><br />
+              <EditableText id="about.sponsors.title-line2" defaultValue="our community." />
+            </h2>
           </div>
         </div>
         <SponsorBar />
@@ -156,37 +182,49 @@ export default function AboutPage() {
       <section className="work-section" id="partners">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> Partners</p>
-            <h2>We don&apos;t do<br />this alone.</h2>
+            <p className="eyebrow"><span /> <EditableText id="about.partners.eyebrow" defaultValue="Partners" /></p>
+            <h2>
+              <EditableText id="about.partners.title-line1" defaultValue="We don't do" /><br />
+              <EditableText id="about.partners.title-line2" defaultValue="this alone." />
+            </h2>
           </div>
         </div>
-        <div className="content-placeholder">
-          {partners[0]}
-        </div>
+        <EditableText
+          as="div"
+          className="content-placeholder"
+          id="about.partners.placeholder"
+          defaultValue="Owner to add confirmed partner organizations here."
+        />
       </section>
 
       <section className="leadership-section" id="staff">
         <div className="section-heading compact-heading">
           <div>
-            <p className="eyebrow"><span /> Leadership & staff</p>
-            <h2>People in<br />your corner.</h2>
+            <p className="eyebrow"><span /> <EditableText id="about.staff.eyebrow" defaultValue="Leadership & staff" /></p>
+            <h2>
+              <EditableText id="about.staff.title-line1" defaultValue="People in" /><br />
+              <EditableText id="about.staff.title-line2" defaultValue="your corner." />
+            </h2>
           </div>
           <p className="section-intro">
-            Coaches, mentors, educators, and community leaders bring professional
-            knowledge and lived experience to a mission grounded in responsibility.
+            <EditableText
+              as="span"
+              id="about.staff.intro"
+              defaultValue="Coaches, mentors, educators, and community leaders bring professional knowledge and lived experience to a mission grounded in responsibility."
+            />
           </p>
         </div>
         <div className="leader-grid">
           {leaders.map(([name, role], index) => (
             <article key={name}>
               <span>0{index + 1}</span>
-              <h3>{name}</h3>
-              <p>{role}</p>
+              <EditableText as="h3" id={`about.staff.${index}.name`} defaultValue={name} />
+              <EditableText as="p" id={`about.staff.${index}.role`} defaultValue={role} />
             </article>
           ))}
         </div>
       </section>
       <BottomCta />
-    </>
+    </EditablePage>
   );
 }

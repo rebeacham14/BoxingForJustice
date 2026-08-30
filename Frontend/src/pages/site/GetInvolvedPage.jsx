@@ -4,6 +4,8 @@ import PageHero from '../../components/site/PageHero';
 import Overlay from '../../components/common/Overlay';
 import ContactForm from '../../components/site/ContactForm';
 import InternshipOverlay from '../../components/site/InternshipOverlay';
+import EditablePage from '../../components/site/EditablePage';
+import EditableText from '../../components/site/EditableText';
 
 const actions = [
   {
@@ -84,40 +86,60 @@ export default function GetInvolvedPage() {
   const [activeOverlay, setActiveOverlay] = useState(null);
 
   return (
-    <>
+    <EditablePage slug="get-involved">
       <PageHero
-        eyebrow="Get involved"
-        title="Justice is"
-        accent="a team effort."
-        lede="Whether you need support, want to strengthen your community, or are ready to invest in the mission, there is a clear place to begin."
+        eyebrow={<EditableText id="get-involved.hero.eyebrow" defaultValue="Get involved" />}
+        title={<EditableText id="get-involved.hero.title" defaultValue="Justice is" />}
+        accent={<EditableText id="get-involved.hero.accent" defaultValue="a team effort." />}
+        lede={
+          <EditableText
+            as="span"
+            id="get-involved.hero.lede"
+            defaultValue="Whether you need support, want to strengthen your community, or are ready to invest in the mission, there is a clear place to begin."
+          />
+        }
         number="05"
       />
 
       <aside className="urgent-help" aria-labelledby="urgent-help-title">
         <div>
-          <span>Immediate support</span>
-          <h2 id="urgent-help-title">If someone may be in danger</h2>
-          <p>Boxing For Justice is not an emergency service or crisis hotline.</p>
+          <span><EditableText id="get-involved.urgent.eyebrow" defaultValue="Immediate support" /></span>
+          <h2 id="urgent-help-title"><EditableText id="get-involved.urgent.title" defaultValue="If someone may be in danger" /></h2>
+          <EditableText as="p" id="get-involved.urgent.text" defaultValue="Boxing For Justice is not an emergency service or crisis hotline." />
         </div>
         <div className="help-links">
-          <a href="tel:911"><strong>Immediate danger</strong><span>Call 911</span></a>
-          <a href="https://humantraffickinghotline.org/en/get-help"><strong>Human trafficking support</strong><span>Call 1-888-373-7888 · Text 233733</span></a>
-          <a href="https://988lifeline.org/get-help/"><strong>Mental health crisis support</strong><span>Call or text 988</span></a>
+          <a href="tel:911">
+            <EditableText as="strong" id="get-involved.urgent.0.label" defaultValue="Immediate danger" />
+            <EditableText as="span" id="get-involved.urgent.0.detail" defaultValue="Call 911" />
+          </a>
+          <a href="https://humantraffickinghotline.org/en/get-help">
+            <EditableText as="strong" id="get-involved.urgent.1.label" defaultValue="Human trafficking support" />
+            <EditableText as="span" id="get-involved.urgent.1.detail" defaultValue="Call 1-888-373-7888 · Text 233733" />
+          </a>
+          <a href="https://988lifeline.org/get-help/">
+            <EditableText as="strong" id="get-involved.urgent.2.label" defaultValue="Mental health crisis support" />
+            <EditableText as="span" id="get-involved.urgent.2.detail" defaultValue="Call or text 988" />
+          </a>
         </div>
       </aside>
 
       <section className="contact-panel">
         <div>
-          <p className="eyebrow eyebrow-light"><span /> Not sure where to begin?</p>
-          <h2>Tell us what<br />brings you here.</h2>
+          <p className="eyebrow eyebrow-light"><span /> <EditableText id="get-involved.contact.eyebrow" defaultValue="Not sure where to begin?" /></p>
+          <h2>
+            <EditableText id="get-involved.contact.title-line1" defaultValue="Tell us what" /><br />
+            <EditableText id="get-involved.contact.title-line2" defaultValue="brings you here." />
+          </h2>
         </div>
         <div>
-          <p>
-            Send a brief note and we will help route your question to the right
-            person. Please do not include confidential details about abuse,
-            exploitation, health, or a minor in your initial email.
-          </p>
-          <a className="button button-red" href="mailto:info@boxingforjustice.org?subject=Website%20inquiry">Email Boxing For Justice</a>
+          <EditableText
+            as="p"
+            id="get-involved.contact.text"
+            defaultValue="Send a brief note and we will help route your question to the right person. Please do not include confidential details about abuse, exploitation, health, or a minor in your initial email."
+          />
+          <a className="button button-red" href="mailto:info@boxingforjustice.org?subject=Website%20inquiry">
+            <EditableText id="get-involved.contact.cta" defaultValue="Email Boxing For Justice" />
+          </a>
         </div>
       </section>
 
@@ -126,19 +148,23 @@ export default function GetInvolvedPage() {
           <article className="involvement-card" id={action.id} key={action.id}>
             <div className="involvement-number">0{index + 1}</div>
             <div className="involvement-content">
-              <span>{action.audience}</span>
-              <h2>{action.title}</h2>
-              <p>{action.text}</p>
+              <EditableText as="span" id={`get-involved.action.${index}.audience`} defaultValue={action.audience} />
+              <EditableText as="h2" id={`get-involved.action.${index}.title`} defaultValue={action.title} />
+              <EditableText as="p" id={`get-involved.action.${index}.text`} defaultValue={action.text} />
             </div>
             {action.kind === 'mailto' && (
-              <a className="button button-dark" href={action.href}>{action.label} <span aria-hidden="true">↗</span></a>
+              <a className="button button-dark" href={action.href}>
+                <EditableText id={`get-involved.action.${index}.label`} defaultValue={action.label} /> <span aria-hidden="true">↗</span>
+              </a>
             )}
             {action.kind === 'link' && (
-              <Link className="button button-dark" to={action.to}>{action.label} <span aria-hidden="true">→</span></Link>
+              <Link className="button button-dark" to={action.to}>
+                <EditableText id={`get-involved.action.${index}.label`} defaultValue={action.label} /> <span aria-hidden="true">→</span>
+              </Link>
             )}
             {action.kind === 'overlay' && (
               <button type="button" className="button button-dark" onClick={() => setActiveOverlay(action.overlay)}>
-                {action.label} <span aria-hidden="true">↗</span>
+                <EditableText id={`get-involved.action.${index}.label`} defaultValue={action.label} /> <span aria-hidden="true">↗</span>
               </button>
             )}
           </article>
@@ -158,6 +184,6 @@ export default function GetInvolvedPage() {
       {activeOverlay === 'internship' && (
         <InternshipOverlay onClose={() => setActiveOverlay(null)} />
       )}
-    </>
+    </EditablePage>
   );
 }
