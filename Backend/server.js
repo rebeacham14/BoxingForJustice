@@ -37,7 +37,12 @@ const upload = multer({
 });
 
 app.use(cors());
-app.use(express.json());
+// Default 100kb is too small for the site editor's embedded-image blocks
+// (base64 images PATCHed straight into a block's content - see
+// routes/content.js); bumped to 4mb, well above the block route's own 10MB
+// per-page guardrail's practical single-image share and the 2MB client-side
+// file-size cap in the frontend upload control.
+app.use(express.json({ limit: '4mb' }));
 
 const squareEnvironment =
   process.env.SQUARE_ENVIRONMENT === 'production'

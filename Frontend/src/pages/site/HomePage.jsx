@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const focusAreas = [
   {
@@ -240,6 +241,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <CustomBlocks sectionId="custom" />
     </EditablePage>
   );
 }

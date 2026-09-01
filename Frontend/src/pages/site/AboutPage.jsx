@@ -4,6 +4,7 @@ import SponsorBar from '../../components/common/SponsorBar';
 import FundsAllocationChart from '../../components/common/FundsAllocationChart';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const pillars = [
   ['Healing-Centered Boxing', 'Boxing as a structured tool for regulation, discipline, and confidence — not the end goal, the vehicle.'],
@@ -224,6 +225,7 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+      <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
   );

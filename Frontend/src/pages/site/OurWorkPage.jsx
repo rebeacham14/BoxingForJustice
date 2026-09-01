@@ -5,6 +5,7 @@ import AccordionItem from '../../components/common/AccordionItem';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const educationTopics = [
   'Human trafficking, sexual exploitation, grooming, and coercion',
@@ -221,6 +222,7 @@ export default function OurWorkPage() {
           <EditableText id="our-work.partnerships.cta" defaultValue="Build something together" />
         </Link>
       </section>
+      <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
   );

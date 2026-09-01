@@ -38,3 +38,55 @@ export async function updateBlock(getToken, slug, blockId, patch) {
 
   return res.json();
 }
+
+// Bulk-creates a group of sibling blocks (e.g. a flip-button's 5 blocks) in
+// one section, atomically.
+export async function createBlocks(getToken, slug, sectionId, blocks) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/pages/${slug}/sections/${sectionId}/blocks`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ blocks }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't add that.");
+  }
+
+  return res.json();
+}
+
+// Bulk-deletes blocks by id, wherever they live on the page.
+export async function deleteBlocks(getToken, slug, blockIds) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/pages/${slug}/blocks`, {
+    method: 'DELETE',
+    headers,
+    body: JSON.stringify({ blockIds }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't remove that.");
+  }
+
+  return res.json();
+}
+
+// Backs the plain-language "your images are taking up a lot of space"
+// banner - the byte counts in the response are for the threshold check only
+// and should never be shown to the owner directly.
+export async function fetchStorageStats(getToken) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/storage-stats`, { headers });
+
+  if (!res.ok) {
+    throw new Error('Could not load storage stats.');
+  }
+
+  return res.json();
+}

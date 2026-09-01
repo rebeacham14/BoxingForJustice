@@ -3,15 +3,18 @@ import { fetchPage } from '../utils/contentApi';
 
 const PageContentContext = createContext({
   slug: null,
+  sections: [],
   blocks: {},
   status: 'idle',
   setBlockLocal: () => {},
+  addBlocksLocal: () => {},
+  removeBlocksLocal: () => {},
 });
 
-function flattenBlocks(page) {
+function flattenBlocks(sections) {
   const blocks = {};
 
-  for (const section of page?.sections || []) {
+  for (const section of sections || []) {
     for (const block of section.blocks || []) {
       blocks[block.blockId] = block;
     }
@@ -20,12 +23,16 @@ function flattenBlocks(page) {
   return blocks;
 }
 
-// Fetches one page's content once per mount and exposes it as a
-// blockId -> block map. `status` starts 'loading' so EditableText can fall
-// back to its defaultValue until (or unless) the fetch resolves - the site
-// is never blank on a slow or failed backend.
+// Fetches one page's content once per mount. `sections` (the page's raw
+// section/block tree, in order - needed by anything that must enumerate a
+// section's blocks, e.g. the block library in CustomBlocks.jsx) is the
+// source of truth; `blocks` (a flat blockId -> block map, for EditableText's
+// single-block lookups) is derived from it on every render. `status` starts
+// 'loading' so EditableText can fall back to its defaultValue until (or
+// unless) the fetch resolves - the site is never blank on a slow/failed
+// backend.
 export function PageContentProvider({ slug, children }) {
-  const [state, setState] = useState({ blocks: {}, status: 'loading' });
+  const [state, setState] = useState({ sections: [], status: 'loading' });
 
   useEffect(() => {
     let cancelled = false;
@@ -33,12 +40,12 @@ export function PageContentProvider({ slug, children }) {
     fetchPage(slug)
       .then((page) => {
         if (!cancelled) {
-          setState({ blocks: flattenBlocks(page), status: 'ready' });
+          setState({ sections: page.sections || [], status: 'ready' });
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setState({ blocks: {}, status: 'error' });
+          setState({ sections: [], status: 'error' });
         }
       });
 
@@ -48,26 +55,58 @@ export function PageContentProvider({ slug, children }) {
   }, [slug]);
 
   function setBlockLocal(blockId, patch) {
-    setState((prev) => {
-      const existing = prev.blocks[blockId] || { blockId, content: {}, style: {} };
+    setState((prev) => ({
+      ...prev,
+      sections: prev.sections.map((section) => ({
+        ...section,
+        blocks: section.blocks.map((block) => {
+          if (block.blockId !== blockId) return block;
 
-      return {
-        ...prev,
-        blocks: {
-          ...prev.blocks,
-          [blockId]: {
-            ...existing,
+          return {
+            ...block,
             ...patch,
-            content: { ...existing.content, ...(patch.content || {}) },
-            style: { ...existing.style, ...(patch.style || {}) },
-          },
-        },
-      };
+            content: { ...block.content, ...(patch.content || {}) },
+            style: { ...block.style, ...(patch.style || {}) },
+          };
+        }),
+      })),
+    }));
+  }
+
+  function addBlocksLocal(sectionId, newBlocks) {
+    setState((prev) => {
+      const exists = prev.sections.some((s) => s.sectionId === sectionId);
+
+      const sections = exists
+        ? prev.sections.map((section) =>
+            section.sectionId === sectionId
+              ? { ...section, blocks: [...section.blocks, ...newBlocks] }
+              : section
+          )
+        : [...prev.sections, { sectionId, layout: 'default', blocks: newBlocks }];
+
+      return { ...prev, sections };
     });
   }
 
+  function removeBlocksLocal(blockIds) {
+    const idsToRemove = new Set(blockIds);
+
+    setState((prev) => ({
+      ...prev,
+      sections: prev.sections.map((section) => ({
+        ...section,
+        blocks: section.blocks.filter((block) => !idsToRemove.has(block.blockId)),
+      })),
+    }));
+  }
+
+  const blocks = flattenBlocks(state.sections);
+
   return (
-    <PageContentContext.Provider value={{ ...state, slug, setBlockLocal }}>
+    <PageContentContext.Provider
+      value={{ sections: state.sections, status: state.status, blocks, slug, setBlockLocal, addBlocksLocal, removeBlocksLocal }}
+    >
       {children}
     </PageContentContext.Provider>
   );

@@ -6,6 +6,7 @@ import ContactForm from '../../components/site/ContactForm';
 import InternshipOverlay from '../../components/site/InternshipOverlay';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const actions = [
   {
@@ -184,6 +185,8 @@ export default function GetInvolvedPage() {
       {activeOverlay === 'internship' && (
         <InternshipOverlay onClose={() => setActiveOverlay(null)} />
       )}
+
+      <CustomBlocks sectionId="custom" />
     </EditablePage>
   );
 }

@@ -611,6 +611,124 @@ html { scroll-behavior: smooth; }
 }
 .bfj-site .flip-card-back { transform: rotateY(180deg); }
 
+/* Site editor block library - owner-addable "flip button" (background
+   image + bold label, hover-flips via the .flip-card mechanic above, opens
+   an Overlay on click) - see Frontend/src/components/site/blocks/. */
+.bfj-site .custom-blocks { padding: 60px clamp(20px, 8vw, 124px) 100px; }
+.bfj-site .custom-blocks-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-bottom: 28px;
+}
+.bfj-site .flip-button.flip-card { border-radius: 10px; min-height: 240px; overflow: hidden; }
+.bfj-site .flip-button-face {
+  align-items: flex-end;
+  background-position: center;
+  background-size: cover;
+  border-radius: 10px;
+  box-shadow: inset 0 -80px 60px -20px rgba(17, 17, 15, .75);
+  color: white;
+  padding: 24px;
+}
+.bfj-site .flip-button-face strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+/* The back face has no image of its own - always a solid color so the
+   hover-label text stays legible. */
+.bfj-site .flip-card-back.flip-button-face { align-items: center; background: var(--ink); box-shadow: none; justify-content: center; text-align: center; }
+/* Edit mode: both faces shown at once in normal flow (see FlipButtonBlock.jsx
+   for why it can't reuse the absolute-stacked .flip-card layout here). */
+.bfj-site .flip-button-editing {
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  padding: 12px;
+}
+.bfj-site .flip-button-edit-face {
+  background-position: center;
+  background-size: cover;
+  border-radius: 8px;
+  box-shadow: inset 0 -60px 50px -15px rgba(17, 17, 15, .7);
+  color: white;
+  margin-bottom: 10px;
+  min-height: 90px;
+  padding: 16px;
+}
+.bfj-site .flip-button-edit-face-alt { background: var(--ink); text-align: center; }
+.bfj-site .flip-button-edit-face-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  margin-bottom: 6px;
+  opacity: .8;
+  text-transform: uppercase;
+}
+.bfj-site .flip-button-edit-face strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+.bfj-site .flip-button-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.bfj-site .flip-button-controls button {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: 6px 10px;
+  text-transform: uppercase;
+}
+.bfj-site .flip-button-controls .flip-button-remove { border-color: var(--red); color: var(--red); }
+.bfj-site .flip-button-error { color: var(--red); font-size: 12px; margin: 6px 0; }
+.bfj-site .flip-button-overlay-fields { display: grid; gap: 10px; margin-top: 12px; }
+.bfj-site .flip-button-overlay-fields label {
+  color: var(--muted);
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.bfj-site .flip-button-overlay-fields label > span,
+.bfj-site .flip-button-overlay-fields label > p {
+  color: var(--ink);
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: normal;
+  margin-top: 4px;
+  text-transform: none;
+}
+.bfj-site .custom-blocks-add {
+  background: none;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: 14px 20px;
+  text-transform: uppercase;
+}
+.bfj-site .custom-blocks-add:hover { border-color: var(--red); color: var(--red); }
+.bfj-site .custom-blocks-storage-warning {
+  background: var(--color-gold-wash);
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 13px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+}
+
 /* Shared: accordion (+) items (Our Work's Educating bullets) */
 .bfj-site .accordion-item { border-bottom: 1px solid var(--line); }
 .bfj-site .program-red .accordion-item { border-color: rgba(255, 255, 255, .35); }

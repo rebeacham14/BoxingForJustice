@@ -2,6 +2,7 @@ import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 export default function EnrollLandingPage() {
   return (
@@ -74,6 +75,7 @@ export default function EnrollLandingPage() {
           </a>
         </div>
       </section>
+      <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
   );

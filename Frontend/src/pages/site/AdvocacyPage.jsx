@@ -4,6 +4,7 @@ import PageHero from '../../components/site/PageHero';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const awarenessBlocks = [
   { front: 'Block 1', back: 'Owner to add content.' },
@@ -76,6 +77,7 @@ export default function AdvocacyPage() {
           </Link>
         </div>
       </section>
+      <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
   );

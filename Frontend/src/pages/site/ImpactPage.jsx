@@ -4,6 +4,7 @@ import PageHero from '../../components/site/PageHero';
 import UsPolicyMap from '../../components/impact/UsPolicyMap';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const outcomes = [
   ['Participation', 'Consistent engagement, attendance, retention, and completion'],
@@ -196,6 +197,7 @@ export default function ImpactPage() {
           </div>
         </div>
       </section>
+      <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
   );
