@@ -1,4 +1,4 @@
-export const API_URL = 'https://boxforjuice.onrender.com';
+export const API_URL = 'https://boxingforjustice.onrender.com';
 
 // Clerk tokens are short-lived and fetched async via `getToken()` from
 // Clerk's useAuth() hook - callers must pass that function in (it can't be
