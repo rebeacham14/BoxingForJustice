@@ -3,6 +3,14 @@ import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
+const ACCENT_CYCLE = ['var(--gold)', 'var(--blue)', 'var(--red)', 'var(--purple)'];
+
+const threeCs = [
+  { label: 'Choice', caption: 'My voice matters.' },
+  { label: 'Control', caption: 'I can choose my response.' },
+  { label: 'Confidence', caption: 'I am more than what happened.' },
+];
+
 const focusAreas = [
   {
     number: '01',
@@ -29,10 +37,10 @@ const measures = [
 ];
 
 const actionGrid = [
-  { to: '/get-involved#mma-program', audience: 'For families', title: 'Enroll or refer a participant' },
-  { to: '/get-involved#training', audience: 'For organizations', title: 'Request education or training' },
-  { to: '/get-involved#partnership', audience: 'For community leaders', title: 'Become a partner' },
-  { to: '/get-involved#internship', audience: 'For supporters', title: 'Volunteer or intern' },
+  { to: '/get-involved#mma-program', audience: 'For families', title: 'Enroll or refer a participant', image: '/Pics/back_of_kid_holding_flag.jpg' },
+  { to: '/get-involved#training', audience: 'For organizations', title: 'Request education or training', image: '/Pics/kid_headshot_serious.jpg' },
+  { to: '/get-involved#partnership', audience: 'For community leaders', title: 'Become a partner', image: '/misc/home-boxing.jpg' },
+  { to: '/get-involved#internship', audience: 'For supporters', title: 'Volunteer or intern', image: '/misc/shop-boxing.jpg' },
 ];
 
 export default function HomePage() {
@@ -52,6 +60,19 @@ export default function HomePage() {
               defaultValue="We protect vulnerable people, prevent harm, and help youth, families, and survivors reclaim their power. Boxing is one tool. The mission is healing, justice, and lasting change."
             />
           </p>
+
+          <div className="icon-stat-row" aria-label="Choice, Control, Confidence — the Boxing For Justice 3 C's model">
+            {threeCs.map((item, index) => (
+              <div className="icon-stat" key={item.label}>
+                <span className="icon-stat-chip" style={{ background: ACCENT_CYCLE[index] }}>0{index + 1}</span>
+                <div>
+                  <strong><EditableText id={`home.top.three-cs.${index}.label`} defaultValue={item.label} /></strong>
+                  <small><EditableText id={`home.top.three-cs.${index}.caption`} defaultValue={item.caption} /></small>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div className="button-row">
             <Link className="button button-red" to="/get-involved#mma-program">
               <EditableText id="home.top.cta-primary" defaultValue="Refer a young person" />
@@ -62,33 +83,13 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="hero-visual" aria-label="Choice, Control, Confidence — the Boxing For Justice 3 C's model">
-          <div className="ring-lines" aria-hidden="true">
-            <span className="ring-line ring-line-a" />
-            <span className="ring-line ring-line-b" />
-            <span className="ring-line ring-line-c" />
+        <div className="hero-photo" style={{ backgroundImage: 'url(/Pics/kid_coach_conversation.jpg)' }}>
+          <div className="hero-photo-badge">
+            <EditableText id="home.top.visual-kicker" defaultValue="Our youth-centered model" />
           </div>
-          <div className="visual-kicker"><EditableText id="home.top.visual-kicker" defaultValue="Our youth-centered model" /></div>
-          <div className="three-cs">
-            <div>
-              <span>01</span>
-              <strong><EditableText id="home.top.three-cs.0.label" defaultValue="Choice" /></strong>
-              <small><EditableText id="home.top.three-cs.0.caption" defaultValue="My voice matters." /></small>
-            </div>
-            <div>
-              <span>02</span>
-              <strong><EditableText id="home.top.three-cs.1.label" defaultValue="Control" /></strong>
-              <small><EditableText id="home.top.three-cs.1.caption" defaultValue="I can choose my response." /></small>
-            </div>
-            <div>
-              <span>03</span>
-              <strong><EditableText id="home.top.three-cs.2.label" defaultValue="Confidence" /></strong>
-              <small><EditableText id="home.top.three-cs.2.caption" defaultValue="I am more than what happened." /></small>
-            </div>
-          </div>
-          <div className="visual-statement">
+          <div className="hero-photo-caption">
             <EditableText id="home.top.visual-statement" defaultValue="Not just winning fights." /><br />
-            <em><EditableText id="home.top.visual-statement-accent" defaultValue="Winning yourself back." /></em>
+            <strong><EditableText id="home.top.visual-statement-accent" defaultValue="Winning yourself back." /></strong>
           </div>
         </div>
       </section>
@@ -119,7 +120,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="work-section" id="our-work">
+      <section className="connected-model" id="our-work">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="home.our-work.eyebrow" defaultValue="One mission. Multiple pathways." /></p>
@@ -136,16 +137,14 @@ export default function HomePage() {
             />
           </p>
         </div>
-        <div className="focus-grid">
+        <div className="connected-row">
           {focusAreas.map((area, index) => (
-            <article className="focus-card" key={area.number}>
-              <span className="focus-number">{area.number}</span>
-              <div>
-                <EditableText as="h3" id={`home.our-work.focus.${index}.title`} defaultValue={area.title} />
-                <EditableText as="p" id={`home.our-work.focus.${index}.text`} defaultValue={area.text} />
-              </div>
-              <span className="focus-arrow" aria-hidden="true">↗</span>
-            </article>
+            <div className="connected-step" key={area.number}>
+              <span className="connected-circle" style={{ background: ACCENT_CYCLE[index] }}>{area.number}</span>
+              <EditableText as="h3" id={`home.our-work.focus.${index}.title`} defaultValue={area.title} />
+              <EditableText as="p" id={`home.our-work.focus.${index}.text`} defaultValue={area.text} />
+              {index < focusAreas.length - 1 && <span className="connected-arrow" aria-hidden="true">→</span>}
+            </div>
           ))}
         </div>
       </section>
@@ -163,12 +162,18 @@ export default function HomePage() {
       </section>
 
       <section className="method-section">
-        <div className="method-art" aria-hidden="true">
+        <div className="method-art">
+          <video
+            className="method-art-video"
+            src="/Videos/shot_of_paperwaork_and_discussion.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden="true"
+          />
+          <div className="method-art-overlay" aria-hidden="true" />
           <div className="corner-label">In their corner</div>
-          <div className="method-word">BREATHE</div>
-          <div className="method-word">PAUSE</div>
-          <div className="method-word active">RESET</div>
-          <div className="method-word">RETURN</div>
         </div>
         <div className="method-copy">
           <p className="eyebrow"><span /> <EditableText id="home.method.eyebrow" defaultValue="Boxing as a tool" /></p>
@@ -233,10 +238,15 @@ export default function HomePage() {
         </h2>
         <div className="action-grid">
           {actionGrid.map((action, index) => (
-            <Link to={action.to} key={action.to}>
-              <span><EditableText id={`home.get-involved.action.${index}.audience`} defaultValue={action.audience} /></span>
-              <strong><EditableText id={`home.get-involved.action.${index}.title`} defaultValue={action.title} /></strong>
-              <em>→</em>
+            <Link
+              className="action-card"
+              to={action.to}
+              key={action.to}
+              style={{ backgroundImage: `url(${action.image})`, '--card-accent': ACCENT_CYCLE[index] }}
+            >
+              <span className="action-card-audience"><EditableText id={`home.get-involved.action.${index}.audience`} defaultValue={action.audience} /></span>
+              <strong className="action-card-title"><EditableText id={`home.get-involved.action.${index}.title`} defaultValue={action.title} /></strong>
+              <em className="action-card-arrow">→</em>
             </Link>
           ))}
         </div>

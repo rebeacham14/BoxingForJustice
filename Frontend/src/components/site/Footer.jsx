@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-brand">
-        <span className="brand-mark brand-mark-footer" aria-hidden="true">BFJ</span>
+        <img className="brand-logo brand-logo-footer" src="/bfj-logo.png" alt="" aria-hidden="true" />
         <div>
           <strong>Boxing For Justice</strong>
           <p>Restoring power. Igniting resilience. Building leaders.</p>

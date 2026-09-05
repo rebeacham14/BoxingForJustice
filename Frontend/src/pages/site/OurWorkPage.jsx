@@ -53,6 +53,7 @@ export default function OurWorkPage() {
             <EditableText id="our-work.feature.cta" defaultValue="See the full breakdown" /> <span aria-hidden="true">↗</span>
           </Link>
         </div>
+        <div className="feature-card-media" style={{ backgroundImage: 'url(/misc/orders-boxing.jpg)' }} aria-hidden="true" />
       </div>
 
       <section className="program-section program-red" id="campaigns">

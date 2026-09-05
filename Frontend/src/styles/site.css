@@ -1,16 +1,26 @@
-/* Ported from Boxing_For_Justice_Website_Source/app/globals.css, scoped under
-   .bfj-site so it can coexist with the existing app's styles in the same SPA. */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap');
+/* Redesigned to match the org's real logo (public/bfj-logo.png: navy, red,
+   white, black patriotic badge) and the owner-approved reference layout —
+   a photo-driven nonprofit template look, replacing the previous all-type
+   editorial system. Scoped under .bfj-site so it can coexist with the
+   existing app's styles in the same SPA. */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 .bfj-site {
-  --ink: #11110f;
-  --paper: #f5f0e6;
+  --ink: #12213a;
+  --paper: #ffffff;
+  --surface-alt: #f4f5f8;
   --red: #e22d23;
   --red-dark: #b51e17;
-  --white: #fffdf7;
-  --muted: #746f66;
-  --line: rgba(17, 17, 15, 0.16);
-  --font-display: "Bebas Neue", Impact, sans-serif;
+  --white: #ffffff;
+  --muted: #5b6472;
+  --line: rgba(18, 33, 58, 0.14);
+  --gold: var(--color-gold);
+  --gold-dark: var(--color-gold-hover);
+  --blue: #2c5f8f;
+  --purple: #6a4fa0;
+  --green: #3c7a52;
+  --radius: 14px;
+  --font-display: "Anton", Impact, sans-serif;
   --font-body: "Manrope", Arial, sans-serif;
 
   margin: 0;
@@ -42,7 +52,8 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .site-header {
   align-items: center;
-  border-bottom: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--white);
   display: flex;
   height: 92px;
   justify-content: space-between;
@@ -51,20 +62,7 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .brand { align-items: center; display: flex; gap: 12px; }
 
-.bfj-site .brand-mark {
-  align-items: center;
-  background: var(--red);
-  color: white;
-  display: inline-flex;
-  font-family: var(--font-display), Impact, sans-serif;
-  font-size: 25px;
-  height: 48px;
-  justify-content: center;
-  letter-spacing: .04em;
-  line-height: 1;
-  transform: skew(-5deg);
-  width: 48px;
-}
+.bfj-site .brand-logo { display: block; height: 52px; width: 52px; }
 
 .bfj-site .brand-name {
   font-family: var(--font-display), Impact, sans-serif;
@@ -76,15 +74,15 @@ html { scroll-behavior: smooth; }
 .bfj-site .brand-name em { color: var(--red); font-style: normal; }
 
 .bfj-site .desktop-nav { align-items: center; display: flex; gap: clamp(18px, 2.5vw, 42px); }
-.bfj-site .desktop-nav a { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.bfj-site .desktop-nav a:hover { color: var(--red); }
+.bfj-site .desktop-nav a { color: var(--white); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.bfj-site .desktop-nav a:hover { color: var(--gold); }
 
 .bfj-site .nav-item { position: relative; }
 .bfj-site .nav-dropdown {
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 6px;
-  box-shadow: 0 16px 32px rgba(17, 17, 15, .14);
+  border-radius: 10px;
+  box-shadow: 0 16px 32px rgba(18, 33, 58, .22);
   display: flex;
   flex-direction: column;
   left: 50%;
@@ -100,7 +98,7 @@ html { scroll-behavior: smooth; }
 }
 .bfj-site .nav-dropdown-open { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
 .bfj-site .nav-dropdown a {
-  border-radius: 4px;
+  border-radius: 6px;
   color: var(--ink);
   font-size: 11px;
   font-weight: 700;
@@ -109,12 +107,13 @@ html { scroll-behavior: smooth; }
   text-transform: none;
   white-space: nowrap;
 }
-.bfj-site .nav-dropdown a:hover { background: var(--paper); color: var(--red); }
+.bfj-site .nav-dropdown a:hover { background: var(--surface-alt); color: var(--red); }
 
 .bfj-site .mobile-menu { display: none; position: relative; }
 .bfj-site .mobile-menu > button {
   background: none;
   border: 0;
+  color: var(--white);
   cursor: pointer;
   font-family: inherit;
   font-size: 11px;
@@ -146,6 +145,7 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .button {
   align-items: center;
+  border-radius: 999px;
   display: inline-flex;
   font-size: 12px;
   font-weight: 800;
@@ -217,31 +217,59 @@ html { scroll-behavior: smooth; }
 .bfj-site button.text-link { background: none; border-left: 0; border-right: 0; border-top: 0; color: inherit; cursor: pointer; font-family: inherit; padding-left: 0; padding-right: 0; }
 .bfj-site .text-link span { color: var(--red); margin-left: 8px; }
 
-.bfj-site .hero-visual {
-  background: var(--red);
+/* Hero icon-stat row (the 3 C's, restyled as colored-circle chips) */
+.bfj-site .icon-stat-row { display: flex; flex-wrap: wrap; gap: 26px; margin: 6px 0 36px; }
+.bfj-site .icon-stat { align-items: center; display: flex; gap: 12px; max-width: 210px; }
+.bfj-site .icon-stat-chip {
+  align-items: center;
+  border-radius: 50%;
   color: white;
+  display: flex;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 13px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+.bfj-site .icon-stat strong { display: block; font-size: 13px; letter-spacing: .02em; text-transform: uppercase; }
+.bfj-site .icon-stat small { color: var(--muted); display: block; font-size: 11px; line-height: 1.4; }
+
+/* Hero photo panel (replaces the old abstract ring-graphic) */
+.bfj-site .hero-photo {
+  background-color: var(--ink);
+  background-position: center;
+  background-size: cover;
   min-height: 720px;
-  overflow: hidden;
-  padding: 68px clamp(28px, 5vw, 80px);
   position: relative;
 }
-
-.bfj-site .ring-lines { inset: 0; opacity: .22; position: absolute; }
-.bfj-site .ring-line { border: 2px solid white; display: block; left: -8%; position: absolute; right: -8%; transform: rotate(-11deg); }
-.bfj-site .ring-line-a { top: 22%; }
-.bfj-site .ring-line-b { top: 50%; }
-.bfj-site .ring-line-c { top: 78%; }
-.bfj-site .ring-line::before, .bfj-site .ring-line::after { background: white; content: ""; height: 32px; position: absolute; top: -16px; width: 4px; }
-.bfj-site .ring-line::before { left: 18%; } .bfj-site .ring-line::after { right: 18%; }
-
-.bfj-site .visual-kicker { font-size: 11px; font-weight: 800; letter-spacing: .2em; position: relative; text-transform: uppercase; }
-.bfj-site .three-cs { border-top: 1px solid rgba(255,255,255,.55); margin-top: 58px; position: relative; }
-.bfj-site .three-cs > div { border-bottom: 1px solid rgba(255,255,255,.55); display: grid; gap: 20px; grid-template-columns: 34px 1fr; padding: 23px 0; }
-.bfj-site .three-cs span { font-size: 11px; font-weight: 800; opacity: .7; }
-.bfj-site .three-cs strong { font-family: var(--font-display); font-size: clamp(38px, 4vw, 62px); font-weight: 400; letter-spacing: .025em; line-height: .8; text-transform: uppercase; }
-.bfj-site .three-cs small { font-size: 12px; grid-column: 2; margin-top: -14px; opacity: .8; }
-.bfj-site .visual-statement { bottom: 50px; font-family: var(--font-display); font-size: clamp(30px, 3vw, 48px); line-height: .95; position: absolute; text-transform: uppercase; }
-.bfj-site .visual-statement em { color: var(--ink); font-style: normal; }
+.bfj-site .hero-photo-badge {
+  background: rgba(18, 33, 58, .78);
+  border-radius: 999px;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  left: clamp(24px, 4vw, 48px);
+  letter-spacing: .1em;
+  padding: 10px 18px;
+  position: absolute;
+  text-transform: uppercase;
+  top: clamp(24px, 4vw, 48px);
+}
+.bfj-site .hero-photo-caption {
+  background: linear-gradient(0deg, rgba(18, 33, 58, .92) 20%, rgba(18, 33, 58, 0) 100%);
+  bottom: 0;
+  color: white;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.6vw, 38px);
+  left: 0;
+  line-height: 1.05;
+  padding: 120px clamp(24px, 4vw, 48px) 40px;
+  position: absolute;
+  right: 0;
+  text-transform: uppercase;
+}
+.bfj-site .hero-photo-caption strong { color: var(--gold); font-weight: 400; }
 
 .bfj-site .manifesto {
   background: var(--ink);
@@ -271,23 +299,61 @@ html { scroll-behavior: smooth; }
 .bfj-site .focus-card p { color: var(--muted); font-size: 13px; line-height: 1.75; margin: 0; }
 .bfj-site .focus-arrow { font-size: 20px; }
 
-.bfj-site .quote-band { background: var(--red); color: white; padding: 80px max(20px, 14vw); text-align: center; }
-.bfj-site .quote-mark { color: var(--ink); font-family: Georgia, serif; font-size: 72px; line-height: .5; }
+/* Home only: "Our Connected Model" row (focusAreas restyled as colored
+   step-circles with connecting arrows, in place of the bordered card grid
+   other pages still use via .focus-grid/.focus-card). */
+.bfj-site .connected-model { background: var(--surface-alt); padding: 110px clamp(20px, 8vw, 124px); }
+.bfj-site .connected-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.bfj-site .connected-step { max-width: 280px; padding: 0 18px; position: relative; text-align: center; }
+.bfj-site .connected-circle {
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  font-family: var(--font-display);
+  font-size: 18px;
+  height: 66px;
+  justify-content: center;
+  margin: 0 auto 18px;
+  width: 66px;
+}
+.bfj-site .connected-step h3 { font-family: var(--font-display); font-size: 24px; font-weight: 400; margin: 0 0 8px; text-transform: uppercase; }
+.bfj-site .connected-step p { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 0; }
+.bfj-site .connected-arrow { color: var(--line); display: none; font-size: 22px; position: absolute; right: -14px; top: 18px; }
+@media (min-width: 860px) {
+  .bfj-site .connected-arrow { display: block; }
+}
+
+.bfj-site .quote-band { background: var(--gold); color: var(--ink); padding: 80px max(20px, 14vw); text-align: center; }
+.bfj-site .quote-mark { color: var(--white); font-family: Georgia, serif; font-size: 72px; line-height: .5; }
 .bfj-site .quote-band blockquote { font-family: var(--font-display); font-size: clamp(44px, 5vw, 78px); line-height: .98; margin: 20px auto 28px; max-width: 1100px; text-transform: uppercase; }
 .bfj-site .quote-band p { font-size: 10px; font-weight: 800; letter-spacing: .2em; margin: 0; text-transform: uppercase; }
 
 .bfj-site .method-section { display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; }
-.bfj-site .method-art { background: #d9d0c0; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 70px clamp(30px, 6vw, 90px); position: relative; }
-.bfj-site .method-art::after { border: 2px solid rgba(17,17,15,.18); border-radius: 50%; content: ""; height: 430px; position: absolute; right: -160px; top: -100px; width: 430px; }
-.bfj-site .corner-label { font-size: 10px; font-weight: 800; letter-spacing: .2em; margin-bottom: 28px; text-transform: uppercase; }
-.bfj-site .method-word { color: rgba(17,17,15,.18); font-family: var(--font-display); font-size: clamp(80px, 9vw, 150px); line-height: .72; text-transform: uppercase; }
-.bfj-site .method-word.active { color: var(--red); transform: translateX(30px); }
+.bfj-site .method-art { background: var(--ink); overflow: hidden; position: relative; }
+.bfj-site .method-art-video { height: 100%; left: 0; object-fit: cover; position: absolute; top: 0; width: 100%; }
+.bfj-site .method-art-overlay { background: linear-gradient(0deg, rgba(18, 33, 58, .85) 0%, rgba(18, 33, 58, .35) 60%); inset: 0; position: absolute; }
+.bfj-site .corner-label {
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  left: clamp(24px, 4vw, 40px);
+  letter-spacing: .2em;
+  position: absolute;
+  text-transform: uppercase;
+  top: clamp(24px, 4vw, 40px);
+}
 .bfj-site .method-copy { background: var(--white); padding: 100px clamp(30px, 7vw, 110px); }
 .bfj-site .method-copy h2 { font-size: clamp(52px, 5vw, 82px); }
 .bfj-site .method-copy > p { color: var(--muted); font-size: 15px; line-height: 1.8; margin: 30px 0; }
 .bfj-site .check-list { border-top: 1px solid var(--line); list-style: none; margin: 0 0 32px; padding: 0; }
 .bfj-site .check-list li { border-bottom: 1px solid var(--line); font-size: 13px; line-height: 1.6; padding: 18px 0 18px 42px; position: relative; }
-.bfj-site .check-list span { color: var(--red); font-family: var(--font-display); font-size: 18px; left: 0; position: absolute; top: 18px; }
+/* :first-child scopes this to the decorative number only - EditableText
+   renders its content as a <span> too (see EditableText.jsx), and an
+   unscoped `.check-list span` would also pull the real list text out of
+   flow and stack it on top of the number (same class of bug as the
+   .eyebrow/.funder-links fixes elsewhere in this file). */
+.bfj-site .check-list span:first-child { color: var(--red); font-family: var(--font-display); font-size: 18px; left: 0; position: absolute; top: 18px; }
 .bfj-site .text-link-dark { display: inline-block; }
 
 .bfj-site .impact-section { background: #20201d; color: white; display: grid; gap: 50px; grid-template-columns: 190px 1fr; padding: 110px clamp(20px, 8vw, 124px); }
@@ -297,7 +363,7 @@ html { scroll-behavior: smooth; }
 .bfj-site .measure-grid { border-top: 1px solid rgba(255,255,255,.18); display: grid; grid-template-columns: repeat(4, 1fr); }
 .bfj-site .measure { border-right: 1px solid rgba(255,255,255,.18); min-height: 160px; padding: 24px; }
 .bfj-site .measure:last-child { border-right: 0; }
-.bfj-site .measure span { color: var(--red); font-family: var(--font-display); font-size: 20px; }
+.bfj-site .measure span { color: var(--gold); font-family: var(--font-display); font-size: 20px; }
 .bfj-site .measure p { font-size: 12px; font-weight: 700; line-height: 1.6; margin: 40px 0 0; }
 .bfj-site .funder-note { align-items: center; background: rgba(255,255,255,.07); border-left: 4px solid var(--red); display: grid; gap: 28px; grid-template-columns: 220px 1fr; margin-top: 40px; padding: 25px 30px; }
 .bfj-site .funder-note strong { font-family: var(--font-display); font-size: 24px; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; }
@@ -305,18 +371,32 @@ html { scroll-behavior: smooth; }
 
 .bfj-site .action-section { padding: 120px clamp(20px, 8vw, 124px); }
 .bfj-site .action-section h2 { font-size: clamp(62px, 7vw, 108px); margin-bottom: 62px; }
-.bfj-site .action-grid { border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; }
-.bfj-site .action-grid a { align-items: center; border-bottom: 1px solid var(--line); display: grid; gap: 8px; grid-template-columns: 1fr 36px; min-height: 150px; padding: 28px 38px 28px 0; transition: color .2s ease, padding .2s ease; }
-.bfj-site .action-grid a:nth-child(odd) { border-right: 1px solid var(--line); padding-right: 48px; }
-.bfj-site .action-grid a:nth-child(even) { padding-left: 48px; }
-.bfj-site .action-grid a:hover { color: var(--red); padding-right: 26px; }
-.bfj-site .action-grid span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
-.bfj-site .action-grid strong { font-family: var(--font-display); font-size: 30px; font-weight: 400; letter-spacing: .02em; text-transform: uppercase; }
-.bfj-site .action-grid em { font-size: 24px; font-style: normal; grid-column: 2; grid-row: 1 / 3; }
+.bfj-site .action-grid { display: grid; gap: 22px; grid-template-columns: repeat(4, 1fr); }
+.bfj-site .action-card {
+  background-color: var(--ink);
+  background-position: center;
+  background-size: cover;
+  border-radius: var(--radius);
+  border-top: 5px solid var(--card-accent, var(--gold));
+  box-shadow: inset 0 -110px 80px -30px rgba(18, 33, 58, .85);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: flex-end;
+  min-height: 280px;
+  overflow: hidden;
+  padding: 26px 22px;
+  transition: transform .2s ease;
+}
+.bfj-site .action-card:hover { transform: translateY(-4px); }
+.bfj-site .action-card-audience { color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.bfj-site .action-card-title { font-family: var(--font-display); font-size: 24px; font-weight: 400; letter-spacing: .02em; line-height: 1.05; text-transform: uppercase; }
+.bfj-site .action-card-arrow { font-size: 22px; font-style: normal; margin-top: 6px; }
 
 .bfj-site .site-footer { align-items: center; background: var(--ink); color: white; display: grid; gap: 34px; grid-template-columns: 1.3fr .7fr .7fr; padding: 60px clamp(20px, 8vw, 124px) 28px; }
 .bfj-site .footer-brand { align-items: center; display: flex; gap: 16px; }
-.bfj-site .brand-mark-footer { height: 58px; width: 58px; }
+.bfj-site .brand-logo-footer { height: 58px; width: 58px; }
 .bfj-site .footer-brand strong { font-family: var(--font-display); font-size: 25px; font-weight: 400; letter-spacing: .03em; text-transform: uppercase; }
 .bfj-site .footer-brand p, .bfj-site .footer-location p, .bfj-site .footer-contact p { color: rgba(255,255,255,.56); font-size: 11px; line-height: 1.5; margin: 2px 0 0; }
 .bfj-site .footer-location strong, .bfj-site .footer-contact strong { font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }
@@ -380,6 +460,7 @@ html { scroll-behavior: smooth; }
 .bfj-site .leader-grid article { border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); min-height: 180px; padding: 28px; }
 .bfj-site .leader-grid article:nth-child(3n) { border-right: 0; }
 .bfj-site .leader-grid span { color: var(--red); font-family: var(--font-display); font-size: 18px; }
+.bfj-site .leader-photo { border-radius: 50%; display: block; height: 56px; object-fit: cover; width: 56px; }
 .bfj-site .leader-grid h3 { font-family: var(--font-display); font-size: 28px; font-weight: 400; letter-spacing: .03em; margin: 38px 0 6px; text-transform: uppercase; }
 .bfj-site .leader-grid p { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 0; }
 
@@ -402,7 +483,12 @@ html { scroll-behavior: smooth; }
 .bfj-site .mini-grid { border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); margin: 32px 0; }
 .bfj-site .mini-grid > div, .bfj-site .mini-grid > .flip-card { border-right: 1px solid var(--line); min-height: 150px; padding: 20px; }
 .bfj-site .mini-grid > div:last-child, .bfj-site .mini-grid > .flip-card:last-child { border: 0; }
-.bfj-site .mini-grid span { color: var(--red); font-family: var(--font-display); font-size: 17px; }
+/* .flip-card-front > span scopes this to the decorative number only -
+   EditableText renders its content as a <span> too (see EditableText.jsx),
+   nested one level deeper inside the <strong> here, so a bare descendant
+   `.mini-grid span` would also match it and misstyle the real label text
+   (same class of bug as the .check-list fix above). */
+.bfj-site .mini-grid .flip-card-front > span { color: var(--red); font-family: var(--font-display); font-size: 17px; }
 .bfj-site .mini-grid strong { display: block; font-family: var(--font-display); font-size: 25px; font-weight: 400; margin: 24px 0 4px; text-transform: uppercase; }
 .bfj-site .mini-grid small { color: var(--muted); font-size: 10px; line-height: 1.5; }
 .bfj-site .mini-grid .flip-card-front, .bfj-site .mini-grid .flip-card-back { justify-content: center; padding: 0; }
@@ -499,10 +585,11 @@ html { scroll-behavior: smooth; }
   .bfj-site .site-header > .button { display: none; }
   .bfj-site .mobile-menu { display: block; }
   .bfj-site .hero { grid-template-columns: 1fr; }
-  .bfj-site .hero-visual { min-height: 650px; }
+  .bfj-site .hero-photo { min-height: 480px; }
   .bfj-site .manifesto, .bfj-site .impact-section { grid-template-columns: 1fr; }
   .bfj-site .section-number { padding: 0; }
   .bfj-site .method-section { grid-template-columns: 1fr; }
+  .bfj-site .method-art { min-height: 420px; }
   .bfj-site .measure-grid { grid-template-columns: 1fr 1fr; }
   .bfj-site .measure:nth-child(2) { border-right: 0; }
   .bfj-site .measure:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.18); }
@@ -521,33 +608,35 @@ html { scroll-behavior: smooth; }
   .bfj-site .funder-section { grid-template-columns: 1fr; }
   .bfj-site .involvement-card { grid-template-columns: 55px 1fr; }
   .bfj-site .involvement-card > .button { grid-column: 2; justify-self: start; }
+  .bfj-site .action-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 680px) {
   .bfj-site .announcement { font-size: 8px; }
   .bfj-site .site-header { height: 76px; }
-  .bfj-site .brand-mark { font-size: 20px; height: 40px; width: 40px; }
+  .bfj-site .brand-logo { height: 40px; width: 40px; }
   .bfj-site .brand-name { font-size: 18px; }
   .bfj-site .site-header > .button { display: none; }
   .bfj-site .hero-copy { padding: 70px 20px; }
   .bfj-site .hero h1 { font-size: clamp(62px, 20vw, 88px); }
   .bfj-site .hero-lede { font-size: 15px; }
   .bfj-site .button-row { align-items: flex-start; flex-direction: column; gap: 22px; }
-  .bfj-site .hero-visual { min-height: 600px; padding: 48px 24px; }
-  .bfj-site .manifesto, .bfj-site .work-section, .bfj-site .method-copy, .bfj-site .impact-section, .bfj-site .action-section { padding: 78px 20px; }
+  .bfj-site .hero-photo { min-height: 380px; }
+  .bfj-site .manifesto, .bfj-site .work-section, .bfj-site .connected-model, .bfj-site .method-copy, .bfj-site .impact-section, .bfj-site .action-section { padding: 78px 20px; }
   .bfj-site .manifesto-columns, .bfj-site .section-heading, .bfj-site .focus-grid, .bfj-site .action-grid { grid-template-columns: 1fr; }
   .bfj-site .section-heading { align-items: start; }
   .bfj-site .manifesto h2, .bfj-site .section-heading h2, .bfj-site .method-copy h2, .bfj-site .impact-content h2, .bfj-site .action-section h2 { font-size: 55px; }
   .bfj-site .focus-card, .bfj-site .focus-card:nth-child(odd), .bfj-site .focus-card:nth-child(even) { border-right: 0; padding: 28px 0; }
   .bfj-site .quote-band { padding: 66px 20px; }
-  .bfj-site .method-art { min-height: 500px; padding: 50px 20px; }
-  .bfj-site .method-word { font-size: 86px; }
+  .bfj-site .method-art { min-height: 320px; }
   .bfj-site .measure-grid { grid-template-columns: 1fr; }
   .bfj-site .measure, .bfj-site .measure:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,.18); border-right: 0; min-height: 120px; }
   .bfj-site .measure:last-child { border-bottom: 0; }
   .bfj-site .measure p { margin-top: 22px; }
   .bfj-site .funder-note { align-items: start; grid-template-columns: 1fr; }
-  .bfj-site .action-grid a, .bfj-site .action-grid a:nth-child(odd), .bfj-site .action-grid a:nth-child(even) { border-right: 0; padding: 24px 0; }
+  .bfj-site .action-grid { grid-template-columns: 1fr; }
+  .bfj-site .connected-row { flex-direction: column; }
+  .bfj-site .connected-step { max-width: none; }
   .bfj-site .site-footer { align-items: start; grid-template-columns: 1fr; padding: 54px 20px 24px; }
   .bfj-site .footer-nav { flex-wrap: wrap; }
   .bfj-site .page-hero { grid-template-columns: 1fr; min-height: auto; }
@@ -815,6 +904,10 @@ html { scroll-behavior: smooth; }
 .bfj-site .feature-card h3 { font-size: clamp(30px, 4vw, 46px); margin: 6px 0 14px; }
 .bfj-site .feature-card p { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 0 0 20px; }
 .bfj-site .feature-card-tag { color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.bfj-site .feature-card-media { background-position: center; background-size: cover; border-radius: 8px; min-height: 220px; }
+@media (max-width: 980px) {
+  .bfj-site .feature-card-media { min-height: 180px; }
+}
 
 /* Interactive US policy map (Impact > GEO Data) */
 .bfj-site .us-map {

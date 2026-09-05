@@ -21,11 +21,11 @@ const values = [
 ];
 
 const leaders = [
-  ['Martye Perkins', 'Founder, Chief Executive Officer & Board Chair'],
-  ['Julian “JP” Powers', 'Director, Strength & Conditioning Coach & Board Vice Chair'],
-  ['Becky “Coach Bek” Perkins', 'Certified Amateur Boxing Coach & Board Secretary'],
-  ['Peter Phan', 'Marketing Director & Youth Mentor'],
-  ['Ryan “Ace” Beacham', 'Media & Production Director'],
+  ['Martye Perkins', 'Founder, Chief Executive Officer & Board Chair', '/headshots/Martye.webp'],
+  ['Julian “JP” Powers', 'Director, Strength & Conditioning Coach & Board Vice Chair', null],
+  ['Becky “Coach Bek” Perkins', 'Certified Amateur Boxing Coach & Board Secretary', null],
+  ['Peter Phan', 'Marketing Director & Youth Mentor', '/headshots/peter.webp'],
+  ['Ryan “Ace” Beacham', 'Media & Production Director', '/headshots/ryan.webp'],
 ];
 
 export default function AboutPage() {
@@ -216,9 +216,13 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="leader-grid">
-          {leaders.map(([name, role], index) => (
+          {leaders.map(([name, role, photo], index) => (
             <article key={name}>
-              <span>0{index + 1}</span>
+              {photo ? (
+                <img className="leader-photo" src={photo} alt="" aria-hidden="true" />
+              ) : (
+                <span>0{index + 1}</span>
+              )}
               <EditableText as="h3" id={`about.staff.${index}.name`} defaultValue={name} />
               <EditableText as="p" id={`about.staff.${index}.role`} defaultValue={role} />
             </article>

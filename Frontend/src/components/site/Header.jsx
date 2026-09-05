@@ -18,7 +18,7 @@ export default function Header() {
       </div>
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Boxing For Justice home">
-          <span className="brand-mark" aria-hidden="true">BFJ</span>
+          <img className="brand-logo" src="/bfj-logo.png" alt="" aria-hidden="true" />
           <span className="brand-name">Boxing <em>For</em> Justice</span>
         </Link>
         <DesktopNav />
