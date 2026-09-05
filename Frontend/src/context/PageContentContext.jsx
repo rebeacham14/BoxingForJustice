@@ -9,6 +9,8 @@ const PageContentContext = createContext({
   setBlockLocal: () => {},
   addBlocksLocal: () => {},
   removeBlocksLocal: () => {},
+  reorderSectionsLocal: () => {},
+  setSectionSizeLocal: () => {},
 });
 
 function flattenBlocks(sections) {
@@ -101,11 +103,42 @@ export function PageContentProvider({ slug, children }) {
     }));
   }
 
+  // `order` is the page's full new ordered list of section ids, matching
+  // what the reorder route expects/persists.
+  function reorderSectionsLocal(order) {
+    setState((prev) => ({
+      ...prev,
+      sections: prev.sections.map((section) => ({
+        ...section,
+        order: order.indexOf(section.sectionId),
+      })),
+    }));
+  }
+
+  function setSectionSizeLocal(sectionId, size) {
+    setState((prev) => ({
+      ...prev,
+      sections: prev.sections.map((section) =>
+        section.sectionId === sectionId ? { ...section, size } : section
+      ),
+    }));
+  }
+
   const blocks = flattenBlocks(state.sections);
 
   return (
     <PageContentContext.Provider
-      value={{ sections: state.sections, status: state.status, blocks, slug, setBlockLocal, addBlocksLocal, removeBlocksLocal }}
+      value={{
+        sections: state.sections,
+        status: state.status,
+        blocks,
+        slug,
+        setBlockLocal,
+        addBlocksLocal,
+        removeBlocksLocal,
+        reorderSectionsLocal,
+        setSectionSizeLocal,
+      }}
     >
       {children}
     </PageContentContext.Provider>

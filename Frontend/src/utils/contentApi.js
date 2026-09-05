@@ -76,6 +76,42 @@ export async function deleteBlocks(getToken, slug, blockIds) {
   return res.json();
 }
 
+// Full new ordered list of a page's section ids (not a partial diff) - see
+// Backend/routes/content.js's reorder route for why.
+export async function reorderSections(getToken, slug, order) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/pages/${slug}/sections/reorder`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({ order }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't reorder that.");
+  }
+
+  return res.json();
+}
+
+export async function setSectionSize(getToken, slug, sectionId, size) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/pages/${slug}/sections/${sectionId}/size`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify({ size }),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't resize that.");
+  }
+
+  return res.json();
+}
+
 // Backs the plain-language "your images are taking up a lot of space"
 // banner - the byte counts in the response are for the threshold check only
 // and should never be shown to the owner directly.

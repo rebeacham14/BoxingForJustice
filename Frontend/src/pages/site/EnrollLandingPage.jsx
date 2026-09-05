@@ -2,6 +2,7 @@ import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 export default function EnrollLandingPage() {
@@ -21,7 +22,7 @@ export default function EnrollLandingPage() {
         number="06"
       />
 
-      <section className="work-section">
+      <EditableSection as="section" sectionId="how" className="work-section">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="enroll.how.eyebrow" defaultValue="How it works" /></p>
@@ -54,9 +55,9 @@ export default function EnrollLandingPage() {
             </div>
           </article>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="contact-panel">
+      <EditableSection as="section" sectionId="portal" className="contact-panel">
         <div>
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="enroll.portal.eyebrow" defaultValue="Go to the portal" /></p>
           <h2>
@@ -74,7 +75,7 @@ export default function EnrollLandingPage() {
             <EditableText id="enroll.portal.cta" defaultValue="Go to the enrollment portal" /> <span aria-hidden="true">↗</span>
           </a>
         </div>
-      </section>
+      </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>

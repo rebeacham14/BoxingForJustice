@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
+import ImageUploadButton from '../../components/site/ImageUploadButton';
+import useEditableImage from '../../hooks/useEditableImage';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const ACCENT_CYCLE = ['var(--gold)', 'var(--blue)', 'var(--red)', 'var(--purple)'];
@@ -43,10 +46,40 @@ const actionGrid = [
   { to: '/get-involved#internship', audience: 'For supporters', title: 'Volunteer or intern', image: '/misc/shop-boxing.jpg' },
 ];
 
+function ActionCard({ action, index }) {
+  const { image, canEdit, error, handleFile } = useEditableImage(
+    `home.get-involved.action.${index}.image`,
+    action.image
+  );
+
+  return (
+    // Upload control is a SIBLING of the <Link>, not nested inside it -
+    // ImageUploadButton's fileInputRef.current.click() dispatches a real
+    // bubbling click event, which would trigger the anchor's own navigation
+    // if the button lived inside it. .action-card-wrap gives the absolutely
+    // positioned button (see .bfj-image-upload in site.css) something to
+    // anchor to instead.
+    <div className="action-card-wrap" style={canEdit ? { display: 'block', position: 'relative' } : undefined}>
+      <Link
+        className="action-card"
+        to={action.to}
+        style={{ backgroundImage: `url(${image})`, '--card-accent': ACCENT_CYCLE[index] }}
+      >
+        <span className="action-card-audience"><EditableText id={`home.get-involved.action.${index}.audience`} defaultValue={action.audience} /></span>
+        <strong className="action-card-title"><EditableText id={`home.get-involved.action.${index}.title`} defaultValue={action.title} /></strong>
+        <em className="action-card-arrow">→</em>
+      </Link>
+      {canEdit && <ImageUploadButton onFile={handleFile} error={error} />}
+    </div>
+  );
+}
+
 export default function HomePage() {
+  const heroPhoto = useEditableImage('home.top.photo', '/Pics/kid_coach_conversation.jpg');
+
   return (
     <EditablePage slug="home">
-      <section className="hero" id="top">
+      <EditableSection as="section" sectionId="top" className="hero" id="top">
         <div className="hero-copy">
           <p className="eyebrow"><span /> <EditableText id="home.top.eyebrow" defaultValue="Justice begins before the fight" /></p>
           <h1>
@@ -83,7 +116,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="hero-photo" style={{ backgroundImage: 'url(/Pics/kid_coach_conversation.jpg)' }}>
+        <div className="hero-photo" style={{ backgroundImage: `url(${heroPhoto.image})` }}>
           <div className="hero-photo-badge">
             <EditableText id="home.top.visual-kicker" defaultValue="Our youth-centered model" />
           </div>
@@ -91,10 +124,11 @@ export default function HomePage() {
             <EditableText id="home.top.visual-statement" defaultValue="Not just winning fights." /><br />
             <strong><EditableText id="home.top.visual-statement-accent" defaultValue="Winning yourself back." /></strong>
           </div>
+          {heroPhoto.canEdit && <ImageUploadButton onFile={heroPhoto.handleFile} error={heroPhoto.error} />}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="manifesto" id="why">
+      <EditableSection as="section" sectionId="why" className="manifesto" id="why">
         <div className="section-number">01 / Why we exist</div>
         <div className="manifesto-copy">
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="home.why.eyebrow" defaultValue="Our purpose" /></p>
@@ -118,9 +152,9 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="connected-model" id="our-work">
+      <EditableSection as="section" sectionId="our-work" className="connected-model" id="our-work">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="home.our-work.eyebrow" defaultValue="One mission. Multiple pathways." /></p>
@@ -147,9 +181,9 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="quote-band">
+      <EditableSection as="section" sectionId="quote" className="quote-band">
         <span className="quote-mark" aria-hidden="true">&ldquo;</span>
         <blockquote>
           <EditableText
@@ -159,9 +193,9 @@ export default function HomePage() {
           />
         </blockquote>
         <p><EditableText id="home.quote.attribution" defaultValue="Boxing For Justice" /></p>
-      </section>
+      </EditableSection>
 
-      <section className="method-section">
+      <EditableSection as="section" sectionId="method" className="method-section">
         <div className="method-art">
           <video
             className="method-art-video"
@@ -194,9 +228,9 @@ export default function HomePage() {
             <EditableText id="home.method.cta" defaultValue="Find the right program" /> <span aria-hidden="true">→</span>
           </Link>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="impact-section" id="impact">
+      <EditableSection as="section" sectionId="impact" className="impact-section" id="impact">
         <div className="section-number dark-number">02 / Accountability</div>
         <div className="impact-content">
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="home.impact.eyebrow" defaultValue="Built for measurable change" /></p>
@@ -229,28 +263,19 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="action-section" id="get-involved">
+      <EditableSection as="section" sectionId="get-involved" className="action-section" id="get-involved">
         <p className="eyebrow"><span /> <EditableText id="home.get-involved.eyebrow" defaultValue="Take the next step" /></p>
         <h2>
           <EditableText id="home.get-involved.title" defaultValue="Justice is a team effort." /><br /><strong><EditableText id="home.get-involved.title-accent" defaultValue="There is a place for you." /></strong>
         </h2>
         <div className="action-grid">
           {actionGrid.map((action, index) => (
-            <Link
-              className="action-card"
-              to={action.to}
-              key={action.to}
-              style={{ backgroundImage: `url(${action.image})`, '--card-accent': ACCENT_CYCLE[index] }}
-            >
-              <span className="action-card-audience"><EditableText id={`home.get-involved.action.${index}.audience`} defaultValue={action.audience} /></span>
-              <strong className="action-card-title"><EditableText id={`home.get-involved.action.${index}.title`} defaultValue={action.title} /></strong>
-              <em className="action-card-arrow">→</em>
-            </Link>
+            <ActionCard action={action} index={index} key={action.to} />
           ))}
         </div>
-      </section>
+      </EditableSection>
 
       <CustomBlocks sectionId="custom" />
     </EditablePage>

@@ -19,6 +19,11 @@ const BLOCK_TYPES = [
 const FONT_SIZE_TOKENS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', 'display'];
 const TEXT_COLOR_TOKENS = ['white', 'gold', 'body-text', 'text-muted', 'danger'];
 
+// Bounded presets, not free pixel values - same "pick from the design
+// system, not raw CSS" philosophy as FONT_SIZE_TOKENS/TEXT_COLOR_TOKENS, so
+// the owner can't produce a broken responsive layout by resizing a section.
+const SECTION_SIZE_TOKENS = ['compact', 'default', 'tall'];
+
 const blockSchema = new mongoose.Schema(
   {
     blockId: { type: String, required: true },
@@ -37,6 +42,13 @@ const sectionSchema = new mongoose.Schema(
   {
     sectionId: { type: String, required: true },
     layout: { type: String, default: 'default' },
+    // No migration needed for already-seeded pages: Mongoose applies these
+    // defaults on read for any section stored before this field existed, and
+    // since every legacy section ties at order 0, a stable sort (guaranteed
+    // by JS since ES2019) preserves their original array order - which is
+    // exactly each page's original visual order.
+    order: { type: Number, default: 0 },
+    size: { type: String, enum: SECTION_SIZE_TOKENS, default: 'default' },
     blocks: [blockSchema],
   },
   { _id: false }
@@ -57,5 +69,6 @@ const Page = mongoose.model('Page', pageSchema);
 Page.BLOCK_TYPES = BLOCK_TYPES;
 Page.FONT_SIZE_TOKENS = FONT_SIZE_TOKENS;
 Page.TEXT_COLOR_TOKENS = TEXT_COLOR_TOKENS;
+Page.SECTION_SIZE_TOKENS = SECTION_SIZE_TOKENS;
 
 module.exports = Page;

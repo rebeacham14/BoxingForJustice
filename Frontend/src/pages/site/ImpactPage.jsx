@@ -4,6 +4,7 @@ import PageHero from '../../components/site/PageHero';
 import UsPolicyMap from '../../components/impact/UsPolicyMap';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const outcomes = [
@@ -45,7 +46,7 @@ export default function ImpactPage() {
         number="04"
       />
 
-      <section className="work-section" id="policies">
+      <EditableSection as="section" sectionId="policies" className="work-section" id="policies">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="impact.policies.eyebrow" defaultValue="Policies" /></p>
@@ -68,9 +69,9 @@ export default function ImpactPage() {
           id="impact.policies.placeholder"
           defaultValue="Owner to add policy tracking content."
         />
-      </section>
+      </EditableSection>
 
-      <section className="work-section" id="geo-data">
+      <EditableSection as="section" sectionId="geo" className="work-section" id="geo-data">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="impact.geo.eyebrow" defaultValue="GEO Data" /></p>
@@ -84,18 +85,18 @@ export default function ImpactPage() {
           </p>
         </div>
         <UsPolicyMap />
-      </section>
+      </EditableSection>
 
-      <section className="fact-band">
+      <EditableSection as="section" sectionId="facts" className="fact-band">
         {factBand.map((fact, index) => (
           <article key={fact.label}>
             <EditableText as="strong" id={`impact.facts.${index}.value`} defaultValue={fact.value} />
             <EditableText as="span" id={`impact.facts.${index}.label`} defaultValue={fact.label} />
           </article>
         ))}
-      </section>
+      </EditableSection>
 
-      <section className="change-model">
+      <EditableSection as="section" sectionId="change" className="change-model">
         <div className="change-heading">
           <p className="eyebrow"><span /> <EditableText id="impact.change.eyebrow" defaultValue="Our path to change" /></p>
           <h2>
@@ -117,9 +118,9 @@ export default function ImpactPage() {
             </article>
           ))}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="outcomes-section">
+      <EditableSection as="section" sectionId="outcomes" className="outcomes-section">
         <div className="section-heading compact-heading">
           <div>
             <p className="eyebrow eyebrow-light"><span /> <EditableText id="impact.outcomes.eyebrow" defaultValue="What we measure" /></p>
@@ -144,9 +145,9 @@ export default function ImpactPage() {
             </article>
           ))}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="integrity-section">
+      <EditableSection as="section" sectionId="integrity" className="integrity-section">
         <div>
           <p className="eyebrow"><span /> <EditableText id="impact.integrity.eyebrow" defaultValue="Our commitment" /></p>
           <h2>
@@ -166,9 +167,9 @@ export default function ImpactPage() {
             defaultValue="As verified program data and approved participant stories are prepared, this site will publish them with context: what was measured, who was included, and what the results can—and cannot—tell us."
           />
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="funder-section">
+      <EditableSection as="section" sectionId="funder" className="funder-section">
         <div className="funder-seal">
           BFJ
           <span>
@@ -196,7 +197,7 @@ export default function ImpactPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>

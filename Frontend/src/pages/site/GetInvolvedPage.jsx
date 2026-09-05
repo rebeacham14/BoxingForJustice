@@ -6,6 +6,7 @@ import ContactForm from '../../components/site/ContactForm';
 import InternshipOverlay from '../../components/site/InternshipOverlay';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const actions = [
@@ -102,7 +103,7 @@ export default function GetInvolvedPage() {
         number="05"
       />
 
-      <aside className="urgent-help" aria-labelledby="urgent-help-title">
+      <EditableSection as="aside" sectionId="urgent" className="urgent-help" aria-labelledby="urgent-help-title">
         <div>
           <span><EditableText id="get-involved.urgent.eyebrow" defaultValue="Immediate support" /></span>
           <h2 id="urgent-help-title"><EditableText id="get-involved.urgent.title" defaultValue="If someone may be in danger" /></h2>
@@ -122,9 +123,9 @@ export default function GetInvolvedPage() {
             <EditableText as="span" id="get-involved.urgent.2.detail" defaultValue="Call or text 988" />
           </a>
         </div>
-      </aside>
+      </EditableSection>
 
-      <section className="contact-panel">
+      <EditableSection as="section" sectionId="contact" className="contact-panel">
         <div>
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="get-involved.contact.eyebrow" defaultValue="Not sure where to begin?" /></p>
           <h2>
@@ -142,9 +143,9 @@ export default function GetInvolvedPage() {
             <EditableText id="get-involved.contact.cta" defaultValue="Email Boxing For Justice" />
           </a>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="involvement-list">
+      <EditableSection as="section" sectionId="action" className="involvement-list">
         {actions.map((action, index) => (
           <article className="involvement-card" id={action.id} key={action.id}>
             <div className="involvement-number">0{index + 1}</div>
@@ -170,7 +171,7 @@ export default function GetInvolvedPage() {
             )}
           </article>
         ))}
-      </section>
+      </EditableSection>
 
       {activeOverlay === 'training' && (
         <Overlay title="Request a training" onClose={() => setActiveOverlay(null)}>

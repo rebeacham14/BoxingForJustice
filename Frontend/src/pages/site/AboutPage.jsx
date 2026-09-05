@@ -4,6 +4,9 @@ import SponsorBar from '../../components/common/SponsorBar';
 import FundsAllocationChart from '../../components/common/FundsAllocationChart';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
+import ImageUploadButton from '../../components/site/ImageUploadButton';
+import useEditableImage from '../../hooks/useEditableImage';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const pillars = [
@@ -28,6 +31,23 @@ const leaders = [
   ['Ryan “Ace” Beacham', 'Media & Production Director', '/headshots/ryan.webp'],
 ];
 
+function LeaderCard({ name, role, photo, index }) {
+  const { image, canEdit, error, handleFile } = useEditableImage(`about.staff.${index}.photo`, photo);
+
+  return (
+    <article style={canEdit ? { position: 'relative' } : undefined}>
+      {image ? (
+        <img className="leader-photo" src={image} alt="" aria-hidden="true" />
+      ) : (
+        <span>0{index + 1}</span>
+      )}
+      <EditableText as="h3" id={`about.staff.${index}.name`} defaultValue={name} />
+      <EditableText as="p" id={`about.staff.${index}.role`} defaultValue={role} />
+      {canEdit && <ImageUploadButton onFile={handleFile} error={error} />}
+    </article>
+  );
+}
+
 export default function AboutPage() {
   return (
     <EditablePage slug="about">
@@ -45,7 +65,7 @@ export default function AboutPage() {
         number="01"
       />
 
-      <section className="work-section pillars-section">
+      <EditableSection as="section" sectionId="pillars" className="work-section pillars-section">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="about.pillars.eyebrow" defaultValue="Our 3 pillars" /></p>
@@ -66,9 +86,9 @@ export default function AboutPage() {
             </article>
           ))}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="story-section" id="purpose">
+      <EditableSection as="section" sectionId="story" className="story-section" id="purpose">
         <div className="story-rail">
           <span><EditableText id="about.story.fact-founded" defaultValue="Founded 2024" /></span>
           <span><EditableText id="about.story.fact-location" defaultValue="Riverside County, CA" /></span>
@@ -105,8 +125,12 @@ export default function AboutPage() {
             <cite>— <EditableText id="about.story.quote-cite" defaultValue="Martye Perkins, Founder" /></cite>
           </blockquote>
         </div>
-      </section>
+      </EditableSection>
 
+      {/* Not wrapped in EditableSection: this one JSX block actually spans two
+          separate Mongo sections (about.mission.* and about.vision.*, split by
+          blockId prefix per Backend/seedData/pages.seed.js's buildPage()), so
+          there's no single real sectionId to reorder/resize as a unit. */}
       <section className="mission-vision">
         <article>
           <span><EditableText id="about.mission.label" defaultValue="Our mission" /></span>
@@ -128,7 +152,7 @@ export default function AboutPage() {
         </article>
       </section>
 
-      <section className="values-section">
+      <EditableSection as="section" sectionId="values" className="values-section">
         <div className="values-heading">
           <p className="eyebrow"><span /> <EditableText id="about.values.eyebrow" defaultValue="How we show up" /></p>
           <h2>
@@ -145,9 +169,9 @@ export default function AboutPage() {
             </article>
           ))}
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="work-section">
+      <EditableSection as="section" sectionId="funds" className="work-section">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="about.funds.eyebrow" defaultValue="Where the money goes" /></p>
@@ -165,9 +189,9 @@ export default function AboutPage() {
           </p>
         </div>
         <FundsAllocationChart />
-      </section>
+      </EditableSection>
 
-      <section className="work-section" id="sponsors">
+      <EditableSection as="section" sectionId="sponsors" className="work-section" id="sponsors">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="about.sponsors.eyebrow" defaultValue="Sponsors" /></p>
@@ -178,9 +202,9 @@ export default function AboutPage() {
           </div>
         </div>
         <SponsorBar />
-      </section>
+      </EditableSection>
 
-      <section className="work-section" id="partners">
+      <EditableSection as="section" sectionId="partners" className="work-section" id="partners">
         <div className="section-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="about.partners.eyebrow" defaultValue="Partners" /></p>
@@ -196,9 +220,9 @@ export default function AboutPage() {
           id="about.partners.placeholder"
           defaultValue="Owner to add confirmed partner organizations here."
         />
-      </section>
+      </EditableSection>
 
-      <section className="leadership-section" id="staff">
+      <EditableSection as="section" sectionId="staff" className="leadership-section" id="staff">
         <div className="section-heading compact-heading">
           <div>
             <p className="eyebrow"><span /> <EditableText id="about.staff.eyebrow" defaultValue="Leadership & staff" /></p>
@@ -217,18 +241,10 @@ export default function AboutPage() {
         </div>
         <div className="leader-grid">
           {leaders.map(([name, role, photo], index) => (
-            <article key={name}>
-              {photo ? (
-                <img className="leader-photo" src={photo} alt="" aria-hidden="true" />
-              ) : (
-                <span>0{index + 1}</span>
-              )}
-              <EditableText as="h3" id={`about.staff.${index}.name`} defaultValue={name} />
-              <EditableText as="p" id={`about.staff.${index}.role`} defaultValue={role} />
-            </article>
+            <LeaderCard key={name} name={name} role={role} photo={photo} index={index} />
           ))}
         </div>
-      </section>
+      </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>

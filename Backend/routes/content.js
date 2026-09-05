@@ -116,8 +116,30 @@ router.patch(
         }
       }
 
+      // Auto-create rather than 404: lets EditableText/EditableImage/etc.
+      // save the very first edit to a blockId that was never seeded, the
+      // same way Phase 2's bulk-create route auto-creates a missing
+      // section. sectionId is derived from the blockId itself
+      // (<pageSlug>.<sectionId>.<field>), matching the exact convention
+      // Backend/seedData/pages.seed.js's buildPage() already uses.
       if (!targetBlock) {
-        return res.status(404).json({ message: 'Block not found' });
+        const sectionId = req.params.blockId.split('.')[1];
+
+        if (!sectionId) {
+          return res.status(400).json({
+            message: 'Invalid blockId - expected <page>.<section>.<field>',
+          });
+        }
+
+        let section = page.sections.find((s) => s.sectionId === sectionId);
+
+        if (!section) {
+          page.sections.push({ sectionId, layout: 'default', blocks: [] });
+          section = page.sections[page.sections.length - 1];
+        }
+
+        section.blocks.push({ blockId: req.params.blockId, type: 'text', content: {}, style: {} });
+        targetBlock = section.blocks[section.blocks.length - 1];
       }
 
       if (
@@ -217,6 +239,108 @@ router.post(
 
       return res.status(500).json({
         message: 'Error adding block',
+        error: error.message,
+      });
+    }
+  }
+);
+
+// Reorder: takes the FULL new ordered list of a page's section ids (not a
+// partial diff) and rewrites order = array index for each. Rejecting on any
+// mismatch against the page's current section set - rather than silently
+// applying a partial reorder - avoids desync if e.g. Phase 2's block library
+// auto-created a new section between the owner loading the page and
+// submitting a reorder.
+router.patch(
+  '/pages/:slug/sections/reorder',
+  authMiddleware,
+  requireOwner,
+  async (req, res) => {
+    try {
+      const { order } = req.body;
+
+      if (!Array.isArray(order) || order.length === 0) {
+        return res.status(400).json({ message: 'No section order provided' });
+      }
+
+      const page = await Page.findOne({ slug: req.params.slug });
+
+      if (!page) {
+        return res.status(404).json({ message: 'Page not found' });
+      }
+
+      const currentIds = new Set(page.sections.map((s) => s.sectionId));
+      const submittedIds = new Set(order);
+
+      const setsMatch =
+        currentIds.size === submittedIds.size &&
+        [...currentIds].every((id) => submittedIds.has(id));
+
+      if (!setsMatch) {
+        return res.status(400).json({
+          message: 'That section list is out of date - refresh the page and try again.',
+        });
+      }
+
+      for (const section of page.sections) {
+        section.order = order.indexOf(section.sectionId);
+      }
+
+      page.updatedBy = req.auth.userId;
+      page.markModified('sections');
+      await page.save();
+
+      return res.json({ page });
+    } catch (error) {
+      console.error('Section reorder error:', error);
+
+      return res.status(500).json({
+        message: 'Error reordering sections',
+        error: error.message,
+      });
+    }
+  }
+);
+
+// Size preset: bounded tokens only (Page.SECTION_SIZE_TOKENS), same
+// enum-validation convention as the block route's fontSize/color.
+router.patch(
+  '/pages/:slug/sections/:sectionId/size',
+  authMiddleware,
+  requireOwner,
+  async (req, res) => {
+    try {
+      const { size } = req.body;
+
+      if (!Page.SECTION_SIZE_TOKENS.includes(size)) {
+        return res.status(400).json({
+          message: `Invalid size. Must be one of: ${Page.SECTION_SIZE_TOKENS.join(', ')}`,
+        });
+      }
+
+      const page = await Page.findOne({ slug: req.params.slug });
+
+      if (!page) {
+        return res.status(404).json({ message: 'Page not found' });
+      }
+
+      const section = page.sections.find((s) => s.sectionId === req.params.sectionId);
+
+      if (!section) {
+        return res.status(404).json({ message: 'Section not found' });
+      }
+
+      section.size = size;
+      page.updatedBy = req.auth.userId;
+      page.markModified('sections');
+      await page.save();
+
+      return res.json({ page });
+    } catch (error) {
+      console.error('Section size error:', error);
+
+      return res.status(500).json({
+        message: 'Error resizing section',
         error: error.message,
       });
     }

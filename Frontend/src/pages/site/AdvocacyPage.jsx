@@ -4,6 +4,7 @@ import PageHero from '../../components/site/PageHero';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const awarenessBlocks = [
@@ -29,7 +30,11 @@ export default function AdvocacyPage() {
         number="02"
       />
 
-      <section className="section-heading" id="awareness-protects">
+      {/* Both wrapped with sectionId="awareness": the heading row and the
+          card grid below it are separate top-level tags but share the same
+          Mongo section (advocacy.awareness.* for both), so moving/resizing
+          either instance moves both together - see EditableSection.jsx. */}
+      <EditableSection as="section" sectionId="awareness" className="section-heading" id="awareness-protects">
         <div>
           <p className="eyebrow"><span /> <EditableText id="advocacy.awareness.eyebrow" defaultValue="#AwarenessProtects" /></p>
           <h2>
@@ -44,8 +49,8 @@ export default function AdvocacyPage() {
             defaultValue="Click or tap any block to flip it. Content below is a placeholder — the owner will fill in the real campaign details."
           />
         </p>
-      </section>
-      <section className="focus-grid">
+      </EditableSection>
+      <EditableSection as="section" sectionId="awareness" className="focus-grid">
         {awarenessBlocks.map((block, index) => (
           <FlipCard
             key={block.front}
@@ -54,9 +59,9 @@ export default function AdvocacyPage() {
             back={<EditableText as="p" id={`advocacy.awareness.${index}.back`} defaultValue={block.back} />}
           />
         ))}
-      </section>
+      </EditableSection>
 
-      <section className="program-section" id="legislative-prep">
+      <EditableSection as="section" sectionId="legislative" className="program-section" id="legislative-prep">
         <div className="program-index">02</div>
         <div className="program-title">
           <p className="eyebrow"><span /> <EditableText id="advocacy.legislative.eyebrow" defaultValue="Legislative prep" /></p>
@@ -76,7 +81,7 @@ export default function AdvocacyPage() {
             <EditableText id="advocacy.legislative.cta" defaultValue="Want to be on the BFJ committee/board?" />
           </Link>
         </div>
-      </section>
+      </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>

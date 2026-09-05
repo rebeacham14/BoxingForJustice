@@ -5,6 +5,9 @@ import AccordionItem from '../../components/common/AccordionItem';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableSection from '../../components/site/EditableSection';
+import ImageUploadButton from '../../components/site/ImageUploadButton';
+import useEditableImage from '../../hooks/useEditableImage';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const educationTopics = [
@@ -21,6 +24,8 @@ const equipping = [
 ];
 
 export default function OurWorkPage() {
+  const featureMedia = useEditableImage('our-work.feature.media', '/misc/orders-boxing.jpg');
+
   return (
     <EditablePage slug="our-work">
       <PageHero
@@ -37,7 +42,7 @@ export default function OurWorkPage() {
         number="03"
       />
 
-      <div className="feature-card">
+      <EditableSection as="div" sectionId="feature" className="feature-card">
         <div>
           <p className="feature-card-tag"><EditableText id="our-work.feature.tag" defaultValue="Boxing & life skills" /></p>
           <h3>
@@ -53,10 +58,16 @@ export default function OurWorkPage() {
             <EditableText id="our-work.feature.cta" defaultValue="See the full breakdown" /> <span aria-hidden="true">↗</span>
           </Link>
         </div>
-        <div className="feature-card-media" style={{ backgroundImage: 'url(/misc/orders-boxing.jpg)' }} aria-hidden="true" />
-      </div>
+        <div
+          className="feature-card-media"
+          style={{ backgroundImage: `url(${featureMedia.image})`, position: featureMedia.canEdit ? 'relative' : undefined }}
+          aria-hidden={!featureMedia.canEdit}
+        >
+          {featureMedia.canEdit && <ImageUploadButton onFile={featureMedia.handleFile} error={featureMedia.error} />}
+        </div>
+      </EditableSection>
 
-      <section className="program-section program-red" id="campaigns">
+      <EditableSection as="section" sectionId="campaigns" className="program-section program-red" id="campaigns">
         <div className="program-index">01</div>
         <div className="program-title">
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.campaigns.eyebrow" defaultValue="Campaigns" /></p>
@@ -77,9 +88,9 @@ export default function OurWorkPage() {
             defaultValue="As the 2028 Olympics come to the region, BFJ is planning to partner with hotels, local businesses, and organizations to confront issues like prostitution and trafficking around USC and the surrounding areas during the Games."
           />
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="program-section" id="fundraiser-events">
+      <EditableSection as="section" sectionId="fundraisers" className="program-section" id="fundraiser-events">
         <div className="program-index">02</div>
         <div className="program-title">
           <p className="eyebrow"><span /> <EditableText id="our-work.fundraisers.eyebrow" defaultValue="Fundraiser events" /></p>
@@ -95,9 +106,9 @@ export default function OurWorkPage() {
             defaultValue="Owner to add upcoming fundraiser events."
           />
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="program-section" id="articles">
+      <EditableSection as="section" sectionId="articles" className="program-section" id="articles">
         <div className="program-index">03</div>
         <div className="program-title">
           <p className="eyebrow"><span /> <EditableText id="our-work.articles.eyebrow" defaultValue="Articles" /></p>
@@ -113,14 +124,14 @@ export default function OurWorkPage() {
             defaultValue="Owner to add articles and press."
           />
         </div>
-      </section>
+      </EditableSection>
 
-      <div className="callout-bar">
+      <EditableSection as="div" sectionId="callout" className="callout-bar">
         <EditableText as="h3" id="our-work.callout.title" defaultValue="Know the signs. Name the harm. Build safety." />
         <EditableText as="p" id="our-work.callout.subline" defaultValue="Owner to add subline." />
-      </div>
+      </EditableSection>
 
-      <section className="program-section program-red">
+      <EditableSection as="section" sectionId="educating" className="program-section program-red">
         <div className="program-index">04</div>
         <div className="program-title">
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.educating.eyebrow" defaultValue="Educating" /></p>
@@ -153,9 +164,9 @@ export default function OurWorkPage() {
             <EditableText id="our-work.educating.cta" defaultValue="Request a training" />
           </Link>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="program-section">
+      <EditableSection as="section" sectionId="equipping" className="program-section">
         <div className="program-index">05</div>
         <div className="program-title">
           <p className="eyebrow"><span /> <EditableText id="our-work.equipping.eyebrow" defaultValue="Equipping" /></p>
@@ -188,9 +199,9 @@ export default function OurWorkPage() {
             <EditableText id="our-work.equipping.cta" defaultValue="Refer a young person" />
           </Link>
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="program-section program-red">
+      <EditableSection as="section" sectionId="encouraging" className="program-section program-red">
         <div className="program-index">06</div>
         <div className="program-title">
           <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.encouraging.eyebrow" defaultValue="Encouraging" /></p>
@@ -206,9 +217,9 @@ export default function OurWorkPage() {
             defaultValue="Owner to add encouragement/mentorship stories and content."
           />
         </div>
-      </section>
+      </EditableSection>
 
-      <section className="partnership-model" id="partnerships">
+      <EditableSection as="section" sectionId="partnerships" className="partnership-model" id="partnerships">
         <p className="eyebrow"><span /> <EditableText id="our-work.partnerships.eyebrow" defaultValue="Community partnership" /></p>
         <h2>
           <EditableText id="our-work.partnerships.title-line1" defaultValue="We do not compete" /><br />
@@ -222,7 +233,7 @@ export default function OurWorkPage() {
         <Link className="button button-red" to="/get-involved#partnership">
           <EditableText id="our-work.partnerships.cta" defaultValue="Build something together" />
         </Link>
-      </section>
+      </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
     </EditablePage>
