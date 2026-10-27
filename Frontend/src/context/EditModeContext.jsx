@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { isClerkConfigured } from '../utils/clerkConfig';
 
@@ -9,32 +9,54 @@ const EditModeContext = createContext({
   isSignedIn: false,
   editMode: false,
   setEditMode: () => {},
+  gridMode: false,
+  setGridMode: () => {},
   activeBlockId: null,
+  activeBlockKind: 'text',
   setActiveBlockId: () => {},
   getToken: noopGetToken,
 });
 
 const SESSION_KEY = 'bfj-edit-mode';
+const GRID_SESSION_KEY = 'bfj-grid-mode';
+
+function readSessionFlag(key) {
+  try {
+    return sessionStorage.getItem(key) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function writeSessionFlag(key, value) {
+  try {
+    sessionStorage.setItem(key, String(value));
+  } catch {
+    // sessionStorage unavailable (e.g. private browsing) - the flag just
+    // won't persist across reloads.
+  }
+}
 
 function EditModeProviderInner({ isOwner, isSignedIn, getToken, children }) {
-  const [editMode, setEditModeState] = useState(() => {
-    try {
-      return sessionStorage.getItem(SESSION_KEY) === 'true';
-    } catch {
-      return false;
-    }
-  });
-  const [activeBlockId, setActiveBlockId] = useState(null);
+  const [editMode, setEditModeState] = useState(() => readSessionFlag(SESSION_KEY));
+  // Grid mode: section width drags snap to a 12-column grid (see
+  // utils/layoutGrid.js). A per-owner preference, not page content, so it
+  // lives here next to editMode rather than in Mongo.
+  const [gridMode, setGridModeState] = useState(() => readSessionFlag(GRID_SESSION_KEY));
+  // The selected element: a text block ('text', gets the format toolbar)
+  // or any other movable element ('element', e.g. a photo - see
+  // useMovable.js). Both get the move handle (MoveHandle.jsx).
+  const [active, setActive] = useState({ id: null, kind: 'text' });
+  const setActiveBlockId = useCallback((id, kind = 'text') => setActive({ id, kind }), []);
 
   function setEditMode(value) {
     setEditModeState(value);
+    writeSessionFlag(SESSION_KEY, value);
+  }
 
-    try {
-      sessionStorage.setItem(SESSION_KEY, String(value));
-    } catch {
-      // sessionStorage unavailable (e.g. private browsing) - edit mode just
-      // won't persist across reloads.
-    }
+  function setGridMode(value) {
+    setGridModeState(value);
+    writeSessionFlag(GRID_SESSION_KEY, value);
   }
 
   const value = useMemo(
@@ -43,11 +65,14 @@ function EditModeProviderInner({ isOwner, isSignedIn, getToken, children }) {
       isSignedIn,
       editMode: isOwner && editMode,
       setEditMode,
-      activeBlockId,
+      gridMode,
+      setGridMode,
+      activeBlockId: active.id,
+      activeBlockKind: active.kind,
       setActiveBlockId,
       getToken,
     }),
-    [isOwner, isSignedIn, editMode, activeBlockId, getToken]
+    [isOwner, isSignedIn, editMode, gridMode, active, setActiveBlockId, getToken]
   );
 
   return <EditModeContext.Provider value={value}>{children}</EditModeContext.Provider>;

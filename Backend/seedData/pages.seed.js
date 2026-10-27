@@ -232,9 +232,10 @@ const ourWorkEntries = {
   'our-work.fundraisers.placeholder': 'Owner to add upcoming fundraiser events.',
 
   'our-work.articles.eyebrow': 'Articles',
-  'our-work.articles.title-line1': 'Coming',
-  'our-work.articles.title-line2': 'soon.',
-  'our-work.articles.placeholder': 'Owner to add articles and press.',
+  'our-work.articles.heading-line1': 'Related',
+  'our-work.articles.heading-line2': 'Articles.',
+  'our-work.articles.intro': 'Read about all the ways communities are being impacted.',
+  'our-work.articles.link': 'View all articles',
 
   'our-work.callout.title': 'Know the signs. Name the harm. Build safety.',
   'our-work.callout.subline': 'Owner to add subline.',

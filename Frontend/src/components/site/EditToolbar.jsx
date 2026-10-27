@@ -20,14 +20,35 @@ const COLOR_OPTIONS = [
   { token: 'danger', label: 'Danger', swatch: 'var(--color-danger)' },
 ];
 
+// `null` = "Auto": clears the override so the site's normal styling for
+// that spot applies again.
+const SPACE_OPTIONS = [
+  { token: null, label: 'Auto', title: 'Site default' },
+  { token: 'none', label: '0', title: 'No space' },
+  { token: 'xs', label: 'XS', title: 'Extra small' },
+  { token: 'sm', label: 'S', title: 'Small' },
+  { token: 'md', label: 'M', title: 'Medium' },
+  { token: 'lg', label: 'L', title: 'Large' },
+  { token: 'xl', label: 'XL', title: 'Extra large' },
+];
+
+const LINE_HEIGHT_OPTIONS = [
+  { token: null, label: 'Auto', title: 'Site default' },
+  { token: 'tight', label: 'Tight', title: 'Tight line spacing' },
+  { token: 'normal', label: 'Normal', title: 'Normal line spacing' },
+  { token: 'relaxed', label: 'Relaxed', title: 'Relaxed line spacing' },
+  { token: 'loose', label: 'Loose', title: 'Loose line spacing' },
+];
+
 // Floating format bar shown while a block is focused in edit mode. Lives
 // inside EditablePage (see EditablePage.jsx) so it shares that page's
 // PageContentContext.
 export default function EditToolbar() {
-  const { isOwner, editMode, activeBlockId } = useEditMode();
+  const { isOwner, editMode, activeBlockId, activeBlockKind } = useEditMode();
   const { blocks } = usePageContent();
 
-  if (!isOwner || !editMode || !activeBlockId) {
+  // Photos etc. can be selected (to move them) but have no text to format.
+  if (!isOwner || !editMode || !activeBlockId || activeBlockKind !== 'text') {
     return null;
   }
 
@@ -80,6 +101,31 @@ function EditToolbarControls({ activeBlockId, block }) {
           />
         ))}
       </div>
+      <TokenGroup label="Above" field="spaceAbove" options={SPACE_OPTIONS} block={block} onApply={applyStyle} />
+      <TokenGroup label="Below" field="spaceBelow" options={SPACE_OPTIONS} block={block} onApply={applyStyle} />
+      <TokenGroup label="Lines" field="lineHeight" options={LINE_HEIGHT_OPTIONS} block={block} onApply={applyStyle} />
+    </div>
+  );
+}
+
+function TokenGroup({ label, field, options, block, onApply }) {
+  const current = block?.style?.[field] || null;
+
+  return (
+    <div className="bfj-edit-toolbar-group">
+      <span className="bfj-edit-toolbar-label">{label}</span>
+      {options.map(({ token, label: optionLabel, title }) => (
+        <button
+          key={token ?? 'auto'}
+          type="button"
+          title={title}
+          className={`bfj-edit-toolbar-btn${current === token ? ' bfj-edit-toolbar-btn-active' : ''}`}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => onApply({ [field]: token })}
+        >
+          {optionLabel}
+        </button>
+      ))}
     </div>
   );
 }

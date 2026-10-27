@@ -57,7 +57,43 @@ export function PageContentProvider({ slug, children }) {
   }, [slug]);
 
   function setBlockLocal(blockId, patch) {
-    setState((prev) => ({
+    setState((prev) => {
+      const exists = prev.sections.some((section) =>
+        section.blocks.some((block) => block.blockId === blockId)
+      );
+
+      return exists ? updateBlockIn(prev, blockId, patch) : insertBlockIn(prev, blockId, patch);
+    });
+  }
+
+  // Mirrors the backend's auto-create-on-PATCH (Backend/routes/content.js):
+  // a block that was never seeded lands in the section named by its
+  // blockId's 2nd segment (<page>.<section>.<field>). Without this, the
+  // first save to a new block (e.g. a section's width, or a new item list)
+  // would persist server-side but vanish locally until a reload.
+  function insertBlockIn(prev, blockId, patch) {
+    const sectionId = blockId.split('.')[1];
+    const newBlock = {
+      blockId,
+      type: 'text',
+      content: { ...(patch.content || {}) },
+      style: { ...(patch.style || {}) },
+    };
+    const hasSection = prev.sections.some((s) => s.sectionId === sectionId);
+
+    const sections = hasSection
+      ? prev.sections.map((section) =>
+          section.sectionId === sectionId
+            ? { ...section, blocks: [...section.blocks, newBlock] }
+            : section
+        )
+      : [...prev.sections, { sectionId, layout: 'default', blocks: [newBlock] }];
+
+    return { ...prev, sections };
+  }
+
+  function updateBlockIn(prev, blockId, patch) {
+    return {
       ...prev,
       sections: prev.sections.map((section) => ({
         ...section,
@@ -72,7 +108,7 @@ export function PageContentProvider({ slug, children }) {
           };
         }),
       })),
-    }));
+    };
   }
 
   function addBlocksLocal(sectionId, newBlocks) {

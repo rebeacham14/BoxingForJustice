@@ -8,6 +8,7 @@ import EditableText from '../../components/site/EditableText';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
 import useEditableImage from '../../hooks/useEditableImage';
+import useMovable from '../../hooks/useMovable';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const educationTopics = [
@@ -25,6 +26,7 @@ const equipping = [
 
 export default function OurWorkPage() {
   const featureMedia = useEditableImage('our-work.feature.media', '/misc/orders-boxing.jpg');
+  const featureMediaMove = useMovable('our-work.feature.media');
 
   return (
     <EditablePage slug="our-work">
@@ -59,9 +61,14 @@ export default function OurWorkPage() {
           </Link>
         </div>
         <div
-          className="feature-card-media"
-          style={{ backgroundImage: `url(${featureMedia.image})`, position: featureMedia.canEdit ? 'relative' : undefined }}
+          className={`feature-card-media ${featureMediaMove.className}`.trim()}
+          style={{
+            backgroundImage: `url(${featureMedia.image})`,
+            position: featureMedia.canEdit ? 'relative' : undefined,
+            ...featureMediaMove.style,
+          }}
           aria-hidden={!featureMedia.canEdit}
+          {...featureMediaMove.props}
         >
           {featureMedia.canEdit && <ImageUploadButton onFile={featureMedia.handleFile} error={featureMedia.error} />}
         </div>
@@ -112,17 +119,23 @@ export default function OurWorkPage() {
         <div className="program-index">03</div>
         <div className="program-title">
           <p className="eyebrow"><span /> <EditableText id="our-work.articles.eyebrow" defaultValue="Articles" /></p>
+          {/* New block ids (not title-line1/2) on purpose: production Mongo
+              already holds "Coming"/"soon." under the old ids, which would
+              override these defaults. */}
           <h2>
-            <EditableText id="our-work.articles.title-line1" defaultValue="Coming" /><br /><strong><EditableText id="our-work.articles.title-line2" defaultValue="soon." /></strong>
+            <EditableText id="our-work.articles.heading-line1" defaultValue="Related" /><br /><strong><EditableText id="our-work.articles.heading-line2" defaultValue="Articles." /></strong>
           </h2>
         </div>
         <div className="program-detail">
           <EditableText
-            as="div"
-            className="content-placeholder"
-            id="our-work.articles.placeholder"
-            defaultValue="Owner to add articles and press."
+            as="p"
+            className="program-lede"
+            id="our-work.articles.intro"
+            defaultValue="Read about all the ways communities are being impacted."
           />
+          <Link className="text-link" to="/articles">
+            <EditableText id="our-work.articles.link" defaultValue="View all articles" /> <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </EditableSection>
 

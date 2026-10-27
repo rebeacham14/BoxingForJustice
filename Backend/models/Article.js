@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-// Schema-ready in Phase 1 (GET /api/articles returns published docs) but
-// there's no create/edit UI yet - that's the Phase 3 articles builder.
+// Created/edited/deleted by the owner from /articles in edit mode (see
+// Frontend/src/pages/site/ArticlesPage.jsx). `layoutTemplate` and `images`
+// aren't exposed in that UI yet - articles are a title + plain-text body.
 const articleImageSchema = new mongoose.Schema(
   {
     src: { type: String, required: true },

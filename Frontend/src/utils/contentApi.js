@@ -126,3 +126,79 @@ export async function fetchStorageStats(getToken) {
 
   return res.json();
 }
+
+/* Articles - public list/read, owner-only create/edit/delete. */
+
+export async function fetchArticles() {
+  const res = await fetch(`${API_URL}/api/articles`);
+
+  if (!res.ok) {
+    throw new Error('Could not load articles.');
+  }
+
+  return res.json();
+}
+
+export async function fetchArticle(id) {
+  const res = await fetch(`${API_URL}/api/articles/${id}`);
+
+  if (res.status === 404) {
+    return null;
+  }
+
+  if (!res.ok) {
+    throw new Error('Could not load this article.');
+  }
+
+  return res.json();
+}
+
+export async function createArticle(getToken, fields) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/articles`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(fields),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't add that article.");
+  }
+
+  return res.json();
+}
+
+export async function updateArticle(getToken, id, fields) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/articles/${id}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(fields),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't save that article.");
+  }
+
+  return res.json();
+}
+
+export async function deleteArticle(getToken, id) {
+  const headers = await getAuthHeaders(getToken);
+
+  const res = await fetch(`${API_URL}/api/articles/${id}`, {
+    method: 'DELETE',
+    headers,
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || "Couldn't remove that article.");
+  }
+
+  return res.json();
+}

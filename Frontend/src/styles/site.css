@@ -1105,11 +1105,15 @@ html { scroll-behavior: smooth; }
   bottom: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
   left: 50%;
+  max-width: calc(100vw - 32px);
   padding: 10px 16px;
   position: fixed;
   transform: translateX(-50%);
+  width: max-content;
   z-index: 1000;
 }
 .bfj-site .bfj-edit-toolbar-group { align-items: center; display: flex; gap: 6px; }
@@ -1190,6 +1194,31 @@ html { scroll-behavior: smooth; }
   color: var(--color-bg-page);
 }
 .bfj-site .bfj-section-size-picker { display: flex; gap: 4px; }
+.bfj-site .bfj-item-controls {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 9;
+}
+.bfj-site .bfj-add-item {
+  background: none;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: 12px 20px;
+  text-transform: uppercase;
+}
+.bfj-site .bfj-add-item:hover { border-color: var(--red); color: var(--red); }
 .bfj-site .bfj-image-upload {
   align-items: flex-start;
   bottom: 12px;
@@ -1210,6 +1239,106 @@ html { scroll-behavior: smooth; }
   padding: 4px 8px;
 }
 
+/* Drag-to-resize section width (useResizableWidth.js, ResizeHandles.jsx).
+   The inline style only sets --bfj-width; whether it applies is decided
+   here. Below the mobile breakpoint the rule doesn't match, so every section
+   falls back to its normal full width no matter what was set on desktop. */
+@media (min-width: 681px) {
+  .bfj-site .bfj-resizable {
+    margin-inline: auto;
+    max-width: 100%;
+    min-width: min(320px, 100%);
+    width: var(--bfj-width, 100%);
+  }
+}
+
+.bfj-site .bfj-resize-target {
+  outline: 2px dashed transparent;
+  outline-offset: -2px;
+  transition: outline-color .15s ease;
+}
+.bfj-site .bfj-resize-target:hover,
+.bfj-site .bfj-resizing { outline-color: var(--color-gold); }
+
+.bfj-site .bfj-resize-handle,
+.bfj-site .bfj-resize-corner {
+  cursor: ew-resize;
+  opacity: 0;
+  position: absolute;
+  touch-action: none;
+  transition: opacity .15s ease, background-color .15s ease;
+  z-index: 11;
+}
+.bfj-site .bfj-resize-handle { bottom: 0; top: 0; width: 12px; }
+.bfj-site .bfj-resize-handle-left { left: 0; }
+.bfj-site .bfj-resize-handle-right { right: 0; }
+.bfj-site .bfj-resize-handle::after {
+  background: var(--color-gold);
+  border: 2px solid var(--color-bg-panel);
+  border-radius: 999px;
+  content: '';
+  height: 56px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+}
+.bfj-site .bfj-resize-handle:hover,
+.bfj-site .bfj-resizing > .bfj-resize-handle { background: var(--color-gold-wash); }
+.bfj-site .bfj-resize-handle:focus-visible { outline: 2px solid var(--color-gold); outline-offset: -2px; }
+
+.bfj-site .bfj-resize-corner {
+  background: var(--color-gold);
+  border: 2px solid var(--color-bg-panel);
+  height: 14px;
+  width: 14px;
+}
+.bfj-site .bfj-resize-corner-top-left { left: 0; top: 0; }
+.bfj-site .bfj-resize-corner-top-right { right: 0; top: 0; }
+.bfj-site .bfj-resize-corner-bottom-left { bottom: 0; left: 0; }
+.bfj-site .bfj-resize-corner-bottom-right { bottom: 0; right: 0; }
+
+.bfj-site .bfj-resize-target:hover > .bfj-resize-handle,
+.bfj-site .bfj-resize-target:hover > .bfj-resize-corner,
+.bfj-site .bfj-resizing > .bfj-resize-handle,
+.bfj-site .bfj-resizing > .bfj-resize-corner,
+.bfj-site .bfj-resize-handle:focus-visible { opacity: 1; }
+
+.bfj-site .bfj-resizing,
+.bfj-site .bfj-resizing * { cursor: ew-resize; user-select: none; }
+
+.bfj-site .bfj-resize-tooltip {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-gold);
+  border-radius: 6px;
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 9px;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 14px));
+  white-space: nowrap;
+  z-index: 1001;
+}
+.bfj-site .bfj-resize-tooltip small { color: var(--color-gold); display: block; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+
+.bfj-site .bfj-edit-mode-buttons { align-items: center; display: flex; gap: 8px; }
+.bfj-site .button-gold { background: var(--gold); color: var(--ink); }
+.bfj-site .button-outline-light { background: transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.4); color: white; }
+
+/* Widths only apply above 680px, so there's nothing to drag below it. The
+   edit buttons are hidden at the same width the header's other buttons are,
+   as before they were grouped. */
+@media (max-width: 680px) {
+  .bfj-site .bfj-resize-handle,
+  .bfj-site .bfj-resize-corner { display: none; }
+}
+@media (max-width: 980px) {
+  .bfj-site .bfj-edit-mode-buttons { display: none; }
+}
+
 .bfj-site .footer-owner-signin {
   background: none;
   border: none;
@@ -1219,4 +1348,80 @@ html { scroll-behavior: smooth; }
   margin-left: 12px;
   padding: 0;
   text-decoration: underline;
+}
+
+/* Articles (/articles list + /articles/:id view) */
+.bfj-site .articles-section { margin: 0 auto; max-width: 900px; padding: 70px clamp(20px, 6vw, 60px) 110px; }
+.bfj-site .articles-add { display: block; margin-top: 40px; width: 100%; }
+.bfj-site .article-form { border: 1px solid var(--line); border-radius: 8px; margin-top: 40px; padding: 28px; }
+.bfj-site .article-form .button-row { flex-wrap: wrap; }
+.bfj-site .articles-status { color: var(--muted); font-size: 15px; margin-top: 40px; }
+.bfj-site .article-list { border-top: 1px solid var(--line); list-style: none; margin: 40px 0 0; padding: 0; }
+.bfj-site .article-list li { border-bottom: 1px solid var(--line); }
+.bfj-site .article-list a { align-items: baseline; display: flex; gap: 20px; justify-content: space-between; padding: 24px 0; }
+.bfj-site .article-list-title { font-size: 20px; font-weight: 700; line-height: 1.35; }
+.bfj-site .article-list a:hover .article-list-title { color: var(--red); }
+.bfj-site .article-list-date { color: var(--muted); flex-shrink: 0; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.bfj-site .article-view article { margin-top: 40px; }
+.bfj-site .article-view h1 { font-family: var(--font-display); font-size: clamp(44px, 6vw, 76px); font-weight: 400; line-height: .95; margin: 0 0 36px; text-transform: uppercase; }
+.bfj-site .article-date { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .06em; margin: 0 0 14px; text-transform: uppercase; }
+.bfj-site .article-body p { font-size: 17px; line-height: 1.85; margin: 0 0 22px; white-space: pre-line; }
+.bfj-site .article-owner-controls { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+@media (max-width: 680px) {
+  .bfj-site .article-list a { flex-direction: column; gap: 6px; }
+}
+
+/* Drag-to-move (MoveHandle.jsx, useMovable.js, utils/moveOffset.js). The
+   element keeps its place in the flow and is only shifted visually, so
+   nothing around it reflows. Like section widths, offsets only apply where
+   they were authored: above the tablet breakpoint (edit mode isn't
+   available below it either). `translate` (not `transform`) so it stacks
+   with any transform the element already has, e.g. hover lifts. */
+@media (min-width: 981px) {
+  .bfj-site .bfj-moved {
+    translate: var(--bfj-move-x, 0) var(--bfj-move-y, 0);
+  }
+  /* Plain inline text can't be translated - promote it to inline-block.
+     :where() keeps this at zero specificity, so any span the page already
+     styles as block/flex keeps that. */
+  :where(.bfj-site span.bfj-moved, .bfj-site strong.bfj-moved, .bfj-site em.bfj-moved) {
+    display: inline-block;
+  }
+}
+.bfj-site .bfj-movable { cursor: pointer; outline: 2px dashed transparent; outline-offset: -2px; transition: outline-color .15s ease; }
+.bfj-site .bfj-movable:hover { outline-color: var(--color-gold); }
+.bfj-site .bfj-move-outline {
+  border: 2px dashed var(--color-gold);
+  border-radius: 4px;
+  pointer-events: none;
+  position: fixed;
+  z-index: 990;
+}
+.bfj-site .bfj-move-controls {
+  align-items: center;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  display: flex;
+  gap: 4px;
+  padding: 3px 5px;
+  position: fixed;
+  z-index: 995;
+}
+.bfj-site .bfj-move-grip {
+  background: var(--color-gold);
+  border: 0;
+  border-radius: 6px;
+  color: #12213a;
+  cursor: grab;
+  font-size: 16px;
+  height: 28px;
+  line-height: 1;
+  touch-action: none;
+  width: 28px;
+}
+.bfj-site .bfj-move-grip:active { cursor: grabbing; }
+.bfj-site .bfj-move-readout { color: var(--color-text-muted); font-size: 11px; font-variant-numeric: tabular-nums; padding: 0 4px; }
+@media (max-width: 980px) {
+  .bfj-site .bfj-move-outline, .bfj-site .bfj-move-controls { display: none; }
 }

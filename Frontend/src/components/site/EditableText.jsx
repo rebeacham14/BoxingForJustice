@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEditMode } from '../../context/EditModeContext';
 import { usePageContent } from '../../context/PageContentContext';
 import { updateBlock } from '../../utils/contentApi';
+import { offsetStyle, readOffset } from '../../utils/moveOffset';
 
 const FONT_SIZE_VAR = {
   xs: 'var(--font-size-xs)',
@@ -19,6 +20,22 @@ const COLOR_VAR = {
   'body-text': 'var(--color-body-text)',
   'text-muted': 'var(--color-text-muted)',
   danger: 'var(--color-danger)',
+};
+
+const SPACE_VAR = {
+  none: 'var(--space-none)',
+  xs: 'var(--space-xs)',
+  sm: 'var(--space-sm)',
+  md: 'var(--space-md)',
+  lg: 'var(--space-lg)',
+  xl: 'var(--space-xl)',
+};
+
+const LINE_HEIGHT_VAR = {
+  tight: 'var(--line-height-tight)',
+  normal: 'var(--line-height-normal)',
+  relaxed: 'var(--line-height-relaxed)',
+  loose: 'var(--line-height-loose)',
 };
 
 // A single editable text node. `id` is a stable block id
@@ -42,6 +59,27 @@ export default function EditableText({ id, as: Tag = 'span', defaultValue = '', 
   if (block?.style?.color && COLOR_VAR[block.style.color]) {
     style.color = COLOR_VAR[block.style.color];
   }
+  if (block?.style?.spaceAbove && SPACE_VAR[block.style.spaceAbove]) {
+    style.marginTop = SPACE_VAR[block.style.spaceAbove];
+  }
+  if (block?.style?.spaceBelow && SPACE_VAR[block.style.spaceBelow]) {
+    style.marginBottom = SPACE_VAR[block.style.spaceBelow];
+  }
+  if (block?.style?.lineHeight && LINE_HEIGHT_VAR[block.style.lineHeight]) {
+    style.lineHeight = LINE_HEIGHT_VAR[block.style.lineHeight];
+  }
+  // Vertical margins and a smaller line-height do nothing on a plain inline
+  // <span> (most blocks render as one, inside the page's own <p>/<h2>), so
+  // any spacing choice turns the span into an inline-block. Blocks with no
+  // spacing set keep rendering exactly as before.
+  const hasSpacing = style.marginTop || style.marginBottom || style.lineHeight;
+  if (hasSpacing && Tag === 'span') {
+    style.display = 'inline-block';
+  }
+  // Owner's drag-to-move offset (MoveHandle.jsx), stored next to `value`.
+  const offset = readOffset(block?.content?.offset);
+  Object.assign(style, offsetStyle(offset));
+  const movedClass = offset ? ' bfj-moved' : '';
 
   const canEdit = isOwner && editMode;
 
@@ -87,7 +125,7 @@ export default function EditableText({ id, as: Tag = 'span', defaultValue = '', 
     }
 
     return (
-      <Tag className={className} style={style}>
+      <Tag className={`${className || ''}${movedClass}`.trim() || undefined} style={style}>
         {value}
       </Tag>
     );
@@ -96,7 +134,7 @@ export default function EditableText({ id, as: Tag = 'span', defaultValue = '', 
   return (
     <>
       <Tag
-        className={`${className || ''} bfj-editable${isEmpty ? ' bfj-editable-empty' : ''}`.trim()}
+        className={`${className || ''} bfj-editable${isEmpty ? ' bfj-editable-empty' : ''}${movedClass}`.trim()}
         style={style}
         contentEditable
         suppressContentEditableWarning

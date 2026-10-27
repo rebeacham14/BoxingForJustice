@@ -7,6 +7,7 @@ import EditableText from '../../components/site/EditableText';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
 import useEditableImage from '../../hooks/useEditableImage';
+import useMovable from '../../hooks/useMovable';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const pillars = [
@@ -33,11 +34,19 @@ const leaders = [
 
 function LeaderCard({ name, role, photo, index }) {
   const { image, canEdit, error, handleFile } = useEditableImage(`about.staff.${index}.photo`, photo);
+  const photoMove = useMovable(`about.staff.${index}.photo`);
 
   return (
     <article style={canEdit ? { position: 'relative' } : undefined}>
       {image ? (
-        <img className="leader-photo" src={image} alt="" aria-hidden="true" />
+        <img
+          className={`leader-photo ${photoMove.className}`.trim()}
+          style={photoMove.style}
+          src={image}
+          alt=""
+          aria-hidden="true"
+          {...photoMove.props}
+        />
       ) : (
         <span>0{index + 1}</span>
       )}

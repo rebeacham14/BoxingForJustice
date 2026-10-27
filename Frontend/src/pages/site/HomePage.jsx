@@ -3,7 +3,10 @@ import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
+import ItemControls from '../../components/site/ItemControls';
 import useEditableImage from '../../hooks/useEditableImage';
+import useMovable from '../../hooks/useMovable';
+import useEditableItemList from '../../hooks/useEditableItemList';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
 const ACCENT_CYCLE = ['var(--gold)', 'var(--blue)', 'var(--red)', 'var(--purple)'];
@@ -46,9 +49,10 @@ const actionGrid = [
   { to: '/get-involved#internship', audience: 'For supporters', title: 'Volunteer or intern', image: '/misc/shop-boxing.jpg' },
 ];
 
-function ActionCard({ action, index }) {
+function ActionCard({ itemId, index, total, list }) {
+  const action = actionGrid[itemId] || { to: '/get-involved', audience: 'New audience', title: 'New action' };
   const { image, canEdit, error, handleFile } = useEditableImage(
-    `home.get-involved.action.${index}.image`,
+    `home.get-involved.action.${itemId}.image`,
     action.image
   );
 
@@ -63,19 +67,81 @@ function ActionCard({ action, index }) {
       <Link
         className="action-card"
         to={action.to}
-        style={{ backgroundImage: `url(${image})`, '--card-accent': ACCENT_CYCLE[index] }}
+        style={{ backgroundImage: `url(${image})`, '--card-accent': ACCENT_CYCLE[index % ACCENT_CYCLE.length] }}
       >
-        <span className="action-card-audience"><EditableText id={`home.get-involved.action.${index}.audience`} defaultValue={action.audience} /></span>
-        <strong className="action-card-title"><EditableText id={`home.get-involved.action.${index}.title`} defaultValue={action.title} /></strong>
+        <span className="action-card-audience"><EditableText id={`home.get-involved.action.${itemId}.audience`} defaultValue={action.audience} /></span>
+        <strong className="action-card-title"><EditableText id={`home.get-involved.action.${itemId}.title`} defaultValue={action.title} /></strong>
         <em className="action-card-arrow">→</em>
       </Link>
-      {canEdit && <ImageUploadButton onFile={handleFile} error={error} />}
+      {canEdit && (
+        <>
+          <ImageUploadButton onFile={handleFile} error={error} />
+          <ItemControls
+            onMoveUp={() => list.moveItem(itemId, -1)}
+            onMoveDown={() => list.moveItem(itemId, 1)}
+            onRemove={() => list.removeItem(itemId)}
+            isFirst={index === 0}
+            isLast={index === total - 1}
+            canRemove={total > 1}
+          />
+        </>
+      )}
+    </div>
+  );
+}
+
+function FocusStep({ itemId, index, total, list }) {
+  const area = focusAreas[itemId] || { title: 'New step', text: '' };
+
+  return (
+    <div className="connected-step" style={list.canEdit ? { position: 'relative' } : undefined}>
+      {list.canEdit && (
+        <ItemControls
+          onMoveUp={() => list.moveItem(itemId, -1)}
+          onMoveDown={() => list.moveItem(itemId, 1)}
+          onRemove={() => list.removeItem(itemId)}
+          isFirst={index === 0}
+          isLast={index === total - 1}
+          canRemove={total > 1}
+        />
+      )}
+      <span className="connected-circle" style={{ background: ACCENT_CYCLE[index % ACCENT_CYCLE.length] }}>
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <EditableText as="h3" id={`home.our-work.focus.${itemId}.title`} defaultValue={area.title} />
+      <EditableText as="p" id={`home.our-work.focus.${itemId}.text`} defaultValue={area.text} />
+      {index < total - 1 && <span className="connected-arrow" aria-hidden="true">→</span>}
+    </div>
+  );
+}
+
+function MeasureItem({ itemId, index, total, list }) {
+  const measure = measures[itemId] ?? '';
+
+  return (
+    <div className="measure" style={list.canEdit ? { position: 'relative' } : undefined}>
+      {list.canEdit && (
+        <ItemControls
+          onMoveUp={() => list.moveItem(itemId, -1)}
+          onMoveDown={() => list.moveItem(itemId, 1)}
+          onRemove={() => list.removeItem(itemId)}
+          isFirst={index === 0}
+          isLast={index === total - 1}
+          canRemove={total > 1}
+        />
+      )}
+      <span>0{index + 1}</span>
+      <EditableText as="p" id={`home.impact.measure.${itemId}`} defaultValue={measure} />
     </div>
   );
 }
 
 export default function HomePage() {
   const heroPhoto = useEditableImage('home.top.photo', '/Pics/kid_coach_conversation.jpg');
+  const heroPhotoMove = useMovable('home.top.photo');
+  const focusList = useEditableItemList({ listId: 'home.our-work.focus', defaultItemIds: ['0', '1', '2'] });
+  const measureList = useEditableItemList({ listId: 'home.impact.measure', defaultItemIds: ['0', '1', '2', '3'] });
+  const actionList = useEditableItemList({ listId: 'home.get-involved.action', defaultItemIds: ['0', '1', '2', '3'] });
 
   return (
     <EditablePage slug="home">
@@ -116,7 +182,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="hero-photo" style={{ backgroundImage: `url(${heroPhoto.image})` }}>
+        <div
+          className={`hero-photo ${heroPhotoMove.className}`.trim()}
+          style={{ backgroundImage: `url(${heroPhoto.image})`, ...heroPhotoMove.style }}
+          {...heroPhotoMove.props}
+        >
           <div className="hero-photo-badge">
             <EditableText id="home.top.visual-kicker" defaultValue="Our youth-centered model" />
           </div>
@@ -172,15 +242,14 @@ export default function HomePage() {
           </p>
         </div>
         <div className="connected-row">
-          {focusAreas.map((area, index) => (
-            <div className="connected-step" key={area.number}>
-              <span className="connected-circle" style={{ background: ACCENT_CYCLE[index] }}>{area.number}</span>
-              <EditableText as="h3" id={`home.our-work.focus.${index}.title`} defaultValue={area.title} />
-              <EditableText as="p" id={`home.our-work.focus.${index}.text`} defaultValue={area.text} />
-              {index < focusAreas.length - 1 && <span className="connected-arrow" aria-hidden="true">→</span>}
-            </div>
+          {focusList.itemIds.map((itemId, index) => (
+            <FocusStep key={itemId} itemId={itemId} index={index} total={focusList.itemIds.length} list={focusList} />
           ))}
         </div>
+        {focusList.canEdit && (
+          <button type="button" className="bfj-add-item" onClick={focusList.addItem}>+ Add step</button>
+        )}
+        {focusList.error && <span className="bfj-section-error">{focusList.error}</span>}
       </EditableSection>
 
       <EditableSection as="section" sectionId="quote" className="quote-band">
@@ -245,13 +314,14 @@ export default function HomePage() {
             />
           </p>
           <div className="measure-grid">
-            {measures.map((measure, index) => (
-              <div className="measure" key={measure}>
-                <span>0{index + 1}</span>
-                <EditableText as="p" id={`home.impact.measure.${index}`} defaultValue={measure} />
-              </div>
+            {measureList.itemIds.map((itemId, index) => (
+              <MeasureItem key={itemId} itemId={itemId} index={index} total={measureList.itemIds.length} list={measureList} />
             ))}
           </div>
+          {measureList.canEdit && (
+            <button type="button" className="bfj-add-item" onClick={measureList.addItem}>+ Add measure</button>
+          )}
+          {measureList.error && <span className="bfj-section-error">{measureList.error}</span>}
           <div className="funder-note">
             <strong><EditableText id="home.impact.funder-heading" defaultValue="For funders & community partners" /></strong>
             <p>
@@ -271,10 +341,14 @@ export default function HomePage() {
           <EditableText id="home.get-involved.title" defaultValue="Justice is a team effort." /><br /><strong><EditableText id="home.get-involved.title-accent" defaultValue="There is a place for you." /></strong>
         </h2>
         <div className="action-grid">
-          {actionGrid.map((action, index) => (
-            <ActionCard action={action} index={index} key={action.to} />
+          {actionList.itemIds.map((itemId, index) => (
+            <ActionCard key={itemId} itemId={itemId} index={index} total={actionList.itemIds.length} list={actionList} />
           ))}
         </div>
+        {actionList.canEdit && (
+          <button type="button" className="bfj-add-item" onClick={actionList.addItem}>+ Add action</button>
+        )}
+        {actionList.error && <span className="bfj-section-error">{actionList.error}</span>}
       </EditableSection>
 
       <CustomBlocks sectionId="custom" />

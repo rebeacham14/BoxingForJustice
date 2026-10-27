@@ -18,6 +18,10 @@ const BLOCK_TYPES = [
 // design system.
 const FONT_SIZE_TOKENS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', 'display'];
 const TEXT_COLOR_TOKENS = ['white', 'gold', 'body-text', 'text-muted', 'danger'];
+// Spacing presets for a text block: space above/below it and the spacing
+// between its own lines. null = the site's normal styling for that spot.
+const SPACE_TOKENS = ['none', 'xs', 'sm', 'md', 'lg', 'xl'];
+const LINE_HEIGHT_TOKENS = ['tight', 'normal', 'relaxed', 'loose'];
 
 // Bounded presets, not free pixel values - same "pick from the design
 // system, not raw CSS" philosophy as FONT_SIZE_TOKENS/TEXT_COLOR_TOKENS, so
@@ -32,6 +36,9 @@ const blockSchema = new mongoose.Schema(
     style: {
       fontSize: { type: String, enum: FONT_SIZE_TOKENS, default: null },
       color: { type: String, enum: TEXT_COLOR_TOKENS, default: null },
+      spaceAbove: { type: String, enum: SPACE_TOKENS, default: null },
+      spaceBelow: { type: String, enum: SPACE_TOKENS, default: null },
+      lineHeight: { type: String, enum: LINE_HEIGHT_TOKENS, default: null },
     },
     editable: { type: Boolean, default: true },
   },
@@ -69,6 +76,8 @@ const Page = mongoose.model('Page', pageSchema);
 Page.BLOCK_TYPES = BLOCK_TYPES;
 Page.FONT_SIZE_TOKENS = FONT_SIZE_TOKENS;
 Page.TEXT_COLOR_TOKENS = TEXT_COLOR_TOKENS;
+Page.SPACE_TOKENS = SPACE_TOKENS;
+Page.LINE_HEIGHT_TOKENS = LINE_HEIGHT_TOKENS;
 Page.SECTION_SIZE_TOKENS = SECTION_SIZE_TOKENS;
 
 module.exports = Page;

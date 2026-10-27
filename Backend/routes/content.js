@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const Page = require('../models/Page');
 const NavItem = require('../models/NavItem');
@@ -99,6 +100,23 @@ router.patch(
         });
       }
 
+      for (const field of ['spaceAbove', 'spaceBelow']) {
+        if (style?.[field] != null && !Page.SPACE_TOKENS.includes(style[field])) {
+          return res.status(400).json({
+            message: `Invalid ${field}. Must be one of: ${Page.SPACE_TOKENS.join(', ')}`,
+          });
+        }
+      }
+
+      if (
+        style?.lineHeight != null &&
+        !Page.LINE_HEIGHT_TOKENS.includes(style.lineHeight)
+      ) {
+        return res.status(400).json({
+          message: `Invalid lineHeight. Must be one of: ${Page.LINE_HEIGHT_TOKENS.join(', ')}`,
+        });
+      }
+
       const page = await Page.findOne({ slug: req.params.slug });
 
       if (!page) {
@@ -159,6 +177,12 @@ router.patch(
 
       if (style?.color !== undefined) {
         targetBlock.style.color = style.color;
+      }
+
+      for (const field of ['spaceAbove', 'spaceBelow', 'lineHeight']) {
+        if (style?.[field] !== undefined) {
+          targetBlock.style[field] = style[field];
+        }
       }
 
       page.updatedBy = req.auth.userId;
@@ -410,19 +434,160 @@ router.get('/storage-stats', authMiddleware, requireOwner, async (req, res) => {
 });
 
 /* =========================
-   ARTICLES / POLICIES (schema-ready for Phase 3/4 builders; public read
-   of published items only - empty lists until those builders ship)
+   ARTICLES (public read of published items; owner-only create/edit/delete
+   from the /articles pages in edit mode) / POLICIES (read-only until the
+   policies builder ships)
 ========================= */
 
+const ARTICLE_TITLE_MAX = 200;
+const ARTICLE_BODY_MAX = 50000;
+
+// Shared by create/edit: trims and length-checks the owner's input. Returns
+// { error } or { fields } (only the fields actually sent, for PATCH).
+function readArticleFields(body, { requireTitle }) {
+  const fields = {};
+
+  if (body.title !== undefined || requireTitle) {
+    const title = typeof body.title === 'string' ? body.title.trim() : '';
+
+    if (!title) {
+      return { error: 'Please give the article a title.' };
+    }
+
+    if (title.length > ARTICLE_TITLE_MAX) {
+      return { error: `Titles can be at most ${ARTICLE_TITLE_MAX} characters.` };
+    }
+
+    fields.title = title;
+  }
+
+  if (body.body !== undefined) {
+    if (typeof body.body !== 'string') {
+      return { error: 'Invalid article text.' };
+    }
+
+    if (body.body.length > ARTICLE_BODY_MAX) {
+      return { error: 'That article is too long.' };
+    }
+
+    fields.body = body.body;
+  }
+
+  return { fields };
+}
+
+// Newest first. Pre-existing docs without publishedAt fall back to createdAt.
 router.get('/articles', async (req, res) => {
   try {
-    const articles = await Article.find({ status: 'published' }).sort({ order: 1 });
+    const articles = await Article.find({ status: 'published' }).sort({ publishedAt: -1, createdAt: -1 });
     return res.json(articles);
   } catch (error) {
     console.error('Article fetch error:', error);
 
     return res.status(500).json({
       message: 'Error getting articles',
+      error: error.message,
+    });
+  }
+});
+
+router.get('/articles/:id', async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    const article = await Article.findOne({ _id: req.params.id, status: 'published' });
+
+    if (!article) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    return res.json(article);
+  } catch (error) {
+    console.error('Article fetch error:', error);
+
+    return res.status(500).json({
+      message: 'Error getting article',
+      error: error.message,
+    });
+  }
+});
+
+// Owner-added articles publish immediately - there's no draft/review step
+// in the UI yet, so a draft would just be invisible to everyone.
+router.post('/articles', authMiddleware, requireOwner, async (req, res) => {
+  try {
+    const { error, fields } = readArticleFields(req.body, { requireTitle: true });
+
+    if (error) {
+      return res.status(400).json({ message: error });
+    }
+
+    const article = await Article.create({
+      ...fields,
+      status: 'published',
+      publishedAt: new Date(),
+    });
+
+    return res.status(201).json(article);
+  } catch (error) {
+    console.error('Article create error:', error);
+
+    return res.status(500).json({
+      message: 'Error creating article',
+      error: error.message,
+    });
+  }
+});
+
+router.patch('/articles/:id', authMiddleware, requireOwner, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    const { error, fields } = readArticleFields(req.body, { requireTitle: false });
+
+    if (error) {
+      return res.status(400).json({ message: error });
+    }
+
+    const article = await Article.findByIdAndUpdate(req.params.id, fields, { new: true, runValidators: true });
+
+    if (!article) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    return res.json(article);
+  } catch (error) {
+    console.error('Article update error:', error);
+
+    return res.status(500).json({
+      message: 'Error updating article',
+      error: error.message,
+    });
+  }
+});
+
+router.delete('/articles/:id', authMiddleware, requireOwner, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    const article = await Article.findByIdAndDelete(req.params.id);
+
+    if (!article) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    return res.json({ deleted: true });
+  } catch (error) {
+    console.error('Article delete error:', error);
+
+    return res.status(500).json({
+      message: 'Error deleting article',
       error: error.message,
     });
   }

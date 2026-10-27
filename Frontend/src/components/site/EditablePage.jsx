@@ -1,5 +1,6 @@
 import { PageContentProvider } from '../../context/PageContentContext';
 import EditToolbar from './EditToolbar';
+import MoveHandle from './MoveHandle';
 
 // Wraps one site page so its EditableText blocks can fetch/save against
 // GET/PATCH /api/pages/:slug and so the floating format toolbar has
@@ -15,6 +16,7 @@ export default function EditablePage({ slug, children }) {
     <PageContentProvider slug={slug}>
       <div className="bfj-page-sections">{children}</div>
       <EditToolbar />
+      <MoveHandle />
     </PageContentProvider>
   );
 }

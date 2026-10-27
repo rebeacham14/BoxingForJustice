@@ -22,14 +22,33 @@
   /* editor font-size scale - the only sizes the site editor's toolbar can
      apply to a text block. Existing hardcoded per-selector font sizes across
      site.css/home.css/etc are untouched; this scale only takes effect once a
-     block has an explicit style.fontSize set via the editor. */
+     block has an explicit style.fontSize set via the editor.
+     The large steps are fluid: they hit their full desktop size at ~1200px
+     viewport and shrink toward the lower bound on phones, so a heading the
+     owner sized up on desktop can't overflow a 375px screen. */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.75rem;
-  --font-size-2xl: 2.5rem;
-  --font-size-display: 4rem;
+  --font-size-lg: clamp(1.125rem, 1.05rem + 0.25vw, 1.25rem);
+  --font-size-xl: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem);
+  --font-size-2xl: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --font-size-display: clamp(2.25rem, 1.2rem + 4vw, 4rem);
+
+  /* editor spacing scale - the only values the toolbar's "Above"/"Below"
+     controls can apply around a text block. Larger steps are fluid, same
+     reasoning as the font scale above. */
+  --space-none: 0;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: clamp(1rem, 0.7rem + 1vw, 1.5rem);
+  --space-xl: clamp(1.5rem, 0.9rem + 2vw, 2.5rem);
+
+  /* editor line-spacing scale (the toolbar's "Lines" control) */
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.8;
+  --line-height-loose: 2.1;
 
   /* chart surface (dark-only site, matches --color-bg-panel) */
   --chart-surface: #1a1a1a;
