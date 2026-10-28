@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import ContactFormBand from './ContactFormBand';
+import EditableRegion from './EditableRegion';
 
 export default function SiteLayout() {
   const location = useLocation();
@@ -26,8 +27,12 @@ export default function SiteLayout() {
       <main>
         <Outlet />
       </main>
-      <ContactFormBand />
-      <Footer />
+      {/* Shared by every page, so its text saves to the site-wide "site"
+          content page rather than any one page. */}
+      <EditableRegion slug="site">
+        <ContactFormBand />
+        <Footer />
+      </EditableRegion>
     </div>
   );
 }

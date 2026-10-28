@@ -117,7 +117,22 @@ router.patch(
         });
       }
 
-      const page = await Page.findOne({ slug: req.params.slug });
+      if (
+        style?.textAlign != null &&
+        !Page.TEXT_ALIGN_TOKENS.includes(style.textAlign)
+      ) {
+        return res.status(400).json({
+          message: `Invalid textAlign. Must be one of: ${Page.TEXT_ALIGN_TOKENS.join(', ')}`,
+        });
+      }
+
+      let page = await Page.findOne({ slug: req.params.slug });
+
+      // Site-wide content (footer etc.) has no seeded page - its document is
+      // created on the first edit. Any other unknown slug is still a 404.
+      if (!page && Page.GLOBAL_PAGE_SLUGS.includes(req.params.slug)) {
+        page = new Page({ slug: req.params.slug, title: 'Site-wide content', sections: [] });
+      }
 
       if (!page) {
         return res.status(404).json({ message: 'Page not found' });
@@ -179,7 +194,7 @@ router.patch(
         targetBlock.style.color = style.color;
       }
 
-      for (const field of ['spaceAbove', 'spaceBelow', 'lineHeight']) {
+      for (const field of ['spaceAbove', 'spaceBelow', 'lineHeight', 'textAlign']) {
         if (style?.[field] !== undefined) {
           targetBlock.style[field] = style[field];
         }

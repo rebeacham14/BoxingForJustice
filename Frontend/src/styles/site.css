@@ -215,7 +215,10 @@ html { scroll-behavior: smooth; }
 .bfj-site .button-row { align-items: center; display: flex; gap: 28px; }
 .bfj-site .text-link { border-bottom: 1px solid var(--ink); font-size: 12px; font-weight: 800; letter-spacing: .06em; padding-bottom: 5px; text-transform: uppercase; }
 .bfj-site button.text-link { background: none; border-left: 0; border-right: 0; border-top: 0; color: inherit; cursor: pointer; font-family: inherit; padding-left: 0; padding-right: 0; }
-.bfj-site .text-link span { color: var(--red); margin-left: 8px; }
+/* [aria-hidden] scopes this to the decorative arrow only - EditableText
+   renders link text as a <span> too, and a bare `.text-link span` turned it
+   red (same class of bug as the .eyebrow/.check-list fixes). */
+.bfj-site .text-link span[aria-hidden="true"] { color: var(--red); margin-left: 8px; }
 
 /* Hero icon-stat row (the 3 C's, restyled as colored-circle chips) */
 .bfj-site .icon-stat-row { display: flex; flex-wrap: wrap; gap: 26px; margin: 6px 0 36px; }
@@ -299,6 +302,29 @@ html { scroll-behavior: smooth; }
 .bfj-site .focus-card h3 { font-family: var(--font-display); font-size: 34px; font-weight: 400; letter-spacing: .02em; margin: 0 0 14px; text-transform: uppercase; }
 .bfj-site .focus-card p { color: var(--muted); font-size: 13px; line-height: 1.75; margin: 0; }
 .bfj-site .focus-arrow { font-size: 20px; }
+
+/* Exactly 3 boxes (EditableGrid adds .bfj-grid-3): one row on desktop
+   instead of 2 + 1. Below 981px the existing 2-col/1-col rules still apply. */
+@media (min-width: 981px) {
+  .bfj-site .focus-grid.bfj-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bfj-site .focus-grid.bfj-grid-3 > .focus-card { border-right: 1px solid var(--line); padding: 38px 32px; }
+  .bfj-site .focus-grid.bfj-grid-3 > .focus-card:first-child { padding-left: 0; }
+  .bfj-site .focus-grid.bfj-grid-3 > .focus-card:last-child { border-right: 0; padding-right: 0; }
+}
+
+/* Flip cards used as focus cards (Advocacy's blocks): .focus-card's
+   number/text/arrow columns (42px 1fr 28px) squeezed the whole flip card
+   into the 42px column. One full-width column instead (still a grid, so
+   the flip faces' height:100% has a definite height to fill), with the
+   text centered in the box. */
+.bfj-site .focus-card.flip-card { grid-template-columns: minmax(0, 1fr); }
+.bfj-site .focus-card.flip-card .flip-card-front,
+.bfj-site .focus-card.flip-card .flip-card-back { align-items: center; padding: 0 24px; text-align: center; }
+.bfj-site .awareness-grid-section { padding: 0 clamp(20px, 8vw, 124px) calc(100px * var(--section-size-scale, 1)); }
+
+/* Owner-set box spacing/size (EditableGrid.jsx). */
+.bfj-site .bfj-grid-gap { gap: var(--bfj-grid-gap); }
+.bfj-site .bfj-grid-box > * { min-height: var(--bfj-box-min); }
 
 /* Home only: "Our Connected Model" row (focusAreas restyled as colored
    step-circles with connecting arrows, in place of the bordered card grid
@@ -1239,10 +1265,14 @@ html { scroll-behavior: smooth; }
   padding: 4px 8px;
 }
 
-/* Drag-to-resize section width (useResizableWidth.js, ResizeHandles.jsx).
-   The inline style only sets --bfj-width; whether it applies is decided
-   here. Below the mobile breakpoint the rule doesn't match, so every section
-   falls back to its normal full width no matter what was set on desktop. */
+/* Drag-to-resize section width and height (useSectionResize.js,
+   ResizeHandles.jsx). The inline style only sets --bfj-width /
+   --bfj-min-height; whether they apply is decided here. Below the mobile
+   breakpoint these rules don't match, so every section falls back to its
+   normal size no matter what was set on desktop. The height is a
+   min-height that replaces the section's own (e.g. the hero's 720px), so the
+   owner can make a section shorter too - but never shorter than its
+   content, since min-height can't clip. */
 @media (min-width: 681px) {
   .bfj-site .bfj-resizable {
     margin-inline: auto;
@@ -1250,6 +1280,7 @@ html { scroll-behavior: smooth; }
     min-width: min(320px, 100%);
     width: var(--bfj-width, 100%);
   }
+  .bfj-site .bfj-resizable-h { min-height: var(--bfj-min-height); }
 }
 
 .bfj-site .bfj-resize-target {
@@ -1269,9 +1300,14 @@ html { scroll-behavior: smooth; }
   transition: opacity .15s ease, background-color .15s ease;
   z-index: 11;
 }
-.bfj-site .bfj-resize-handle { bottom: 0; top: 0; width: 12px; }
+.bfj-site .bfj-resize-handle-left,
+.bfj-site .bfj-resize-handle-right { bottom: 0; top: 0; width: 12px; }
 .bfj-site .bfj-resize-handle-left { left: 0; }
 .bfj-site .bfj-resize-handle-right { right: 0; }
+.bfj-site .bfj-resize-handle-bottom { bottom: 0; cursor: ns-resize; height: 12px; left: 0; right: 0; }
+.bfj-site .bfj-resize-handle-bottom::after { height: 8px; width: 56px; }
+.bfj-site .bfj-resize-corner-bottom-left { cursor: nesw-resize; }
+.bfj-site .bfj-resize-corner-bottom-right { cursor: nwse-resize; }
 .bfj-site .bfj-resize-handle::after {
   background: var(--color-gold);
   border: 2px solid var(--color-bg-panel);
@@ -1306,7 +1342,7 @@ html { scroll-behavior: smooth; }
 .bfj-site .bfj-resize-handle:focus-visible { opacity: 1; }
 
 .bfj-site .bfj-resizing,
-.bfj-site .bfj-resizing * { cursor: ew-resize; user-select: none; }
+.bfj-site .bfj-resizing * { user-select: none; }
 
 .bfj-site .bfj-resize-tooltip {
   background: var(--color-bg-panel);
@@ -1390,6 +1426,23 @@ html { scroll-behavior: smooth; }
 }
 .bfj-site .bfj-movable { cursor: pointer; outline: 2px dashed transparent; outline-offset: -2px; transition: outline-color .15s ease; }
 .bfj-site .bfj-movable:hover { outline-color: var(--color-gold); }
+/* Thin decorative bits (the eyebrows' 3px red tick) are too small to click
+   - give empty movables an invisible, bigger click area in edit mode. */
+.bfj-site .bfj-movable:empty { position: relative; }
+.bfj-site .bfj-movable:empty::after { content: ''; inset: -10px -4px; position: absolute; }
+
+.bfj-site .bfj-grid-controls {
+  align-items: center;
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0 0 14px;
+  padding: 6px 10px;
+  width: fit-content;
+}
 .bfj-site .bfj-move-outline {
   border: 2px dashed var(--color-gold);
   border-radius: 4px;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEditMode } from '../../context/EditModeContext';
 import { usePageContent } from '../../context/PageContentContext';
 import { reorderSections, setSectionSize } from '../../utils/contentApi';
-import useResizableWidth from '../../hooks/useResizableWidth';
+import useSectionResize from '../../hooks/useSectionResize';
 import ResizeHandles from './ResizeHandles';
 
 const SIZE_OPTIONS = [
@@ -13,7 +13,7 @@ const SIZE_OPTIONS = [
 
 // Wraps one top-level page section so the owner can move it up/down among
 // its siblings, pick a bounded height preset, and drag its edges to set its
-// width (see useResizableWidth.js), in edit mode. `sectionId`
+// width and height (see useSectionResize.js), in edit mode. `sectionId`
 // must match the Mongo section this content already belongs to (same id
 // used as the 2nd dot-segment of that section's EditableText blockIds - see
 // Backend/seedData/pages.seed.js). Mirrors EditableText's
@@ -26,13 +26,16 @@ export default function EditableSection(props) {
   const {
     elementRef,
     width,
+    height,
     savedWidth,
+    savedHeight,
     isResizing,
     drag,
     error: resizeError,
     handleProps,
     resetWidth,
-  } = useResizableWidth(`${slug}.${sectionId}.layout`);
+    resetHeight,
+  } = useSectionResize(`${slug}.${sectionId}.layout`);
 
   const section = sections.find((s) => s.sectionId === sectionId);
   const order = section?.order ?? 0;
@@ -82,6 +85,7 @@ export default function EditableSection(props) {
     'bfj-editable-section',
     `bfj-section-size-${size}`,
     width != null && 'bfj-resizable',
+    height != null && 'bfj-resizable-h',
     canEdit && 'bfj-resize-target',
     isResizing && 'bfj-resizing',
   ].filter(Boolean).join(' ');
@@ -89,6 +93,9 @@ export default function EditableSection(props) {
   const sectionStyle = { ...style, order };
   if (width != null) {
     sectionStyle['--bfj-width'] = `${width}%`;
+  }
+  if (height != null) {
+    sectionStyle['--bfj-min-height'] = `${height}px`;
   }
 
   return (
@@ -101,7 +108,7 @@ export default function EditableSection(props) {
     >
       {children}
       {canEdit && (
-        <ResizeHandles width={width} drag={drag} handleProps={handleProps} gridMode={gridMode} />
+        <ResizeHandles width={width} height={height} drag={drag} handleProps={handleProps} gridMode={gridMode} />
       )}
       {canEdit && (
         <div className="bfj-section-controls" contentEditable={false}>
@@ -146,6 +153,16 @@ export default function EditableSection(props) {
             title="Reset to full width"
           >
             ↔
+          </button>
+          <button
+            type="button"
+            className="bfj-section-controls-btn"
+            onClick={resetHeight}
+            disabled={savedHeight == null}
+            aria-label="Reset to normal height"
+            title="Reset to normal height"
+          >
+            ↕
           </button>
           {(error || resizeError) && <span className="bfj-section-error">{error || resizeError}</span>}
         </div>

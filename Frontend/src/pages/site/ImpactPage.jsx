@@ -4,6 +4,7 @@ import PageHero from '../../components/site/PageHero';
 import UsPolicyMap from '../../components/impact/UsPolicyMap';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
@@ -49,7 +50,7 @@ export default function ImpactPage() {
       <EditableSection as="section" sectionId="policies" className="work-section" id="policies">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="impact.policies.eyebrow" defaultValue="Policies" /></p>
+            <p className="eyebrow"><Movable id="impact.policies.eyebrow-tick" /> <EditableText id="impact.policies.eyebrow" defaultValue="Policies" /></p>
             <h2>
               <EditableText id="impact.policies.title-line1" defaultValue="What's on" /><br />
               <EditableText id="impact.policies.title-line2" defaultValue="the books." />
@@ -74,7 +75,7 @@ export default function ImpactPage() {
       <EditableSection as="section" sectionId="geo" className="work-section" id="geo-data">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="impact.geo.eyebrow" defaultValue="GEO Data" /></p>
+            <p className="eyebrow"><Movable id="impact.geo.eyebrow-tick" /> <EditableText id="impact.geo.eyebrow" defaultValue="GEO Data" /></p>
             <h2>
               <EditableText id="impact.geo.title-line1" defaultValue="Click a state." /><br />
               <EditableText id="impact.geo.title-line2" defaultValue="See the picture." />
@@ -98,7 +99,7 @@ export default function ImpactPage() {
 
       <EditableSection as="section" sectionId="change" className="change-model">
         <div className="change-heading">
-          <p className="eyebrow"><span /> <EditableText id="impact.change.eyebrow" defaultValue="Our path to change" /></p>
+          <p className="eyebrow"><Movable id="impact.change.eyebrow-tick" /> <EditableText id="impact.change.eyebrow" defaultValue="Our path to change" /></p>
           <h2>
             <EditableText id="impact.change.title-line1" defaultValue="From a safe moment" /><br />
             <EditableText id="impact.change.title-line2" defaultValue="to a stronger future." />
@@ -123,7 +124,7 @@ export default function ImpactPage() {
       <EditableSection as="section" sectionId="outcomes" className="outcomes-section">
         <div className="section-heading compact-heading">
           <div>
-            <p className="eyebrow eyebrow-light"><span /> <EditableText id="impact.outcomes.eyebrow" defaultValue="What we measure" /></p>
+            <p className="eyebrow eyebrow-light"><Movable id="impact.outcomes.eyebrow-tick" /> <EditableText id="impact.outcomes.eyebrow" defaultValue="What we measure" /></p>
             <h2>
               <EditableText id="impact.outcomes.title-line1" defaultValue="Evidence with" /><br /><strong><EditableText id="impact.outcomes.title-line2" defaultValue="integrity." /></strong>
             </h2>
@@ -139,7 +140,7 @@ export default function ImpactPage() {
         <div className="outcomes-list">
           {outcomes.map(([title, description], index) => (
             <article key={title}>
-              <span>0{index + 1}</span>
+              <Movable id={`impact.outcomes.${index}.number`}>0{index + 1}</Movable>
               <EditableText as="h3" id={`impact.outcomes.${index}.title`} defaultValue={title} />
               <EditableText as="p" id={`impact.outcomes.${index}.description`} defaultValue={description} />
             </article>
@@ -149,7 +150,7 @@ export default function ImpactPage() {
 
       <EditableSection as="section" sectionId="integrity" className="integrity-section">
         <div>
-          <p className="eyebrow"><span /> <EditableText id="impact.integrity.eyebrow" defaultValue="Our commitment" /></p>
+          <p className="eyebrow"><Movable id="impact.integrity.eyebrow-tick" /> <EditableText id="impact.integrity.eyebrow" defaultValue="Our commitment" /></p>
           <h2>
             <EditableText id="impact.integrity.title-line1" defaultValue="People are never" /><br />
             <EditableText id="impact.integrity.title-line2" defaultValue="marketing material." />
@@ -170,15 +171,15 @@ export default function ImpactPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="funder" className="funder-section">
-        <div className="funder-seal">
+        <Movable as="div" id="impact.funder.seal" className="funder-seal">
           BFJ
           <span>
             <EditableText id="impact.funder.seal-line1" defaultValue="Funder" /><br />
             <EditableText id="impact.funder.seal-line2" defaultValue="readiness" />
           </span>
-        </div>
+        </Movable>
         <div>
-          <p className="eyebrow"><span /> <EditableText id="impact.funder.eyebrow" defaultValue="For grantmakers & sponsors" /></p>
+          <p className="eyebrow"><Movable id="impact.funder.eyebrow-tick" /> <EditableText id="impact.funder.eyebrow" defaultValue="For grantmakers & sponsors" /></p>
           <h2>
             <EditableText id="impact.funder.title-line1" defaultValue="A mission built" /><br />
             <EditableText id="impact.funder.title-line2" defaultValue="for partnership." />

@@ -5,6 +5,7 @@ import AccordionItem from '../../components/common/AccordionItem';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
 import useEditableImage from '../../hooks/useEditableImage';
@@ -24,12 +25,24 @@ const equipping = [
   { front: 'Rise', back: 'through leadership and purpose' },
 ];
 
+// The page's hooks (photos, item lists) read PageContentContext, so they
+// must run in a component rendered INSIDE <EditablePage> - called directly
+// in the page component they'd get the context's empty default (slug null),
+// and every save would go to /api/pages/null/... ("Page not found").
 export default function OurWorkPage() {
+  return (
+    <EditablePage slug="our-work">
+      <OurWorkContent />
+    </EditablePage>
+  );
+}
+
+function OurWorkContent() {
   const featureMedia = useEditableImage('our-work.feature.media', '/misc/orders-boxing.jpg');
   const featureMediaMove = useMovable('our-work.feature.media');
 
   return (
-    <EditablePage slug="our-work">
+    <>
       <PageHero
         eyebrow={<EditableText id="our-work.hero.eyebrow" defaultValue="What we do" />}
         title={<EditableText id="our-work.hero.title" defaultValue="One mission." />}
@@ -75,9 +88,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="campaigns" className="program-section program-red" id="campaigns">
-        <div className="program-index">01</div>
+        <Movable as="div" id="our-work.campaigns.index" className="program-index">01</Movable>
         <div className="program-title">
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.campaigns.eyebrow" defaultValue="Campaigns" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="our-work.campaigns.eyebrow-tick" /> <EditableText id="our-work.campaigns.eyebrow" defaultValue="Campaigns" /></p>
           <h2>
             <EditableText id="our-work.campaigns.title-line1" defaultValue="2028" /><br /><strong><EditableText id="our-work.campaigns.title-line2" defaultValue="Olympics." /></strong>
           </h2>
@@ -98,9 +111,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="fundraisers" className="program-section" id="fundraiser-events">
-        <div className="program-index">02</div>
+        <Movable as="div" id="our-work.fundraisers.index" className="program-index">02</Movable>
         <div className="program-title">
-          <p className="eyebrow"><span /> <EditableText id="our-work.fundraisers.eyebrow" defaultValue="Fundraiser events" /></p>
+          <p className="eyebrow"><Movable id="our-work.fundraisers.eyebrow-tick" /> <EditableText id="our-work.fundraisers.eyebrow" defaultValue="Fundraiser events" /></p>
           <h2>
             <EditableText id="our-work.fundraisers.title-line1" defaultValue="Coming" /><br /><strong><EditableText id="our-work.fundraisers.title-line2" defaultValue="soon." /></strong>
           </h2>
@@ -116,9 +129,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="articles" className="program-section" id="articles">
-        <div className="program-index">03</div>
+        <Movable as="div" id="our-work.articles.index" className="program-index">03</Movable>
         <div className="program-title">
-          <p className="eyebrow"><span /> <EditableText id="our-work.articles.eyebrow" defaultValue="Articles" /></p>
+          <p className="eyebrow"><Movable id="our-work.articles.eyebrow-tick" /> <EditableText id="our-work.articles.eyebrow" defaultValue="Articles" /></p>
           {/* New block ids (not title-line1/2) on purpose: production Mongo
               already holds "Coming"/"soon." under the old ids, which would
               override these defaults. */}
@@ -145,9 +158,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="educating" className="program-section program-red">
-        <div className="program-index">04</div>
+        <Movable as="div" id="our-work.educating.index" className="program-index">04</Movable>
         <div className="program-title">
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.educating.eyebrow" defaultValue="Educating" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="our-work.educating.eyebrow-tick" /> <EditableText id="our-work.educating.eyebrow" defaultValue="Educating" /></p>
           <h2>
             <EditableText id="our-work.educating.title-line1" defaultValue="Know the signs." /><br />
             <EditableText id="our-work.educating.title-line2" defaultValue="Name the harm." /><br />
@@ -180,9 +193,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="equipping" className="program-section">
-        <div className="program-index">05</div>
+        <Movable as="div" id="our-work.equipping.index" className="program-index">05</Movable>
         <div className="program-title">
-          <p className="eyebrow"><span /> <EditableText id="our-work.equipping.eyebrow" defaultValue="Equipping" /></p>
+          <p className="eyebrow"><Movable id="our-work.equipping.eyebrow-tick" /> <EditableText id="our-work.equipping.eyebrow" defaultValue="Equipping" /></p>
           <h2>
             <EditableText id="our-work.equipping.title-line1" defaultValue="Today's strength." /><br /><strong><EditableText id="our-work.equipping.title-line2" defaultValue="Tomorrow's leaders." /></strong>
           </h2>
@@ -203,7 +216,7 @@ export default function OurWorkPage() {
             {equipping.map(({ front, back }, index) => (
               <FlipCard
                 key={front}
-                front={<><span>0{index + 1}</span><strong><EditableText id={`our-work.equipping.${index}.front`} defaultValue={front} /></strong></>}
+                front={<><Movable id={`our-work.equipping.${index}.number`}>0{index + 1}</Movable><strong><EditableText id={`our-work.equipping.${index}.front`} defaultValue={front} /></strong></>}
                 back={<EditableText as="span" id={`our-work.equipping.${index}.back`} defaultValue={back} />}
               />
             ))}
@@ -215,9 +228,9 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="encouraging" className="program-section program-red">
-        <div className="program-index">06</div>
+        <Movable as="div" id="our-work.encouraging.index" className="program-index">06</Movable>
         <div className="program-title">
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="our-work.encouraging.eyebrow" defaultValue="Encouraging" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="our-work.encouraging.eyebrow-tick" /> <EditableText id="our-work.encouraging.eyebrow" defaultValue="Encouraging" /></p>
           <h2>
             <EditableText id="our-work.encouraging.title-line1" defaultValue="Community that" /><br /><strong><EditableText id="our-work.encouraging.title-line2" defaultValue="shows up." /></strong>
           </h2>
@@ -233,7 +246,7 @@ export default function OurWorkPage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="partnerships" className="partnership-model" id="partnerships">
-        <p className="eyebrow"><span /> <EditableText id="our-work.partnerships.eyebrow" defaultValue="Community partnership" /></p>
+        <p className="eyebrow"><Movable id="our-work.partnerships.eyebrow-tick" /> <EditableText id="our-work.partnerships.eyebrow" defaultValue="Community partnership" /></p>
         <h2>
           <EditableText id="our-work.partnerships.title-line1" defaultValue="We do not compete" /><br />
           <EditableText id="our-work.partnerships.title-line2" defaultValue="for credit." /> <strong><EditableText id="our-work.partnerships.title-accent" defaultValue="We multiply impact." /></strong>
@@ -249,6 +262,6 @@ export default function OurWorkPage() {
       </EditableSection>
       <CustomBlocks sectionId="custom" />
       <BottomCta />
-    </EditablePage>
+    </>
   );
 }

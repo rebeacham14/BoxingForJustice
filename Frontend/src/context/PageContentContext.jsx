@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useId, useState } from 'react';
 import { fetchPage } from '../utils/contentApi';
 
 const PageContentContext = createContext({
   slug: null,
+  regionId: null,
   sections: [],
   blocks: {},
   status: 'idle',
@@ -35,6 +36,10 @@ function flattenBlocks(sections) {
 // backend.
 export function PageContentProvider({ slug, children }) {
   const [state, setState] = useState({ sections: [], status: 'loading' });
+  // Identifies this provider instance, so the editor knows which region's
+  // toolbar owns the selected block even when two regions share a slug
+  // (see activeBlockRegion in EditModeContext).
+  const regionId = useId();
 
   useEffect(() => {
     let cancelled = false;
@@ -169,6 +174,7 @@ export function PageContentProvider({ slug, children }) {
         status: state.status,
         blocks,
         slug,
+        regionId,
         setBlockLocal,
         addBlocksLocal,
         removeBlocksLocal,

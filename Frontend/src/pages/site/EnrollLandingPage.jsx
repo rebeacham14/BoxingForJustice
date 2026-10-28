@@ -2,6 +2,8 @@ import BottomCta from '../../components/site/BottomCta';
 import PageHero from '../../components/site/PageHero';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableGrid from '../../components/site/EditableGrid';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
@@ -25,7 +27,7 @@ export default function EnrollLandingPage() {
       <EditableSection as="section" sectionId="how" className="work-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="enroll.how.eyebrow" defaultValue="How it works" /></p>
+            <p className="eyebrow"><Movable id="enroll.how.eyebrow-tick" /> <EditableText id="enroll.how.eyebrow" defaultValue="How it works" /></p>
             <h2>
               <EditableText id="enroll.how.title-line1" defaultValue="One portal." /><br />
               <EditableText id="enroll.how.title-line2" defaultValue="Everything you need." />
@@ -39,27 +41,27 @@ export default function EnrollLandingPage() {
             />
           </p>
         </div>
-        <div className="focus-grid">
+        <EditableGrid id="enroll.how.grid" className="focus-grid">
           <article className="focus-card">
-            <span className="focus-number">01</span>
+            <Movable id="enroll.how.0.number" className="focus-number">01</Movable>
             <div>
               <EditableText as="h3" id="enroll.how.0.title" defaultValue="Create an account" />
               <EditableText as="p" id="enroll.how.0.text" defaultValue="Sign in or sign up on the enrollment portal to get started." />
             </div>
           </article>
           <article className="focus-card">
-            <span className="focus-number">02</span>
+            <Movable id="enroll.how.1.number" className="focus-number">02</Movable>
             <div>
               <EditableText as="h3" id="enroll.how.1.title" defaultValue="Enroll or buy tickets" />
               <EditableText as="p" id="enroll.how.1.text" defaultValue="Enroll a participant in a program, or purchase event tickets." />
             </div>
           </article>
-        </div>
+        </EditableGrid>
       </EditableSection>
 
       <EditableSection as="section" sectionId="portal" className="contact-panel">
         <div>
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="enroll.portal.eyebrow" defaultValue="Go to the portal" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="enroll.portal.eyebrow-tick" /> <EditableText id="enroll.portal.eyebrow" defaultValue="Go to the portal" /></p>
           <h2>
             <EditableText id="enroll.portal.title-line1" defaultValue="Enrollment" /><br />
             <EditableText id="enroll.portal.title-line2" defaultValue="portal." />

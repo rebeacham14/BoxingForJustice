@@ -4,6 +4,8 @@ import PageHero from '../../components/site/PageHero';
 import FlipCard from '../../components/common/FlipCard';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableGrid from '../../components/site/EditableGrid';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
@@ -36,7 +38,7 @@ export default function AdvocacyPage() {
           either instance moves both together - see EditableSection.jsx. */}
       <EditableSection as="section" sectionId="awareness" className="section-heading" id="awareness-protects">
         <div>
-          <p className="eyebrow"><span /> <EditableText id="advocacy.awareness.eyebrow" defaultValue="#AwarenessProtects" /></p>
+          <p className="eyebrow"><Movable id="advocacy.awareness.eyebrow-tick" /> <EditableText id="advocacy.awareness.eyebrow" defaultValue="#AwarenessProtects" /></p>
           <h2>
             <EditableText id="advocacy.awareness.title-line1" defaultValue="Tap a block" /><br />
             <strong><EditableText id="advocacy.awareness.title-line2" defaultValue="to learn more." /></strong>
@@ -50,21 +52,27 @@ export default function AdvocacyPage() {
           />
         </p>
       </EditableSection>
-      <EditableSection as="section" sectionId="awareness" className="focus-grid">
-        {awarenessBlocks.map((block, index) => (
-          <FlipCard
-            key={block.front}
-            className="focus-card"
-            front={<EditableText as="h3" id={`advocacy.awareness.${index}.front`} defaultValue={block.front} />}
-            back={<EditableText as="p" id={`advocacy.awareness.${index}.back`} defaultValue={block.back} />}
-          />
-        ))}
+      {/* The grid sits INSIDE the section (rather than being the section
+          itself) so it can carry its own spacing/box-size controls - see
+          EditableGrid.jsx - without them landing inside the section's
+          page-level flex ordering. */}
+      <EditableSection as="section" sectionId="awareness" className="awareness-grid-section">
+        <EditableGrid id="advocacy.awareness.grid" className="focus-grid">
+          {awarenessBlocks.map((block, index) => (
+            <FlipCard
+              key={block.front}
+              className="focus-card"
+              front={<EditableText as="h3" id={`advocacy.awareness.${index}.front`} defaultValue={block.front} />}
+              back={<EditableText as="p" id={`advocacy.awareness.${index}.back`} defaultValue={block.back} />}
+            />
+          ))}
+        </EditableGrid>
       </EditableSection>
 
       <EditableSection as="section" sectionId="legislative" className="program-section" id="legislative-prep">
-        <div className="program-index">02</div>
+        <Movable as="div" id="advocacy.legislative.index" className="program-index">02</Movable>
         <div className="program-title">
-          <p className="eyebrow"><span /> <EditableText id="advocacy.legislative.eyebrow" defaultValue="Legislative prep" /></p>
+          <p className="eyebrow"><Movable id="advocacy.legislative.eyebrow-tick" /> <EditableText id="advocacy.legislative.eyebrow" defaultValue="Legislative prep" /></p>
           <h2>
             <EditableText id="advocacy.legislative.title-line1" defaultValue="Prepared to" /><br />
             <strong><EditableText id="advocacy.legislative.title-line2" defaultValue="speak on policy." /></strong>

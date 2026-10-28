@@ -10,7 +10,7 @@ import { offsetStyle, readOffset } from '../utils/moveOffset';
 // the same id passed to useEditableImage).
 export default function useMovable(id) {
   const { isOwner, editMode, setActiveBlockId } = useEditMode();
-  const { blocks } = usePageContent();
+  const { regionId, blocks } = usePageContent();
 
   const canEdit = isOwner && editMode;
   const offset = readOffset(blocks[id]?.content?.offset);
@@ -19,7 +19,7 @@ export default function useMovable(id) {
     // A click on editable text or a control inside this element selects
     // that instead (e.g. the hero photo's caption, or "Change image").
     if (e.target.closest('[contenteditable="true"], button, input, a')) return;
-    setActiveBlockId(id, 'element');
+    setActiveBlockId(id, 'element', regionId);
   }
 
   return {

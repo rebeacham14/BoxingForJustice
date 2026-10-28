@@ -13,6 +13,7 @@ const EditModeContext = createContext({
   setGridMode: () => {},
   activeBlockId: null,
   activeBlockKind: 'text',
+  activeBlockRegion: null,
   setActiveBlockId: () => {},
   getToken: noopGetToken,
 });
@@ -45,9 +46,16 @@ function EditModeProviderInner({ isOwner, isSignedIn, getToken, children }) {
   const [gridMode, setGridModeState] = useState(() => readSessionFlag(GRID_SESSION_KEY));
   // The selected element: a text block ('text', gets the format toolbar)
   // or any other movable element ('element', e.g. a photo - see
-  // useMovable.js). Both get the move handle (MoveHandle.jsx).
-  const [active, setActive] = useState({ id: null, kind: 'text' });
-  const setActiveBlockId = useCallback((id, kind = 'text') => setActive({ id, kind }), []);
+  // useMovable.js). Both get the move handle (MoveHandle.jsx). `region` is
+  // the PageContentProvider instance the block belongs to (its regionId),
+  // so only that region's toolbar/move handle shows - one screen can hold
+  // several regions (a page, the site-wide bottom call-to-action, the
+  // footer), and another region's toolbar would save to the wrong place.
+  const [active, setActive] = useState({ id: null, kind: 'text', region: null });
+  const setActiveBlockId = useCallback(
+    (id, kind = 'text', region = null) => setActive({ id, kind, region }),
+    []
+  );
 
   function setEditMode(value) {
     setEditModeState(value);
@@ -69,6 +77,7 @@ function EditModeProviderInner({ isOwner, isSignedIn, getToken, children }) {
       setGridMode,
       activeBlockId: active.id,
       activeBlockKind: active.kind,
+      activeBlockRegion: active.region,
       setActiveBlockId,
       getToken,
     }),

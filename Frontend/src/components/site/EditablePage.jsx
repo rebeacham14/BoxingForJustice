@@ -1,6 +1,4 @@
-import { PageContentProvider } from '../../context/PageContentContext';
-import EditToolbar from './EditToolbar';
-import MoveHandle from './MoveHandle';
+import EditableRegion from './EditableRegion';
 
 // Wraps one site page so its EditableText blocks can fetch/save against
 // GET/PATCH /api/pages/:slug and so the floating format toolbar has
@@ -13,10 +11,8 @@ import MoveHandle from './MoveHandle';
 // which non-editor routes like /mma-events also render through).
 export default function EditablePage({ slug, children }) {
   return (
-    <PageContentProvider slug={slug}>
+    <EditableRegion slug={slug}>
       <div className="bfj-page-sections">{children}</div>
-      <EditToolbar />
-      <MoveHandle />
-    </PageContentProvider>
+    </EditableRegion>
   );
 }

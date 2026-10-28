@@ -17,6 +17,8 @@ const FONT_SIZE_VAR = {
 const COLOR_VAR = {
   white: 'var(--color-white)',
   gold: 'var(--color-gold)',
+  // The site's own navy (display headings), defined on .bfj-site in site.css.
+  navy: 'var(--ink)',
   'body-text': 'var(--color-body-text)',
   'text-muted': 'var(--color-text-muted)',
   danger: 'var(--color-danger)',
@@ -31,6 +33,8 @@ const SPACE_VAR = {
   xl: 'var(--space-xl)',
 };
 
+const TEXT_ALIGN_VALUES = ['left', 'center', 'right', 'justify'];
+
 const LINE_HEIGHT_VAR = {
   tight: 'var(--line-height-tight)',
   normal: 'var(--line-height-normal)',
@@ -44,7 +48,7 @@ const LINE_HEIGHT_VAR = {
 // is shown instead so the page never blanks out.
 export default function EditableText({ id, as: Tag = 'span', defaultValue = '', className }) {
   const { isOwner, editMode, setActiveBlockId, getToken } = useEditMode();
-  const { slug, blocks, setBlockLocal } = usePageContent();
+  const { slug, regionId, blocks, setBlockLocal } = usePageContent();
   const [pendingValue, setPendingValue] = useState(null);
   const [saveState, setSaveState] = useState('idle'); // idle | saving | error
 
@@ -75,6 +79,16 @@ export default function EditableText({ id, as: Tag = 'span', defaultValue = '', 
   const hasSpacing = style.marginTop || style.marginBottom || style.lineHeight;
   if (hasSpacing && Tag === 'span') {
     style.display = 'inline-block';
+  }
+  // Alignment needs a full-width box to align within. inline-block + 100%
+  // (rather than block) so a following <br /> in the same heading doesn't
+  // add a blank line.
+  if (block?.style?.textAlign && TEXT_ALIGN_VALUES.includes(block.style.textAlign)) {
+    style.textAlign = block.style.textAlign;
+    if (Tag === 'span') {
+      style.display = 'inline-block';
+      style.width = '100%';
+    }
   }
   // Owner's drag-to-move offset (MoveHandle.jsx), stored next to `value`.
   const offset = readOffset(block?.content?.offset);
@@ -139,7 +153,7 @@ export default function EditableText({ id, as: Tag = 'span', defaultValue = '', 
         contentEditable
         suppressContentEditableWarning
         data-block-id={id}
-        onFocus={() => setActiveBlockId(id)}
+        onFocus={() => setActiveBlockId(id, 'text', regionId)}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
       >

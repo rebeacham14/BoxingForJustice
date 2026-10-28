@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
 import ItemControls from '../../components/site/ItemControls';
@@ -105,9 +106,13 @@ function FocusStep({ itemId, index, total, list }) {
           canRemove={total > 1}
         />
       )}
-      <span className="connected-circle" style={{ background: ACCENT_CYCLE[index % ACCENT_CYCLE.length] }}>
+      <Movable
+        id={`home.our-work.focus.${itemId}.circle`}
+        className="connected-circle"
+        style={{ background: ACCENT_CYCLE[index % ACCENT_CYCLE.length] }}
+      >
         {String(index + 1).padStart(2, '0')}
-      </span>
+      </Movable>
       <EditableText as="h3" id={`home.our-work.focus.${itemId}.title`} defaultValue={area.title} />
       <EditableText as="p" id={`home.our-work.focus.${itemId}.text`} defaultValue={area.text} />
       {index < total - 1 && <span className="connected-arrow" aria-hidden="true">→</span>}
@@ -130,13 +135,25 @@ function MeasureItem({ itemId, index, total, list }) {
           canRemove={total > 1}
         />
       )}
-      <span>0{index + 1}</span>
+      <Movable id={`home.impact.measure.${itemId}.number`}>0{index + 1}</Movable>
       <EditableText as="p" id={`home.impact.measure.${itemId}`} defaultValue={measure} />
     </div>
   );
 }
 
+// The page's hooks (photos, item lists) read PageContentContext, so they
+// must run in a component rendered INSIDE <EditablePage> - called directly
+// in the page component they'd get the context's empty default (slug null),
+// and every save would go to /api/pages/null/... ("Page not found").
 export default function HomePage() {
+  return (
+    <EditablePage slug="home">
+      <HomeContent />
+    </EditablePage>
+  );
+}
+
+function HomeContent() {
   const heroPhoto = useEditableImage('home.top.photo', '/Pics/kid_coach_conversation.jpg');
   const heroPhotoMove = useMovable('home.top.photo');
   const focusList = useEditableItemList({ listId: 'home.our-work.focus', defaultItemIds: ['0', '1', '2'] });
@@ -144,10 +161,10 @@ export default function HomePage() {
   const actionList = useEditableItemList({ listId: 'home.get-involved.action', defaultItemIds: ['0', '1', '2', '3'] });
 
   return (
-    <EditablePage slug="home">
+    <>
       <EditableSection as="section" sectionId="top" className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span /> <EditableText id="home.top.eyebrow" defaultValue="Justice begins before the fight" /></p>
+          <p className="eyebrow"><Movable id="home.top.eyebrow-tick" /> <EditableText id="home.top.eyebrow" defaultValue="Justice begins before the fight" /></p>
           <h1>
             <EditableText id="home.top.title" defaultValue="Power is not taken." /><br />
             <strong><EditableText id="home.top.title-accent" defaultValue="It is restored." /></strong>
@@ -163,7 +180,7 @@ export default function HomePage() {
           <div className="icon-stat-row" aria-label="Choice, Control, Confidence — the Boxing For Justice 3 C's model">
             {threeCs.map((item, index) => (
               <div className="icon-stat" key={item.label}>
-                <span className="icon-stat-chip" style={{ background: ACCENT_CYCLE[index] }}>0{index + 1}</span>
+                <Movable id={`home.top.three-cs.${index}.chip`} className="icon-stat-chip" style={{ background: ACCENT_CYCLE[index] }}>0{index + 1}</Movable>
                 <div>
                   <strong><EditableText id={`home.top.three-cs.${index}.label`} defaultValue={item.label} /></strong>
                   <small><EditableText id={`home.top.three-cs.${index}.caption`} defaultValue={item.caption} /></small>
@@ -199,9 +216,9 @@ export default function HomePage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="why" className="manifesto" id="why">
-        <div className="section-number">01 / Why we exist</div>
+        <Movable as="div" id="home.why.section-number" className="section-number">01 / Why we exist</Movable>
         <div className="manifesto-copy">
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="home.why.eyebrow" defaultValue="Our purpose" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="home.why.eyebrow-tick" /> <EditableText id="home.why.eyebrow" defaultValue="Our purpose" /></p>
           <h2>
             <EditableText id="home.why.title" defaultValue="Trauma can steal choice, control, and confidence." /> <strong><EditableText id="home.why.title-accent" defaultValue="We help give them back." /></strong>
           </h2>
@@ -227,7 +244,7 @@ export default function HomePage() {
       <EditableSection as="section" sectionId="our-work" className="connected-model" id="our-work">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="home.our-work.eyebrow" defaultValue="One mission. Multiple pathways." /></p>
+            <p className="eyebrow"><Movable id="home.our-work.eyebrow-tick" /> <EditableText id="home.our-work.eyebrow" defaultValue="One mission. Multiple pathways." /></p>
             <h2>
               <EditableText id="home.our-work.title-line1" defaultValue="Our work goes" /><br />
               <EditableText id="home.our-work.title-line2" defaultValue="beyond the ring." />
@@ -253,7 +270,7 @@ export default function HomePage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="quote" className="quote-band">
-        <span className="quote-mark" aria-hidden="true">&ldquo;</span>
+        <Movable id="home.quote.mark" className="quote-mark" aria-hidden="true">&ldquo;</Movable>
         <blockquote>
           <EditableText
             as="span"
@@ -276,10 +293,10 @@ export default function HomePage() {
             aria-hidden="true"
           />
           <div className="method-art-overlay" aria-hidden="true" />
-          <div className="corner-label">In their corner</div>
+          <Movable as="div" id="home.method.corner-label" className="corner-label">In their corner</Movable>
         </div>
         <div className="method-copy">
-          <p className="eyebrow"><span /> <EditableText id="home.method.eyebrow" defaultValue="Boxing as a tool" /></p>
+          <p className="eyebrow"><Movable id="home.method.eyebrow-tick" /> <EditableText id="home.method.eyebrow" defaultValue="Boxing as a tool" /></p>
           <h2><EditableText id="home.method.title" defaultValue="We teach breathing before we teach punching." /></h2>
           <p>
             <EditableText
@@ -289,9 +306,9 @@ export default function HomePage() {
             />
           </p>
           <ul className="check-list">
-            <li><span>01</span> <EditableText id="home.method.check.0" defaultValue="Beginning Boxing welcomes youth at every experience level and builds strong fundamentals, fitness, and belonging." /></li>
-            <li><span>02</span> <EditableText id="home.method.check.1" defaultValue="Elite Boxing prepares committed youth for the demands of USA Boxing competition and develops the 4 D's." /></li>
-            <li><span>03</span> <EditableText id="home.method.check.2" defaultValue="Every level values personal growth as much as athletic progress." /></li>
+            <li><Movable id="home.method.check.0-number">01</Movable> <EditableText id="home.method.check.0" defaultValue="Beginning Boxing welcomes youth at every experience level and builds strong fundamentals, fitness, and belonging." /></li>
+            <li><Movable id="home.method.check.1-number">02</Movable> <EditableText id="home.method.check.1" defaultValue="Elite Boxing prepares committed youth for the demands of USA Boxing competition and develops the 4 D's." /></li>
+            <li><Movable id="home.method.check.2-number">03</Movable> <EditableText id="home.method.check.2" defaultValue="Every level values personal growth as much as athletic progress." /></li>
           </ul>
           <Link className="text-link text-link-dark" to="/mma-events/about#boxing-life-skills">
             <EditableText id="home.method.cta" defaultValue="Find the right program" /> <span aria-hidden="true">→</span>
@@ -300,9 +317,9 @@ export default function HomePage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="impact" className="impact-section" id="impact">
-        <div className="section-number dark-number">02 / Accountability</div>
+        <Movable as="div" id="home.impact.section-number" className="section-number dark-number">02 / Accountability</Movable>
         <div className="impact-content">
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="home.impact.eyebrow" defaultValue="Built for measurable change" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="home.impact.eyebrow-tick" /> <EditableText id="home.impact.eyebrow" defaultValue="Built for measurable change" /></p>
           <h2>
             <EditableText id="home.impact.title" defaultValue="Credibility lives in" /><br /><strong><EditableText id="home.impact.title-accent" defaultValue="what we can show." /></strong>
           </h2>
@@ -336,7 +353,7 @@ export default function HomePage() {
       </EditableSection>
 
       <EditableSection as="section" sectionId="get-involved" className="action-section" id="get-involved">
-        <p className="eyebrow"><span /> <EditableText id="home.get-involved.eyebrow" defaultValue="Take the next step" /></p>
+        <p className="eyebrow"><Movable id="home.get-involved.eyebrow-tick" /> <EditableText id="home.get-involved.eyebrow" defaultValue="Take the next step" /></p>
         <h2>
           <EditableText id="home.get-involved.title" defaultValue="Justice is a team effort." /><br /><strong><EditableText id="home.get-involved.title-accent" defaultValue="There is a place for you." /></strong>
         </h2>
@@ -352,6 +369,6 @@ export default function HomePage() {
       </EditableSection>
 
       <CustomBlocks sectionId="custom" />
-    </EditablePage>
+    </>
   );
 }

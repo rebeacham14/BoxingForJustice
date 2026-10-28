@@ -35,9 +35,12 @@ function applyLive(el, offset) {
 // elements around the page's own markup (see the bare-`span` CSS gotchas
 // noted in EditableText's history).
 export default function MoveHandle() {
-  const { isOwner, editMode, activeBlockId } = useEditMode();
+  const { isOwner, editMode, activeBlockId, activeBlockRegion } = useEditMode();
+  const { regionId } = usePageContent();
 
-  if (!isOwner || !editMode || !activeBlockId) {
+  // Only the content region the selected element belongs to (see
+  // activeBlockRegion in EditModeContext) - it saves to that region's page.
+  if (!isOwner || !editMode || !activeBlockId || activeBlockRegion !== regionId) {
     return null;
   }
 

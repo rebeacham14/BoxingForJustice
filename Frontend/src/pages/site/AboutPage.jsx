@@ -4,6 +4,8 @@ import SponsorBar from '../../components/common/SponsorBar';
 import FundsAllocationChart from '../../components/common/FundsAllocationChart';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import EditableGrid from '../../components/site/EditableGrid';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import ImageUploadButton from '../../components/site/ImageUploadButton';
 import useEditableImage from '../../hooks/useEditableImage';
@@ -48,7 +50,7 @@ function LeaderCard({ name, role, photo, index }) {
           {...photoMove.props}
         />
       ) : (
-        <span>0{index + 1}</span>
+        <Movable id={`about.staff.${index}.number`}>0{index + 1}</Movable>
       )}
       <EditableText as="h3" id={`about.staff.${index}.name`} defaultValue={name} />
       <EditableText as="p" id={`about.staff.${index}.role`} defaultValue={role} />
@@ -77,24 +79,24 @@ export default function AboutPage() {
       <EditableSection as="section" sectionId="pillars" className="work-section pillars-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="about.pillars.eyebrow" defaultValue="Our 3 pillars" /></p>
+            <p className="eyebrow"><Movable id="about.pillars.eyebrow-tick" /> <EditableText id="about.pillars.eyebrow" defaultValue="Our 3 pillars" /></p>
             <h2>
               <EditableText id="about.pillars.title-line1" defaultValue="What we" /><br />
               <EditableText id="about.pillars.title-line2" defaultValue="stand on." />
             </h2>
           </div>
         </div>
-        <div className="focus-grid">
+        <EditableGrid id="about.pillars.grid" className="focus-grid">
           {pillars.map(([name, description], index) => (
             <article className="focus-card" key={name}>
-              <span className="focus-number">0{index + 1}</span>
+              <Movable id={`about.pillars.${index}.number`} className="focus-number">0{index + 1}</Movable>
               <div>
                 <EditableText as="h3" id={`about.pillars.${index}.name`} defaultValue={name} />
                 <EditableText as="p" id={`about.pillars.${index}.description`} defaultValue={description} />
               </div>
             </article>
           ))}
-        </div>
+        </EditableGrid>
       </EditableSection>
 
       <EditableSection as="section" sectionId="story" className="story-section" id="purpose">
@@ -104,7 +106,7 @@ export default function AboutPage() {
           <span><EditableText id="about.story.fact-status" defaultValue="501(c)(3) public charity" /></span>
         </div>
         <div className="story-content">
-          <p className="eyebrow"><span /> <EditableText id="about.story.eyebrow" defaultValue="The story behind the mission" /></p>
+          <p className="eyebrow"><Movable id="about.story.eyebrow-tick" /> <EditableText id="about.story.eyebrow" defaultValue="The story behind the mission" /></p>
           <h2>
             <EditableText id="about.story.title-line1" defaultValue="When pain becomes purpose," /><br />
             <EditableText id="about.story.title-line2" defaultValue="silence loses its power." />
@@ -163,7 +165,7 @@ export default function AboutPage() {
 
       <EditableSection as="section" sectionId="values" className="values-section">
         <div className="values-heading">
-          <p className="eyebrow"><span /> <EditableText id="about.values.eyebrow" defaultValue="How we show up" /></p>
+          <p className="eyebrow"><Movable id="about.values.eyebrow-tick" /> <EditableText id="about.values.eyebrow" defaultValue="How we show up" /></p>
           <h2>
             <EditableText id="about.values.title-line1" defaultValue="Values you can" /><br />
             <EditableText id="about.values.title-line2" defaultValue="feel in the room." />
@@ -172,7 +174,7 @@ export default function AboutPage() {
         <div className="values-list">
           {values.map(([name, description], index) => (
             <article key={name}>
-              <span>0{index + 1}</span>
+              <Movable id={`about.values.${index}.number`}>0{index + 1}</Movable>
               <EditableText as="h3" id={`about.values.${index}.name`} defaultValue={name} />
               <EditableText as="p" id={`about.values.${index}.description`} defaultValue={description} />
             </article>
@@ -183,7 +185,7 @@ export default function AboutPage() {
       <EditableSection as="section" sectionId="funds" className="work-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="about.funds.eyebrow" defaultValue="Where the money goes" /></p>
+            <p className="eyebrow"><Movable id="about.funds.eyebrow-tick" /> <EditableText id="about.funds.eyebrow" defaultValue="Where the money goes" /></p>
             <h2>
               <EditableText id="about.funds.title-line1" defaultValue="Funds," /><br />
               <EditableText id="about.funds.title-line2" defaultValue="accounted for." />
@@ -203,7 +205,7 @@ export default function AboutPage() {
       <EditableSection as="section" sectionId="sponsors" className="work-section" id="sponsors">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="about.sponsors.eyebrow" defaultValue="Sponsors" /></p>
+            <p className="eyebrow"><Movable id="about.sponsors.eyebrow-tick" /> <EditableText id="about.sponsors.eyebrow" defaultValue="Sponsors" /></p>
             <h2>
               <EditableText id="about.sponsors.title-line1" defaultValue="Backed by" /><br />
               <EditableText id="about.sponsors.title-line2" defaultValue="our community." />
@@ -216,7 +218,7 @@ export default function AboutPage() {
       <EditableSection as="section" sectionId="partners" className="work-section" id="partners">
         <div className="section-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="about.partners.eyebrow" defaultValue="Partners" /></p>
+            <p className="eyebrow"><Movable id="about.partners.eyebrow-tick" /> <EditableText id="about.partners.eyebrow" defaultValue="Partners" /></p>
             <h2>
               <EditableText id="about.partners.title-line1" defaultValue="We don't do" /><br />
               <EditableText id="about.partners.title-line2" defaultValue="this alone." />
@@ -234,7 +236,7 @@ export default function AboutPage() {
       <EditableSection as="section" sectionId="staff" className="leadership-section" id="staff">
         <div className="section-heading compact-heading">
           <div>
-            <p className="eyebrow"><span /> <EditableText id="about.staff.eyebrow" defaultValue="Leadership & staff" /></p>
+            <p className="eyebrow"><Movable id="about.staff.eyebrow-tick" /> <EditableText id="about.staff.eyebrow" defaultValue="Leadership & staff" /></p>
             <h2>
               <EditableText id="about.staff.title-line1" defaultValue="People in" /><br />
               <EditableText id="about.staff.title-line2" defaultValue="your corner." />

@@ -15,6 +15,7 @@ const FONT_SIZE_OPTIONS = [
 const COLOR_OPTIONS = [
   { token: 'white', label: 'White', swatch: 'var(--color-white)' },
   { token: 'gold', label: 'Gold', swatch: 'var(--color-gold)' },
+  { token: 'navy', label: 'Navy', swatch: 'var(--ink)' },
   { token: 'body-text', label: 'Body', swatch: 'var(--color-body-text)' },
   { token: 'text-muted', label: 'Muted', swatch: 'var(--color-text-muted)' },
   { token: 'danger', label: 'Danger', swatch: 'var(--color-danger)' },
@@ -32,6 +33,14 @@ const SPACE_OPTIONS = [
   { token: 'xl', label: 'XL', title: 'Extra large' },
 ];
 
+const ALIGN_OPTIONS = [
+  { token: null, label: 'Auto', title: 'Site default' },
+  { token: 'left', label: '⇤', title: 'Align left' },
+  { token: 'center', label: '↔', title: 'Center' },
+  { token: 'right', label: '⇥', title: 'Align right' },
+  { token: 'justify', label: '☰', title: 'Justify (stretch lines to both edges)' },
+];
+
 const LINE_HEIGHT_OPTIONS = [
   { token: null, label: 'Auto', title: 'Site default' },
   { token: 'tight', label: 'Tight', title: 'Tight line spacing' },
@@ -44,11 +53,13 @@ const LINE_HEIGHT_OPTIONS = [
 // inside EditablePage (see EditablePage.jsx) so it shares that page's
 // PageContentContext.
 export default function EditToolbar() {
-  const { isOwner, editMode, activeBlockId, activeBlockKind } = useEditMode();
-  const { blocks } = usePageContent();
+  const { isOwner, editMode, activeBlockId, activeBlockKind, activeBlockRegion } = useEditMode();
+  const { regionId, blocks } = usePageContent();
 
   // Photos etc. can be selected (to move them) but have no text to format.
-  if (!isOwner || !editMode || !activeBlockId || activeBlockKind !== 'text') {
+  // A block from another content region (e.g. site-wide footer text while
+  // this is a page's toolbar) belongs to that region's own toolbar.
+  if (!isOwner || !editMode || !activeBlockId || activeBlockKind !== 'text' || activeBlockRegion !== regionId) {
     return null;
   }
 
@@ -104,6 +115,7 @@ function EditToolbarControls({ activeBlockId, block }) {
       <TokenGroup label="Above" field="spaceAbove" options={SPACE_OPTIONS} block={block} onApply={applyStyle} />
       <TokenGroup label="Below" field="spaceBelow" options={SPACE_OPTIONS} block={block} onApply={applyStyle} />
       <TokenGroup label="Lines" field="lineHeight" options={LINE_HEIGHT_OPTIONS} block={block} onApply={applyStyle} />
+      <TokenGroup label="Align" field="textAlign" options={ALIGN_OPTIONS} block={block} onApply={applyStyle} />
     </div>
   );
 }

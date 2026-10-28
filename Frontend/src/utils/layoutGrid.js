@@ -1,4 +1,4 @@
-// Width guardrails for the owner's drag-to-resize (see useResizableWidth.js).
+// Width guardrails for the owner's drag-to-resize (see useSectionResize.js).
 // Widths are stored as a percentage of the section's parent container, never
 // raw pixels, so a width chosen on one desktop still makes sense on another.
 // Below the mobile breakpoint the stored width is ignored entirely and every
@@ -60,4 +60,23 @@ export function describeWidth(pct, containerWidthPx) {
 
   parts.push(`${px}px`);
   return parts.join(' · ');
+}
+
+// Section height (the bottom edge/corners of the same drag handles). Stored
+// as a min-height in px, so a section can never be made shorter than its
+// own content - only taller. Like widths, only applied above the mobile
+// breakpoint, where content stacks and gets naturally taller anyway.
+export const MAX_HEIGHT_PX = 2000;
+export const HEIGHT_STEP_PX = 20;
+export const BIG_HEIGHT_STEP_PX = 100;
+
+// null = the section's normal height.
+export function readStoredHeight(value) {
+  const px = Number(value);
+
+  if (!Number.isFinite(px) || px <= 0) {
+    return null;
+  }
+
+  return Math.min(MAX_HEIGHT_PX, Math.round(px));
 }

@@ -17,11 +17,17 @@ const BLOCK_TYPES = [
 // tokens.css so the editor can only ever pick colors/sizes already in the
 // design system.
 const FONT_SIZE_TOKENS = ['xs', 'sm', 'base', 'lg', 'xl', '2xl', 'display'];
-const TEXT_COLOR_TOKENS = ['white', 'gold', 'body-text', 'text-muted', 'danger'];
+const TEXT_COLOR_TOKENS = ['white', 'gold', 'navy', 'body-text', 'text-muted', 'danger'];
 // Spacing presets for a text block: space above/below it and the spacing
 // between its own lines. null = the site's normal styling for that spot.
 const SPACE_TOKENS = ['none', 'xs', 'sm', 'md', 'lg', 'xl'];
 const LINE_HEIGHT_TOKENS = ['tight', 'normal', 'relaxed', 'loose'];
+const TEXT_ALIGN_TOKENS = ['left', 'center', 'right', 'justify'];
+
+// Content shared by every page (bottom call-to-action, contact band, footer)
+// lives in one page document per slug here. Unlike the 7 seeded pages,
+// these are created on the owner's first edit (see the PATCH route).
+const GLOBAL_PAGE_SLUGS = ['site'];
 
 // Bounded presets, not free pixel values - same "pick from the design
 // system, not raw CSS" philosophy as FONT_SIZE_TOKENS/TEXT_COLOR_TOKENS, so
@@ -39,6 +45,7 @@ const blockSchema = new mongoose.Schema(
       spaceAbove: { type: String, enum: SPACE_TOKENS, default: null },
       spaceBelow: { type: String, enum: SPACE_TOKENS, default: null },
       lineHeight: { type: String, enum: LINE_HEIGHT_TOKENS, default: null },
+      textAlign: { type: String, enum: TEXT_ALIGN_TOKENS, default: null },
     },
     editable: { type: Boolean, default: true },
   },
@@ -78,6 +85,8 @@ Page.FONT_SIZE_TOKENS = FONT_SIZE_TOKENS;
 Page.TEXT_COLOR_TOKENS = TEXT_COLOR_TOKENS;
 Page.SPACE_TOKENS = SPACE_TOKENS;
 Page.LINE_HEIGHT_TOKENS = LINE_HEIGHT_TOKENS;
+Page.TEXT_ALIGN_TOKENS = TEXT_ALIGN_TOKENS;
+Page.GLOBAL_PAGE_SLUGS = GLOBAL_PAGE_SLUGS;
 Page.SECTION_SIZE_TOKENS = SECTION_SIZE_TOKENS;
 
 module.exports = Page;

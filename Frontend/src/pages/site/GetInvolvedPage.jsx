@@ -6,6 +6,7 @@ import ContactForm from '../../components/site/ContactForm';
 import InternshipOverlay from '../../components/site/InternshipOverlay';
 import EditablePage from '../../components/site/EditablePage';
 import EditableText from '../../components/site/EditableText';
+import Movable from '../../components/site/Movable';
 import EditableSection from '../../components/site/EditableSection';
 import CustomBlocks from '../../components/site/blocks/CustomBlocks';
 
@@ -127,7 +128,7 @@ export default function GetInvolvedPage() {
 
       <EditableSection as="section" sectionId="contact" className="contact-panel">
         <div>
-          <p className="eyebrow eyebrow-light"><span /> <EditableText id="get-involved.contact.eyebrow" defaultValue="Not sure where to begin?" /></p>
+          <p className="eyebrow eyebrow-light"><Movable id="get-involved.contact.eyebrow-tick" /> <EditableText id="get-involved.contact.eyebrow" defaultValue="Not sure where to begin?" /></p>
           <h2>
             <EditableText id="get-involved.contact.title-line1" defaultValue="Tell us what" /><br />
             <EditableText id="get-involved.contact.title-line2" defaultValue="brings you here." />
@@ -148,7 +149,7 @@ export default function GetInvolvedPage() {
       <EditableSection as="section" sectionId="action" className="involvement-list">
         {actions.map((action, index) => (
           <article className="involvement-card" id={action.id} key={action.id}>
-            <div className="involvement-number">0{index + 1}</div>
+            <Movable as="div" id={`get-involved.action.${index}.number`} className="involvement-number">0{index + 1}</Movable>
             <div className="involvement-content">
               <EditableText as="span" id={`get-involved.action.${index}.audience`} defaultValue={action.audience} />
               <EditableText as="h2" id={`get-involved.action.${index}.title`} defaultValue={action.title} />
